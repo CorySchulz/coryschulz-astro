@@ -1,9 +1,84 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 ---
 
 <Layout>
-	<Welcome />
+	<Header/>
+	<main class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+		<div class="container mx-auto px-4 py-12">
+			<!-- Experience Section -->
+			<section class="mb-20">
+				<h2 class="text-4xl font-bold mb-12 text-slate-800 text-center">Experience</h2>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+					<div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200 text-center hover:shadow-xl transition-shadow">
+						<div class="text-5xl font-bold text-blue-600 mb-3">20</div>
+						<div class="text-xl font-semibold text-slate-700 mb-1">Years</div>
+						<div class="text-slate-500">Full Stack Developer</div>
+					</div>
+					<div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200 text-center hover:shadow-xl transition-shadow">
+						<div class="text-5xl font-bold text-blue-500 mb-3">8</div>
+						<div class="text-xl font-semibold text-slate-700 mb-1">Years</div>
+						<div class="text-slate-500">Shopify Developer</div>
+					</div>
+					<div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200 text-center hover:shadow-xl transition-shadow">
+						<div class="text-5xl font-bold text-blue-400 mb-3">4</div>
+						<div class="text-xl font-semibold text-slate-700 mb-1">Years</div>
+						<div class="text-slate-500">Designer</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Magic Spells Section -->
+			<section class="mb-20">
+				<h2 class="text-4xl font-bold mb-12 text-slate-800 text-center">Magic Spells</h2>
+				<div class="space-y-6">
+					<div class="bg-gradient-to-r from-blue-50 to-slate-50 p-8 rounded-xl border-l-4 border-blue-500 shadow-md">
+						<p class="text-lg text-slate-700 leading-relaxed">We specialize in fully custom Shopify themes tailored exactly to your brand's ambitions. Beautifully designed, meticulously coded, and ready to scale.</p>
+					</div>
+					<div class="bg-gradient-to-r from-slate-50 to-blue-50 p-8 rounded-xl border-l-4 border-slate-500 shadow-md">
+						<p class="text-lg text-slate-700 leading-relaxed">We sell a pre-made Shopify theme in the theme store.</p>
+					</div>
+					<div class="bg-gradient-to-r from-blue-50 to-slate-50 p-8 rounded-xl border-l-4 border-blue-400 shadow-md">
+						<p class="text-lg text-slate-700 leading-relaxed">Free, open-source web components crafted for developers.</p>
+					</div>
+				</div>
+				<div class="mt-10 text-center">
+					<button class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold">
+						Go to Magic Spells
+					</button>
+				</div>
+			</section>
+
+			<!-- Tarot Section -->
+			<section class="mb-20">
+				<h2 class="text-4xl font-bold mb-12 text-slate-800 text-center">Tarot</h2>
+				<div class="bg-gradient-to-br from-slate-100 to-blue-100 p-8 rounded-xl mb-8 shadow-lg border border-slate-200">
+					<p class="text-lg mb-6 text-slate-700 leading-relaxed">A modern carousel with beautiful physics based animations.</p>
+					<div class="flex flex-wrap gap-3 text-sm mb-6">
+						<span class="bg-blue-200 text-blue-800 px-4 py-2 rounded-full font-medium">RIPPLE EFFECT</span>
+						<span class="bg-slate-200 text-slate-700 px-4 py-2 rounded-full font-medium">BUTTERFLY EFFECT</span>
+					</div>
+				</div>
+				<div class="text-center">
+					<button class="bg-gradient-to-r from-slate-600 to-slate-700 text-white px-8 py-4 rounded-xl hover:from-slate-700 hover:to-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold">
+						Go to TAROT
+					</button>
+				</div>
+			</section>
+
+			<!-- Contact Section -->
+			<section class="mb-20">
+				<h2 class="text-4xl font-bold mb-12 text-slate-800 text-center">Contact</h2>
+				<div class="bg-gradient-to-br from-blue-100 to-slate-100 p-10 rounded-xl text-center shadow-lg border border-slate-200">
+					<p class="text-xl mb-8 text-slate-700 leading-relaxed">Message me if you need help building a Shopify site:</p>
+					<button class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-10 py-4 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold text-lg">
+						Message Me
+					</button>
+				</div>
+			</section>
+		</div>
+	</main>
+	<Footer/>
 </Layout>
