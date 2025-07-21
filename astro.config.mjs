@@ -10,5 +10,5 @@ export default defineConfig({
   integrations: [tailwind()],
   build: {
     format: 'file'
-  }
+  },
 });

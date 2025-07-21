@@ -30,6 +30,19 @@ import Footer from '../components/Footer.astro';
 				</div>
 			</section>
 
+
+			<scroll-progress
+			  playhead-element-start="top"
+			  playhead-viewport-start="bottom"
+			  playhead-element-end="bottom"
+			  playhead-viewport-end="top">
+			  <div 
+			    class="animated-layer" 
+			    style="transform: translateX(calc(var(--scroll-progress) * 100%));">
+			    Scroll me!
+			  </div>
+			</scroll-progress>
+
 			<!-- Magic Spells Section -->
 			<section class="mb-20">
 				<h2 class="text-4xl font-bold mb-12 text-slate-800 text-center">Magic Spells</h2>
@@ -82,3 +95,4 @@ import Footer from '../components/Footer.astro';
 	</main>
 	<Footer/>
 </Layout>
+
