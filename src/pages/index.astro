@@ -1,64 +1,69 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
 ---
 
-<Layout>
-	<Header/>
-	<main class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+<Layout title="Cory Schulz - Full Stack Developer">
+	<canvas id="lavaCanvas"></canvas>
+	
+	<header class="relative z-10 bg-black/20 backdrop-blur-sm text-white shadow-lg">
+		<div class="container mx-auto px-4 py-6">
+			<div class="flex justify-between items-center">
+				<h1 class="text-2xl font-bold">Cory Schulz</h1>
+				<nav>
+					<ul class="flex space-x-6">
+						<li>
+							<a 
+								href="mailto:cory@magicspells.io" 
+								class="hover:text-white/80 transition-colors">
+									Message Me
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<main class="relative z-10 min-h-screen">
 		<div class="container mx-auto px-4 py-12">
 			<!-- Experience Section -->
 			<section class="mb-20">
-				<h2 class="text-4xl font-bold mb-12 text-slate-800 text-center">Experience</h2>
+				<h2 class="text-4xl font-bold mb-12 text-white text-center drop-shadow-lg">Experience</h2>
 				<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-					<div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200 text-center hover:shadow-xl transition-shadow">
-						<div class="text-5xl font-bold text-blue-600 mb-3">20</div>
-						<div class="text-xl font-semibold text-slate-700 mb-1">Years</div>
-						<div class="text-slate-500">Full Stack Developer</div>
+					<div class="bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-lg border border-white/20 text-center hover:bg-white/20 transition-all text-white">
+						<div class="text-5xl font-bold mb-3">20</div>
+						<div class="text-xl font-semibold mb-1">Years</div>
+						<div class="text-white/80">Full Stack Developer</div>
 					</div>
-					<div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200 text-center hover:shadow-xl transition-shadow">
-						<div class="text-5xl font-bold text-blue-500 mb-3">8</div>
-						<div class="text-xl font-semibold text-slate-700 mb-1">Years</div>
-						<div class="text-slate-500">Shopify Developer</div>
+					<div class="bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-lg border border-white/20 text-center hover:bg-white/20 transition-all text-white">
+						<div class="text-5xl font-bold mb-3">8</div>
+						<div class="text-xl font-semibold mb-1">Years</div>
+						<div class="text-white/80">Shopify Developer</div>
 					</div>
-					<div class="bg-white p-8 rounded-xl shadow-lg border border-slate-200 text-center hover:shadow-xl transition-shadow">
-						<div class="text-5xl font-bold text-blue-400 mb-3">4</div>
-						<div class="text-xl font-semibold text-slate-700 mb-1">Years</div>
-						<div class="text-slate-500">Designer</div>
+					<div class="bg-white/10 backdrop-blur-md p-8 rounded-xl shadow-lg border border-white/20 text-center hover:bg-white/20 transition-all text-white">
+						<div class="text-5xl font-bold mb-3">4</div>
+						<div class="text-xl font-semibold mb-1">Years</div>
+						<div class="text-white/80">Designer</div>
 					</div>
 				</div>
 			</section>
 
-
-			<scroll-progress
-			  playhead-element-start="top"
-			  playhead-viewport-start="bottom"
-			  playhead-element-end="bottom"
-			  playhead-viewport-end="top">
-			  <div 
-			    class="animated-layer" 
-			    style="transform: translateX(calc(var(--scroll-progress) * 100%));">
-			    Scroll me!
-			  </div>
-			</scroll-progress>
-
 			<!-- Magic Spells Section -->
 			<section class="mb-20">
-				<h2 class="text-4xl font-bold mb-12 text-slate-800 text-center">Magic Spells</h2>
+				<h2 class="text-4xl font-bold mb-12 text-white text-center drop-shadow-lg">Magic Spells</h2>
 				<div class="space-y-6">
-					<div class="bg-gradient-to-r from-blue-50 to-slate-50 p-8 rounded-xl border-l-4 border-blue-500 shadow-md">
-						<p class="text-lg text-slate-700 leading-relaxed">We specialize in fully custom Shopify themes tailored exactly to your brand's ambitions. Beautifully designed, meticulously coded, and ready to scale.</p>
+					<div class="bg-white/10 backdrop-blur-md p-8 rounded-xl border-l-4 border-white/50 shadow-md text-white">
+						<p class="text-lg leading-relaxed">We specialize in fully custom Shopify themes tailored exactly to your brand's ambitions. Beautifully designed, meticulously coded, and ready to scale.</p>
 					</div>
-					<div class="bg-gradient-to-r from-slate-50 to-blue-50 p-8 rounded-xl border-l-4 border-slate-500 shadow-md">
-						<p class="text-lg text-slate-700 leading-relaxed">We sell a pre-made Shopify theme in the theme store.</p>
+					<div class="bg-white/10 backdrop-blur-md p-8 rounded-xl border-l-4 border-white/50 shadow-md text-white">
+						<p class="text-lg leading-relaxed">We sell a pre-made Shopify theme in the theme store.</p>
 					</div>
-					<div class="bg-gradient-to-r from-blue-50 to-slate-50 p-8 rounded-xl border-l-4 border-blue-400 shadow-md">
-						<p class="text-lg text-slate-700 leading-relaxed">Free, open-source web components crafted for developers.</p>
+					<div class="bg-white/10 backdrop-blur-md p-8 rounded-xl border-l-4 border-white/50 shadow-md text-white">
+						<p class="text-lg leading-relaxed">Free, open-source web components crafted for developers.</p>
 					</div>
 				</div>
 				<div class="mt-10 text-center">
-					<button class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold">
+					<button class="bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-xl hover:bg-white/30 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30">
 						Go to Magic Spells
 					</button>
 				</div>
@@ -66,16 +71,16 @@ import Footer from '../components/Footer.astro';
 
 			<!-- Tarot Section -->
 			<section class="mb-20">
-				<h2 class="text-4xl font-bold mb-12 text-slate-800 text-center">Tarot</h2>
-				<div class="bg-gradient-to-br from-slate-100 to-blue-100 p-8 rounded-xl mb-8 shadow-lg border border-slate-200">
-					<p class="text-lg mb-6 text-slate-700 leading-relaxed">A modern carousel with beautiful physics based animations.</p>
+				<h2 class="text-4xl font-bold mb-12 text-white text-center drop-shadow-lg">Tarot</h2>
+				<div class="bg-white/10 backdrop-blur-md p-8 rounded-xl mb-8 shadow-lg border border-white/20 text-white">
+					<p class="text-lg mb-6 leading-relaxed">A modern carousel with beautiful physics based animations.</p>
 					<div class="flex flex-wrap gap-3 text-sm mb-6">
-						<span class="bg-blue-200 text-blue-800 px-4 py-2 rounded-full font-medium">RIPPLE EFFECT</span>
-						<span class="bg-slate-200 text-slate-700 px-4 py-2 rounded-full font-medium">BUTTERFLY EFFECT</span>
+						<span class="bg-white/20 text-white px-4 py-2 rounded-full font-medium">RIPPLE EFFECT</span>
+						<span class="bg-white/20 text-white px-4 py-2 rounded-full font-medium">BUTTERFLY EFFECT</span>
 					</div>
 				</div>
 				<div class="text-center">
-					<button class="bg-gradient-to-r from-slate-600 to-slate-700 text-white px-8 py-4 rounded-xl hover:from-slate-700 hover:to-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold">
+					<button class="bg-white/20 backdrop-blur-md text-white px-8 py-4 rounded-xl hover:bg-white/30 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30">
 						Go to TAROT
 					</button>
 				</div>
@@ -83,16 +88,365 @@ import Footer from '../components/Footer.astro';
 
 			<!-- Contact Section -->
 			<section class="mb-20">
-				<h2 class="text-4xl font-bold mb-12 text-slate-800 text-center">Contact</h2>
-				<div class="bg-gradient-to-br from-blue-100 to-slate-100 p-10 rounded-xl text-center shadow-lg border border-slate-200">
-					<p class="text-xl mb-8 text-slate-700 leading-relaxed">Message me if you need help building a Shopify site:</p>
-					<button class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-10 py-4 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold text-lg">
+				<h2 class="text-4xl font-bold mb-12 text-white text-center drop-shadow-lg">Contact</h2>
+				<div class="bg-white/10 backdrop-blur-md p-10 rounded-xl text-center shadow-lg border border-white/20 text-white">
+					<p class="text-xl mb-8 leading-relaxed">Message me if you need help building a Shopify site:</p>
+					<a href="mailto:cory@magicspells.io" class="inline-block bg-white/20 backdrop-blur-md text-white px-10 py-4 rounded-xl hover:bg-white/30 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold text-lg border border-white/30">
 						Message Me
-					</button>
+					</a>
 				</div>
 			</section>
 		</div>
 	</main>
-	<Footer/>
+
+	<div class="hint" id="hint">
+		colors auto-fade every 10s • click to change manually
+	</div>
 </Layout>
+
+<style>
+	:root {
+		/* warm sunset palette (default) */
+		--palette-0-1: #f3a840;
+		--palette-0-2: #d87c2c;
+		--palette-0-3: #ffd47a;
+		--palette-0-4: #e28d36;
+		--palette-0-5: #c45537;
+		--palette-0-6: #e07b3a;
+
+		/* dark magenta palette */
+		--palette-1-1: #8b1538;
+		--palette-1-2: #a91b60;
+		--palette-1-3: #6d1b45;
+		--palette-1-4: #b91a6b;
+		--palette-1-5: #4a0e29;
+		--palette-1-6: #9e1854;
+
+		/* deep ocean palette */
+		--palette-2-1: #1e3a5f;
+		--palette-2-2: #0f2847;
+		--palette-2-3: #0d1929;
+		--palette-2-4: #162544;
+		--palette-2-5: #0a1628;
+		--palette-2-6: #1a4d7a;
+
+		/* dark purple palette */
+		--palette-3-1: #4a148c;
+		--palette-3-2: #6a1b9a;
+		--palette-3-3: #311b92;
+		--palette-3-4: #512da8;
+		--palette-3-5: #1a0d40;
+		--palette-3-6: #3f1675;
+
+		/* active palette colors */
+		--color-1: var(--palette-0-1);
+		--color-2: var(--palette-0-2);
+		--color-3: var(--palette-0-3);
+		--color-4: var(--palette-0-4);
+		--color-5: var(--palette-0-5);
+		--color-6: var(--palette-0-6);
+	}
+
+	/* smooth color transitions - 2 second fade */
+	:root {
+		transition: --color-1 2s ease-in-out,
+		            --color-2 2s ease-in-out,
+		            --color-3 2s ease-in-out,
+		            --color-4 2s ease-in-out,
+		            --color-5 2s ease-in-out,
+		            --color-6 2s ease-in-out;
+	}
+
+	/* support for css variable transitions in modern browsers */
+	@property --color-1 { syntax: '<color>'; inherits: true; }
+	@property --color-2 { syntax: '<color>'; inherits: true; }
+	@property --color-3 { syntax: '<color>'; inherits: true; }
+	@property --color-4 { syntax: '<color>'; inherits: true; }
+	@property --color-5 { syntax: '<color>'; inherits: true; }
+	@property --color-6 { syntax: '<color>'; inherits: true; }
+
+	html,
+	body {
+		height: 100%;
+		margin: 0;
+		overflow-x: hidden;
+	}
+
+	#lavaCanvas {
+		position: fixed;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		display: block;
+		z-index: 0;
+		background: #391b14;
+		transition: background 2s ease-in-out;
+	}
+
+	/* background colors for different palettes */
+	body.palette-1 #lavaCanvas { background: #2a0817; }
+	body.palette-2 #lavaCanvas { background: #050a15; }
+	body.palette-3 #lavaCanvas { background: #0f0520; }
+
+	/* ui hint that fades out */
+	.hint {
+		position: fixed;
+		bottom: 20px;
+		left: 50%;
+		transform: translateX(-50%);
+		color: white;
+		font-family: system-ui, sans-serif;
+		font-size: 14px;
+		padding: 10px 20px;
+		background: rgba(0, 0, 0, 0.7);
+		border-radius: 20px;
+		pointer-events: none;
+		opacity: 1;
+		transition: opacity 0.5s ease;
+		z-index: 20;
+	}
+
+	.hint.fade {
+		opacity: 0;
+	}
+</style>
+
+
+	<script>
+		function init(canvas) {
+			const context = canvas.getContext('2d');
+			
+			// hide hint after 5 seconds
+			setTimeout(() => {
+				document.getElementById('hint').classList.add('fade');
+			}, 5000);
+
+			const colourCount = 6;
+			let currentPalette = 0;
+			const totalPalettes = 4;
+			let autoTransition = true;
+			let lastTransitionTime = Date.now();
+			const holdDuration = 8000; // 8 seconds hold
+			const fadeDuration = 6000; // 6 seconds fade
+			const totalCycleDuration = holdDuration + fadeDuration; // 10 seconds total
+			let isFading = false;
+			let fadeStartTime = 0;
+			let nextPalette = 0;
+			let baseColors = [];
+			let targetColors = [];
+			
+			/**
+			 * gets colors for a specific palette
+			 * @param {number} paletteIndex
+			 * @returns {string[]} array of color hex values
+			 */
+			function getPaletteColors(paletteIndex) {
+				const root = document.documentElement;
+				return Array.from({ length: colourCount }, (_, i) =>
+					getComputedStyle(root).getPropertyValue(`--palette-${paletteIndex}-${i + 1}`).trim()
+				);
+			}
+			
+			/**
+			 * interpolates between two colors
+			 * @param {string} color1 - hex color
+			 * @param {string} color2 - hex color
+			 * @param {number} t - interpolation factor (0-1)
+			 * @returns {string} interpolated hex color
+			 */
+			function interpolateColor(color1, color2, t) {
+				// convert hex to rgb
+				const hex2rgb = (hex) => {
+					const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+					return result ? {
+						r: parseInt(result[1], 16),
+						g: parseInt(result[2], 16),
+						b: parseInt(result[3], 16)
+					} : null;
+				};
+				
+				const rgb1 = hex2rgb(color1);
+				const rgb2 = hex2rgb(color2);
+				
+				if (!rgb1 || !rgb2) return color1;
+				
+				// interpolate each channel
+				const r = Math.round(rgb1.r + (rgb2.r - rgb1.r) * t);
+				const g = Math.round(rgb1.g + (rgb2.g - rgb1.g) * t);
+				const b = Math.round(rgb1.b + (rgb2.b - rgb1.b) * t);
+				
+				// convert back to hex
+				return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+			}
+			
+			let colours = getPaletteColors(currentPalette);
+
+			const heightFactors = [1.2, 1.05, 1, 0.9, 1.25, 1.1];
+
+			let width, height;
+			let time = 0;
+			let pointerY = 0.5;
+			let pointerX = 0.5;
+
+			const stripeOverlap = 2.3;
+			const horizontalStep = 8;
+			const baseAmplitude = 120;
+			const secondaryAmplitude = 60;
+			const waveLength = 0.003;
+			const waveSpeed = 0.00008;
+			const verticalShiftFactor = 0.10;
+
+			const stripePhases = Array.from({ length: colourCount }, (_, i) => (Math.PI * 2 / colourCount) * i);
+
+			const clamp = (v, min = 0, max = 1) => Math.max(min, Math.min(max, v));
+
+			function resize() {
+				width = canvas.width = window.innerWidth;
+				height = canvas.height = window.innerHeight;
+			}
+
+			function onPointerMove(event) {
+				const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+				const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+				pointerY = clamp(clientY / height);
+				pointerX = clamp(clientX / width);
+			}
+
+			function onDeviceOrientation(event) {
+				const axis = Math.abs(event.gamma) > 10 ? event.gamma : event.beta;
+				if (axis == null) return;
+				pointerY = clamp(1 - ((axis + 90) / 180));
+			}
+			
+			/**
+			 * handles click events to cycle through color palettes
+			 */
+			function onClick(event) {
+				// manual click disables auto-transition
+				autoTransition = false;
+				isFading = false;
+				
+				currentPalette = (currentPalette + 1) % totalPalettes;
+				colours = getPaletteColors(currentPalette);
+				
+				// update body class for background color
+				document.body.className = currentPalette > 0 ? `palette-${currentPalette}` : '';
+				
+				// reset transition timer
+				lastTransitionTime = Date.now();
+			}
+
+			function enableMotion() {
+				if (typeof DeviceOrientationEvent === 'undefined') return;
+				if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+					DeviceOrientationEvent.requestPermission()
+						.then(state => { if (state === 'granted') window.addEventListener('deviceorientation', onDeviceOrientation); })
+						.catch(console.error);
+				} else {
+					window.addEventListener('deviceorientation', onDeviceOrientation);
+				}
+			}
+
+			window.addEventListener('resize', resize);
+			window.addEventListener('mousemove', onPointerMove);
+			window.addEventListener('touchmove', onPointerMove, { passive: true });
+			window.addEventListener('click', onClick);
+			
+			// enable device orientation on first interaction
+			window.addEventListener('click', enableMotion, { once: true });
+
+			resize();
+
+			/**
+			 * draws a single wavy stripe layer
+			 * @param {string} fillStyle - color for the stripe
+			 * @param {number} phase - phase offset for wave animation
+			 * @param {number} index - stripe index for positioning
+			 */
+			function drawStripe(fillStyle, phase, index) {
+				// add very subtle dark shadow effect for layered depth
+				context.shadowBlur = 20;
+				context.shadowColor = 'rgba(0, 0, 0, 0.15)';
+				context.shadowOffsetY = 3;
+				
+				context.fillStyle = fillStyle;
+				context.beginPath();
+
+				const baseStripeHeight = height / colourCount * stripeOverlap;
+				const stripeHeight = baseStripeHeight * heightFactors[index];
+				const baseY = index * (height / colourCount) - stripeHeight / 2 + height * verticalShiftFactor;
+
+				context.moveTo(0, baseY);
+
+				for (let x = 0; x <= width; x += horizontalStep) {
+					// combine multiple wave frequencies for more complex motion
+					const dynamicAmp = baseAmplitude * (0.5 + pointerY);
+					const yOffset = Math.sin(x * waveLength + time + phase) * dynamicAmp +
+						Math.sin(x * waveLength * 0.5 + time * 0.8 + phase) * secondaryAmplitude +
+						Math.sin(x * waveLength * 2 + time * 1.5 + phase) * 20; // added tertiary wave
+					
+					context.lineTo(x, baseY + yOffset);
+				}
+
+				context.lineTo(width, baseY + stripeHeight);
+				context.lineTo(0, baseY + stripeHeight);
+				context.closePath();
+				context.fill();
+			}
+
+			function animate() {
+				// update time with constant speed
+				time += waveSpeed * 60;
+				
+				// check for auto color transition
+				if (autoTransition) {
+					const timeSinceLastTransition = Date.now() - lastTransitionTime;
+					
+					// after 8 seconds of holding, start the 2 second fade
+					if (timeSinceLastTransition > holdDuration && !isFading) {
+						// start fade
+						isFading = true;
+						fadeStartTime = Date.now();
+						nextPalette = (currentPalette + 1) % totalPalettes;
+						baseColors = [...colours];
+						targetColors = getPaletteColors(nextPalette);
+					}
+					
+					// during fade, interpolate colors
+					if (isFading) {
+						const fadeProgress = (Date.now() - fadeStartTime) / fadeDuration;
+						
+						if (fadeProgress >= 1) {
+							// fade complete
+							isFading = false;
+							currentPalette = nextPalette;
+							colours = targetColors;
+							lastTransitionTime = Date.now();
+							
+							// update body class for background
+							document.body.className = currentPalette > 0 ? `palette-${currentPalette}` : '';
+						} else {
+							// interpolate colors
+							colours = baseColors.map((baseColor, i) => 
+								interpolateColor(baseColor, targetColors[i], fadeProgress)
+							);
+						}
+					}
+				}
+				
+				context.clearRect(0, 0, width, height);
+				
+				// draw all stripes
+				for (let i = 0; i < colourCount; i++) {
+					drawStripe(colours[i], stripePhases[i], i);
+				}
+				
+				requestAnimationFrame(animate);
+			}
+
+			animate();
+		}
+
+		init(document.getElementById('lavaCanvas'));
+	</script>
 
