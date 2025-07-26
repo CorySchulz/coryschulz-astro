@@ -221,15 +221,15 @@ import Layout from '../layouts/Layout.astro';
 				document.getElementById('hint').classList.add('fade');
 			}, 5000);
 			
-			// Request motion permissions immediately on iOS devices
-			const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-			if (isIOS && typeof DeviceOrientationEvent.requestPermission === 'function') {
-				// On iOS, we need user interaction first, so we'll enable on first touch/click
-				// This is handled by the existing event listeners below
-			} else {
-				// For non-iOS devices, enable immediately
-				enableMotion();
-			}
+			// Motion effects disabled for now
+			// const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+			// if (isIOS && typeof DeviceOrientationEvent.requestPermission === 'function') {
+			// 	// On iOS, we need user interaction first, so we'll enable on first touch/click
+			// 	// This is handled by the existing event listeners below
+			// } else {
+			// 	// For non-iOS devices, enable immediately
+			// 	enableMotion();
+			// }
 
 			const colourCount = 6;
 			let currentPalette = 0;
@@ -461,9 +461,9 @@ import Layout from '../layouts/Layout.astro';
 			window.addEventListener('click', onClick);
 			window.addEventListener('touchstart', onTouch);
 			
-			// enable device orientation on first interaction
-			window.addEventListener('click', enableMotion, { once: true });
-			window.addEventListener('touchstart', enableMotion, { once: true });
+			// enable device orientation on first interaction (disabled for now)
+			// window.addEventListener('click', enableMotion, { once: true });
+			// window.addEventListener('touchstart', enableMotion, { once: true });
 
 			resize();
 
