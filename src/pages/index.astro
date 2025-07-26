@@ -100,7 +100,7 @@ import Layout from '../layouts/Layout.astro';
 	</main>
 
 	<div class="hint" id="hint">
-		colors auto-fade every 10s • click to change manually
+		colors auto-fade every 10s • click or double-tap to change manually
 	</div>
 </Layout>
 
@@ -341,6 +341,10 @@ import Layout from '../layouts/Layout.astro';
 				pointerY = clamp(1 - ((axis + 90) / 180));
 			}
 			
+			// Double tap detection for mobile
+			let lastTouchTime = 0;
+			const doubleTapDelay = 300; // milliseconds
+			
 			/**
 			 * handles click events to cycle through color palettes
 			 */
@@ -358,6 +362,21 @@ import Layout from '../layouts/Layout.astro';
 				// reset transition timer
 				lastTransitionTime = Date.now();
 			}
+			
+			/**
+			 * handles touch events with double tap detection
+			 */
+			function onTouch(event) {
+				const currentTime = new Date().getTime();
+				const tapLength = currentTime - lastTouchTime;
+				
+				if (tapLength < doubleTapDelay && tapLength > 0) {
+					// Double tap detected
+					onClick(event);
+				}
+				
+				lastTouchTime = currentTime;
+			}
 
 			function enableMotion() {
 				if (typeof DeviceOrientationEvent === 'undefined') return;
@@ -374,7 +393,7 @@ import Layout from '../layouts/Layout.astro';
 			window.addEventListener('mousemove', onPointerMove);
 			window.addEventListener('touchmove', onPointerMove, { passive: true });
 			window.addEventListener('click', onClick);
-			window.addEventListener('touchstart', onClick);
+			window.addEventListener('touchstart', onTouch);
 			
 			// enable device orientation on first interaction
 			window.addEventListener('click', enableMotion, { once: true });
