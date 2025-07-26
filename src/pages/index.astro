@@ -241,10 +241,28 @@ import Layout from '../layouts/Layout.astro';
 			 * @returns {string[]} array of color hex values
 			 */
 			function getPaletteColors(paletteIndex) {
+				// Hardcoded fallbacks for iOS Safari compatibility
+				const palettes = [
+					// Orange palette
+					['#f3a840', '#d87c2c', '#ffd47a', '#e28d36', '#c45537', '#e07b3a'],
+					// Magenta palette  
+					['#8b1538', '#a91b60', '#6d1b45', '#b91a6b', '#4a0e29', '#9e1854'],
+					// Blue palette
+					['#1e3a5f', '#0f2847', '#0d1929', '#162544', '#0a1628', '#1a4d7a'],
+					// Purple palette
+					['#4a148c', '#6a1b9a', '#311b92', '#512da8', '#1a0d40', '#3f1675']
+				];
+				
+				// Try to get from CSS custom properties first, fallback to hardcoded
 				const root = document.documentElement;
-				return Array.from({ length: colourCount }, (_, i) =>
-					getComputedStyle(root).getPropertyValue(`--palette-${paletteIndex}-${i + 1}`).trim()
-				);
+				const colors = [];
+				
+				for (let i = 0; i < colourCount; i++) {
+					const cssColor = getComputedStyle(root).getPropertyValue(`--palette-${paletteIndex}-${i + 1}`).trim();
+					colors.push(cssColor || palettes[paletteIndex][i]);
+				}
+				
+				return colors;
 			}
 			
 			/**
@@ -280,6 +298,11 @@ import Layout from '../layouts/Layout.astro';
 			}
 			
 			let colours = getPaletteColors(currentPalette);
+			
+			// Ensure colors are properly initialized for iOS Safari
+			if (!colours || colours.some(color => !color || color === '')) {
+				colours = ['#f3a840', '#d87c2c', '#ffd47a', '#e28d36', '#c45537', '#e07b3a'];
+			}
 
 			const heightFactors = [1.2, 1.05, 1, 0.9, 1.25, 1.1];
 
@@ -351,9 +374,11 @@ import Layout from '../layouts/Layout.astro';
 			window.addEventListener('mousemove', onPointerMove);
 			window.addEventListener('touchmove', onPointerMove, { passive: true });
 			window.addEventListener('click', onClick);
+			window.addEventListener('touchstart', onClick);
 			
 			// enable device orientation on first interaction
 			window.addEventListener('click', enableMotion, { once: true });
+			window.addEventListener('touchstart', enableMotion, { once: true });
 
 			resize();
 
