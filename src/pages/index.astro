@@ -336,9 +336,19 @@ import Layout from '../layouts/Layout.astro';
 			}
 
 			function onDeviceOrientation(event) {
-				const axis = Math.abs(event.gamma) > 10 ? event.gamma : event.beta;
-				if (axis == null) return;
-				pointerY = clamp(1 - ((axis + 90) / 180));
+				// Use device orientation to control wave behavior
+				// gamma: left/right tilt (-90 to 90)
+				// beta: front/back tilt (-180 to 180)
+				
+				if (event.gamma != null && event.beta != null) {
+					// Map gamma (-90 to 90) to pointerX (0 to 1)
+					pointerX = clamp((event.gamma + 90) / 180);
+					
+					// Map beta (-90 to 90) to pointerY (0 to 1) 
+					// Clamp beta to reasonable range and invert for intuitive movement
+					const clampedBeta = Math.max(-90, Math.min(90, event.beta));
+					pointerY = clamp(1 - ((clampedBeta + 90) / 180));
+				}
 			}
 			
 			// Double tap detection for mobile
@@ -400,6 +410,9 @@ import Layout from '../layouts/Layout.astro';
 			window.addEventListener('touchstart', enableMotion, { once: true });
 
 			resize();
+			
+			// Try to enable device orientation immediately for mobile
+			enableMotion();
 
 			/**
 			 * draws a single wavy stripe layer
@@ -425,9 +438,13 @@ import Layout from '../layouts/Layout.astro';
 				for (let x = 0; x <= width; x += horizontalStep) {
 					// combine multiple wave frequencies for more complex motion
 					const dynamicAmp = baseAmplitude * (0.5 + pointerY);
-					const yOffset = Math.sin(x * waveLength + time + phase) * dynamicAmp +
-						Math.sin(x * waveLength * 0.5 + time * 0.8 + phase) * secondaryAmplitude +
-						Math.sin(x * waveLength * 2 + time * 1.5 + phase) * 20; // added tertiary wave
+					
+					// Add horizontal offset based on pointerX for additional movement
+					const horizontalInfluence = (pointerX - 0.5) * 100;
+					
+					const yOffset = Math.sin(x * waveLength + time + phase + horizontalInfluence * 0.01) * dynamicAmp +
+						Math.sin(x * waveLength * 0.5 + time * 0.8 + phase) * secondaryAmplitude * (0.8 + pointerX * 0.4) +
+						Math.sin(x * waveLength * 2 + time * 1.5 + phase + horizontalInfluence * 0.02) * 20; // added tertiary wave
 					
 					context.lineTo(x, baseY + yOffset);
 				}
