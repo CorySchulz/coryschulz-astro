@@ -102,10 +102,6 @@ import Layout from '../layouts/Layout.astro';
 	<div class="hint" id="hint">
 		colors auto-fade every 10s • click or double-tap to change manually
 	</div>
-	
-	<button id="motionButton" class="motion-button" style="display: none;">
-		Enable Motion Effects
-	</button>
 </Layout>
 
 <style>
@@ -213,28 +209,6 @@ import Layout from '../layouts/Layout.astro';
 	.hint.fade {
 		opacity: 0;
 	}
-	
-	.motion-button {
-		position: fixed;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		background: rgba(255, 255, 255, 0.9);
-		color: #333;
-		border: none;
-		padding: 15px 30px;
-		border-radius: 25px;
-		font-size: 16px;
-		font-weight: 600;
-		cursor: pointer;
-		z-index: 30;
-		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-		backdrop-filter: blur(10px);
-	}
-	
-	.motion-button:hover {
-		background: rgba(255, 255, 255, 1);
-	}
 </style>
 
 
@@ -247,15 +221,14 @@ import Layout from '../layouts/Layout.astro';
 				document.getElementById('hint').classList.add('fade');
 			}, 5000);
 			
-			// Show motion button on iOS devices
+			// Request motion permissions immediately on iOS devices
 			const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 			if (isIOS && typeof DeviceOrientationEvent.requestPermission === 'function') {
-				const motionButton = document.getElementById('motionButton');
-				motionButton.style.display = 'block';
-				motionButton.addEventListener('click', () => {
-					enableMotion();
-					motionButton.style.display = 'none';
-				});
+				// On iOS, we need user interaction first, so we'll enable on first touch/click
+				// This is handled by the existing event listeners below
+			} else {
+				// For non-iOS devices, enable immediately
+				enableMotion();
 			}
 
 			const colourCount = 6;
@@ -378,13 +351,14 @@ import Layout from '../layouts/Layout.astro';
 				// beta: front/back tilt (-180 to 180)
 				
 				if (event.gamma != null && event.beta != null) {
-					// Map gamma (-90 to 90) to pointerX (0 to 1)
-					pointerX = clamp((event.gamma + 90) / 180);
+					// Map gamma (-30 to 30) to pointerX (0 to 1) for more sensitivity
+					const sensitiveGamma = Math.max(-30, Math.min(30, event.gamma));
+					pointerX = clamp((sensitiveGamma + 30) / 60);
 					
-					// Map beta (-90 to 90) to pointerY (0 to 1) 
-					// Clamp beta to reasonable range and invert for intuitive movement
-					const clampedBeta = Math.max(-90, Math.min(90, event.beta));
-					pointerY = clamp(1 - ((clampedBeta + 90) / 180));
+					// Map beta (-30 to 30) to pointerY (0 to 1) for more sensitivity
+					// Clamp beta to smaller range and invert for intuitive movement
+					const sensitiveBeta = Math.max(-30, Math.min(30, event.beta));
+					pointerY = clamp(1 - ((sensitiveBeta + 30) / 60));
 				}
 			}
 			
@@ -473,11 +447,11 @@ import Layout from '../layouts/Layout.astro';
 					const x = event.accelerationIncludingGravity.x;
 					const y = event.accelerationIncludingGravity.y;
 					
-					// Map acceleration to pointer values
-					// X: -10 to 10 -> 0 to 1
-					pointerX = clamp((x + 10) / 20);
-					// Y: -10 to 10 -> 0 to 1 (inverted)
-					pointerY = clamp(1 - ((y + 10) / 20));
+					// Map acceleration to pointer values with higher sensitivity
+					// X: -5 to 5 -> 0 to 1 (more sensitive range)
+					pointerX = clamp((x + 5) / 10);
+					// Y: -5 to 5 -> 0 to 1 (inverted, more sensitive)
+					pointerY = clamp(1 - ((y + 5) / 10));
 				}
 			}
 
