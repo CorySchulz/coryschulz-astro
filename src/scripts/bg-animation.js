@@ -275,14 +275,15 @@ function init(canvas) {
 
 		for (let x = 0; x <= width; x += horizontalStep) {
 			// combine multiple wave frequencies for more complex motion
+			// Use pointerY for wave amplitude
 			const dynamicAmp = baseAmplitude * (0.5 + pointerY);
 
-			// Add horizontal offset based on pointerX for additional movement
-			const horizontalInfluence = (pointerX - 0.5) * 100;
+			// Use pointerY for phase shift instead of pointerX (prevents jumping during horizontal swipes)
+			const verticalInfluence = (pointerY - 0.5) * 100;
 
-			const yOffset = Math.sin(x * waveLength + time + phase + horizontalInfluence * 0.01) * dynamicAmp +
-				Math.sin(x * waveLength * 0.5 + time * 0.8 + phase) * secondaryAmplitude * (0.8 + pointerX * 0.4) +
-				Math.sin(x * waveLength * 2 + time * 1.5 + phase + horizontalInfluence * 0.02) * 20; // added tertiary wave
+			const yOffset = Math.sin(x * waveLength + time + phase + verticalInfluence * 0.01) * dynamicAmp +
+				Math.sin(x * waveLength * 0.5 + time * 0.8 + phase) * secondaryAmplitude * (0.8 + pointerY * 0.4) +
+				Math.sin(x * waveLength * 2 + time * 1.5 + phase + verticalInfluence * 0.02) * 20; // added tertiary wave
 
 			context.lineTo(x, baseY + yOffset);
 		}
