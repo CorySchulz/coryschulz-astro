@@ -261,3 +261,87 @@ tarot-carousel {
   display: block;
   width: 100%;
 }
+
+/* Navigation unit - group buttons and pagination together */
+.tarot-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.tarot-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Style the navigation buttons */
+.tarot-button-prev,
+.tarot-button-next {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.tarot-button-prev:hover,
+.tarot-button-next:hover {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.tarot-button-prev:disabled,
+.tarot-button-next:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Style the pagination dots container */
+.tarot-dots-container {
+  display: flex;
+  width: fit-content;
+  margin-inline: auto;
+  margin-top: 14px;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tarot-dots-list {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+button.tarot-dots-button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s;
+  padding: 0;
+}
+
+button.tarot-dots-button:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+button.tarot-dots-button[aria-selected="true"] {
+  background: #007aff !important;
+  width: 12px;
+  height: 12px;
+  border-color: #2096ff;
+}

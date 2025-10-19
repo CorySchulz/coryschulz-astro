@@ -106,9 +106,17 @@ import Layout from '../layouts/Layout.astro';
 						<h3 class="text-2xl font-bold text-white mb-4">Ripple Effect</h3>
 						<tarot-carousel>
 							<script type="application/json" data-tarot-options>
-								{ "effect": "ripple",
-								"gap": 20,
-								"slidesPerView": 2 }
+								{
+									"effect": "ripple",
+									"gap": 20,
+									"slidesPerView": 2,
+									"navigation": {
+										"showButtons": false,
+										"showPagination": true,
+										"paginationPosition": "bottom",
+										"buttonsPosition": "bottom"
+									}
+								}
 							</script>
 							<tarot-viewport>
 								<tarot-slide class="bg-gradient-to-br from-purple-500 to-pink-500 min-h-[180px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 1</tarot-slide>
@@ -127,15 +135,21 @@ import Layout from '../layouts/Layout.astro';
 						<h3 class="text-2xl font-bold text-white mb-4">Butterfly Effect</h3>
 						<tarot-carousel>
 							<script type="application/json" data-tarot-options>
-								{ 
+								{
 									"effect": "butterfly",
 									"goToSelectedSlide": true,
 									"loop": true,
 									"gap": 10,
 									"paddingLeft": "25%",
 									"paddingRight": "25%",
-									"slidesPerView": 1
-								 }
+									"slidesPerView": 1,
+									"navigation": {
+										"showButtons": false,
+										"showPagination": true,
+										"paginationPosition": "bottom",
+										"buttonsPosition": "bottom"
+									}
+								}
 							</script>
 							<tarot-viewport>
 								<tarot-slide class="bg-gradient-to-br from-indigo-500 to-purple-500 min-h-[240px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 1</tarot-slide>
@@ -155,17 +169,25 @@ import Layout from '../layouts/Layout.astro';
 						<div class="max-w-[700px] mx-auto peacock-carousel">
 							<tarot-carousel>
 								<script type="application/json" data-tarot-options>
-									{ "effect": "peacock",
-									"loop": true }
+									{
+										"effect": "peacock",
+										"loop": true,
+										"navigation": {
+											"showButtons": false,
+											"showPagination": true,
+											"paginationPosition": "bottom",
+											"buttonsPosition": "bottom"
+										}
+									}
 								</script>
 								<tarot-viewport>
-									<tarot-slide class="bg-gradient-to-br from-emerald-500 to-teal-500 min-h-[500px] rounded flex items-center justify-center text-center text-white text-3xl font-bold">Slide 1</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-sky-500 to-blue-500 min-h-[500px] rounded flex items-center justify-center text-center text-white text-3xl font-bold">Slide 2</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-amber-500 to-yellow-500 min-h-[500px] rounded flex items-center justify-center text-center text-white text-3xl font-bold">Slide 3</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-rose-500 to-pink-500 min-h-[500px] rounded flex items-center justify-center text-center text-white text-3xl font-bold">Slide 4</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-purple-500 to-indigo-500 min-h-[500px] rounded flex items-center justify-center text-center text-white text-3xl font-bold">Slide 5</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-cyan-500 to-sky-500 min-h-[500px] rounded flex items-center justify-center text-center text-white text-3xl font-bold">Slide 6</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-fuchsia-500 to-purple-500 min-h-[500px] rounded flex items-center justify-center text-center text-white text-3xl font-bold">Slide 7</tarot-slide>
+									<tarot-slide class="bg-gradient-to-br from-emerald-500 to-teal-500 min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">Slide 1</tarot-slide>
+									<tarot-slide class="bg-gradient-to-br from-sky-500 to-blue-500 min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">Slide 2</tarot-slide>
+									<tarot-slide class="bg-gradient-to-br from-amber-500 to-yellow-500 min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">Slide 3</tarot-slide>
+									<tarot-slide class="bg-gradient-to-br from-rose-500 to-pink-500 min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">Slide 4</tarot-slide>
+									<tarot-slide class="bg-gradient-to-br from-purple-500 to-indigo-500 min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">Slide 5</tarot-slide>
+									<tarot-slide class="bg-gradient-to-br from-cyan-500 to-sky-500 min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">Slide 6</tarot-slide>
+									<tarot-slide class="bg-gradient-to-br from-fuchsia-500 to-purple-500 min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">Slide 7</tarot-slide>
 								</tarot-viewport>
 							</tarot-carousel>
 						</div>
@@ -253,51 +275,7 @@ import Layout from '../layouts/Layout.astro';
 							</div>
 						</div>
 
-						<!-- Services Section -->
-						<div class="space-y-4">
-							<h3 class="text-lg font-semibold text-white mb-4">What services are you interested in? (check all that apply)</h3>
-							<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-								<label class="flex items-center space-x-3 text-white cursor-pointer">
-									<input 
-										type="checkbox" 
-										name="services" 
-										value="CRO"
-										class="w-4 h-4 text-white/80 bg-black/15 border border-white/20 rounded focus:ring-white/20 focus:ring-2"
-									/>
-									<span>CRO</span>
-								</label>
-								
-								<label class="flex items-center space-x-3 text-white cursor-pointer">
-									<input 
-										type="checkbox" 
-										name="services" 
-										value="E-Commerce UI/UX Design"
-										class="w-4 h-4 text-white/80 bg-black/15 border border-white/20 rounded focus:ring-white/20 focus:ring-2"
-									/>
-									<span>E-Commerce UI/UX Design</span>
-								</label>
-								
-								<label class="flex items-center space-x-3 text-white cursor-pointer">
-									<input 
-										type="checkbox" 
-										name="services" 
-										value="Klaviyo Email and Marketing"
-										class="w-4 h-4 text-white/80 bg-black/15 border border-white/20 rounded focus:ring-white/20 focus:ring-2"
-									/>
-									<span>Klaviyo Email and Marketing</span>
-								</label>
-								
-								<label class="flex items-center space-x-3 text-white cursor-pointer">
-									<input 
-										type="checkbox" 
-										name="services" 
-										value="Shopify Theme Development"
-										class="w-4 h-4 text-white/80 bg-black/15 border border-white/20 rounded focus:ring-white/20 focus:ring-2"
-									/>
-									<span>Shopify Theme Development</span>
-								</label>
-							</div>
-						</div>
+		
 
 						<!-- Project Details Section -->
 						<div class="space-y-4">
@@ -310,8 +288,7 @@ import Layout from '../layouts/Layout.astro';
 										required
 										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
 									>
-										<option value="" disabled selected></option>
-										<option value="$10,000 - $20,000">$10,000 - $20,000</option>
+										<option value="$10,000 - $20,000" selected>$10,000 - $20,000</option>
 										<option value="$20,000 - $40,000">$20,000 - $40,000</option>
 										<option value="$40,000 - $60,000">$40,000 - $60,000</option>
 										<option value="$60,000 - $100,000">$60,000 - $100,000</option>
@@ -329,7 +306,7 @@ import Layout from '../layouts/Layout.astro';
 										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 resize-none"
 										placeholder="Tell us about your project"
 									></textarea>
-									<label for="project-description" class="floating-label">Project Description</label>
+									<label for="project-description" class="floating-label">Message</label>
 								</div>
 							</div>
 						</div>
