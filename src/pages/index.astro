@@ -4,83 +4,176 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="Cory Schulz - Full Stack Developer">
 	<canvas id="lavaCanvas"></canvas>
-	
-	<header class="relative z-10 bg-black/20 backdrop-blur-sm text-white shadow-lg">
-		<div class="container mx-auto px-4 py-6">
-			<div class="flex justify-between items-center">
-				<h1 class="text-2xl font-bold">Cory Schulz</h1>
-				<nav>
-					<ul class="flex space-x-6">
-						<li>
-							<a 
-								href="mailto:cory@magicspells.io" 
-								class="hover:text-white/80 transition-colors">
-									Message Me
-							</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</header>
 
 	<main class="relative z-10 min-h-screen">
-		<div class="container mx-auto px-4 py-12">
-			<!-- Experience Section -->
+		<div class="container py-12">
+			<!-- Hero Section -->
 			<section class="mb-20">
-				<h2 class="text-4xl font-bold mb-12 text-white text-center drop-shadow-lg">Experience</h2>
-				<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-					<div class="bg-black/15 backdrop-blur-[30px] p-8 rounded-xl shadow-lg border border-white/20 text-center hover:bg-white/10 transition-all text-white">
-						<div class="text-5xl font-bold mb-3">20</div>
-						<div class="text-xl font-semibold mb-1">Years</div>
-						<div class="text-white/80">Full Stack Developer</div>
-					</div>
-					<div class="bg-black/15 backdrop-blur-[30px] p-8 rounded-xl shadow-lg border border-white/20 text-center hover:bg-white/10 transition-all text-white">
-						<div class="text-5xl font-bold mb-3">8</div>
-						<div class="text-xl font-semibold mb-1">Years</div>
-						<div class="text-white/80">Shopify Developer</div>
-					</div>
-					<div class="bg-black/15 backdrop-blur-[30px] p-8 rounded-xl shadow-lg border border-white/20 text-center hover:bg-white/10 transition-all text-white">
-						<div class="text-5xl font-bold mb-3">4</div>
-						<div class="text-xl font-semibold mb-1">Years</div>
-						<div class="text-white/80">Designer</div>
+				<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-10 rounded-xl shadow-lg border border-white/20">
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+						<!-- Left: Photo and Name -->
+						<div class="flex flex-col items-center lg:items-start gap-6">
+							<div class="w-64 h-64 rounded-full bg-black/20 bg-noise backdrop-blur-[30px] border-4 border-white/20 shadow-2xl overflow-hidden">
+								<img src="/cory.jpg" alt="Cory Schulz" class="w-full h-full object-cover" />
+							</div>
+							<div class="text-center lg:text-left">
+								<h1 class="text-4xl lg:text-5xl font-black text-white mb-3 tracking-tight text-shadow-lg">Cory Schulz</h1>
+								<a
+									href="mailto:cory@magicspells.io"
+									class="text-lg text-white/90 hover:text-white transition-colors block mb-4 font-medium text-shadow">
+										cory@magicspells.io
+								</a>
+								<p class="text-white/80 text-lg lg:text-xl leading-relaxed max-w-md font-normal text-shadow text-pretty">
+									I love to design beautiful experiences and create tools that make life more enjoyable and set everyone up for success.
+								</p>
+							</div>
+						</div>
+
+						<!-- Right: Experience Cards -->
+						<div class="grid grid-cols-1 gap-6">
+							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
+								<div class="flex items-center gap-4">
+									<div class="text-4xl font-bold">20</div>
+									<div>
+										<div class="text-lg font-semibold">Years</div>
+										<div class="text-white/80 text-sm">Full Stack Developer</div>
+									</div>
+								</div>
+							</div>
+							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
+								<div class="flex items-center gap-4">
+									<div class="text-4xl font-bold">10</div>
+									<div>
+										<div class="text-lg font-semibold">Years</div>
+										<div class="text-white/80 text-sm">Shopify Developer</div>
+									</div>
+								</div>
+							</div>
+							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
+								<div class="flex items-center gap-4">
+									<div class="text-4xl font-bold">4</div>
+									<div>
+										<div class="text-lg font-semibold">Years</div>
+										<div class="text-white/80 text-sm">Designer</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</section>
 
 			<!-- Magic Spells Section -->
 			<section class="mb-20">
-				<h2 class="text-4xl font-bold mb-12 text-white text-center drop-shadow-lg">Magic Spells</h2>
-				<div class="space-y-6">
-					<div class="bg-black/15 backdrop-blur-[30px] p-8 rounded-xl border-l-4 border-white/50 shadow-md text-white">
-						<p class="text-lg leading-relaxed">We specialize in fully custom Shopify themes tailored exactly to your brand's ambitions. Beautifully designed, meticulously coded, and ready to scale.</p>
+				<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-10 rounded-xl shadow-lg border border-white/20 text-white">
+					<h2 class="text-4xl font-bold mb-8 text-white drop-shadow-lg">Magic Spells</h2>
+					<div class="space-y-6 mb-8">
+						<p class="text-lg leading-relaxed text-pretty">
+							We specialize in fully custom Shopify themes tailored exactly to your brand's ambitions. Beautifully designed, meticulously coded, and ready to scale.
+						</p>
+						<p class="text-lg leading-relaxed text-pretty">
+							We sell a pre-made Shopify theme in the theme store.
+						</p>
+						<p class="text-lg leading-relaxed text-pretty">
+							Free, open-source web components crafted for developers.
+						</p>
 					</div>
-					<div class="bg-black/15 backdrop-blur-[30px] p-8 rounded-xl border-l-4 border-white/50 shadow-md text-white">
-						<p class="text-lg leading-relaxed">We sell a pre-made Shopify theme in the theme store.</p>
+					<div class="text-center">
+						<button class="bg-white/10 bg-noise backdrop-blur-[30px] text-white px-8 py-4 rounded-xl hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30">
+							Go to Magic Spells
+						</button>
 					</div>
-					<div class="bg-black/15 backdrop-blur-[30px] p-8 rounded-xl border-l-4 border-white/50 shadow-md text-white">
-						<p class="text-lg leading-relaxed">Free, open-source web components crafted for developers.</p>
-					</div>
-				</div>
-				<div class="mt-10 text-center">
-					<button class="bg-white/10 backdrop-blur-[30px] text-white px-8 py-4 rounded-xl hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30">
-						Go to Magic Spells
-					</button>
 				</div>
 			</section>
 
 			<!-- Tarot Section -->
 			<section class="mb-20">
-				<h2 class="text-4xl font-bold mb-12 text-white text-center drop-shadow-lg">Tarot</h2>
-				<div class="bg-black/15 backdrop-blur-[30px] p-8 rounded-xl mb-8 shadow-lg border border-white/20 text-white">
-					<p class="text-lg mb-6 leading-relaxed">A modern carousel with beautiful physics based animations.</p>
+				<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-8 rounded-xl mb-8 shadow-lg border border-white/20 text-white">
+					<h2 class="text-4xl font-bold mb-6 text-white drop-shadow-lg">Tarot</h2>
+					<p class="text-lg mb-6 leading-relaxed text-pretty">A modern carousel with beautiful physics based animations.</p>
 					<div class="flex flex-wrap gap-3 text-sm mb-6">
-						<span class="bg-white/20 text-white px-4 py-2 rounded-full font-medium">RIPPLE EFFECT</span>
-						<span class="bg-white/20 text-white px-4 py-2 rounded-full font-medium">BUTTERFLY EFFECT</span>
+						<span class="bg-white/20 bg-noise text-white px-4 py-2 rounded-full font-medium">RIPPLE EFFECT</span>
+						<span class="bg-white/20 bg-noise text-white px-4 py-2 rounded-full font-medium">BUTTERFLY EFFECT</span>
+						<span class="bg-white/20 bg-noise text-white px-4 py-2 rounded-full font-medium">CUBE EFFECT</span>
+						<span class="bg-white/20 bg-noise text-white px-4 py-2 rounded-full font-medium">PEACOCK EFFECT</span>
 					</div>
 				</div>
+
+				<!-- Tarot Examples -->
+				<div class="space-y-8 mb-8">
+					<!-- Ripple Effect -->
+					<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20">
+						<h3 class="text-2xl font-bold text-white mb-4">Ripple Effect</h3>
+						<tarot-carousel>
+							<script type="application/json" data-tarot-options>
+								{ "effect": "ripple",
+								"gap": 20,
+								"slidesPerView": 2 }
+							</script>
+							<tarot-viewport>
+								<tarot-slide class="bg-gradient-to-br from-purple-500 to-pink-500 min-h-[180px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 1</tarot-slide>
+								<tarot-slide class="bg-gradient-to-br from-blue-500 to-cyan-500 min-h-[180px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 2</tarot-slide>
+								<tarot-slide class="bg-gradient-to-br from-green-500 to-emerald-500 min-h-[180px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 3</tarot-slide>
+								<tarot-slide class="bg-gradient-to-br from-orange-500 to-red-500 min-h-[180px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 4</tarot-slide>
+								<tarot-slide class="bg-gradient-to-br from-red-500 to-rose-500 min-h-[180px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 5</tarot-slide>
+								<tarot-slide class="bg-gradient-to-br from-indigo-500 to-violet-500 min-h-[180px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 6</tarot-slide>
+								<tarot-slide class="bg-gradient-to-br from-amber-500 to-orange-500 min-h-[180px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 7</tarot-slide>
+							</tarot-viewport>
+						</tarot-carousel>
+					</div>
+
+					<!-- Butterfly Effect -->
+					<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20">
+						<h3 class="text-2xl font-bold text-white mb-4">Butterfly Effect</h3>
+						<tarot-carousel>
+							<script type="application/json" data-tarot-options>
+								{ 
+									"effect": "butterfly",
+									"goToSelectedSlide": true,
+									"loop": true,
+									"gap": 10,
+									"paddingLeft": "25%",
+									"paddingRight": "25%",
+									"slidesPerView": 1
+								 }
+							</script>
+							<tarot-viewport>
+								<tarot-slide class="bg-gradient-to-br from-indigo-500 to-purple-500 min-h-[240px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 1</tarot-slide>
+								<tarot-slide class="bg-gradient-to-br from-pink-500 to-rose-500 min-h-[240px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 2</tarot-slide>
+								<tarot-slide class="bg-gradient-to-br from-yellow-500 to-orange-500 min-h-[240px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 3</tarot-slide>
+								<tarot-slide class="bg-gradient-to-br from-teal-500 to-cyan-500 min-h-[240px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 4</tarot-slide>
+								<tarot-slide class="bg-gradient-to-br from-violet-500 to-fuchsia-500 min-h-[240px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 5</tarot-slide>
+								<tarot-slide class="bg-gradient-to-br from-lime-500 to-green-500 min-h-[240px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 6</tarot-slide>
+								<tarot-slide class="bg-gradient-to-br from-red-500 to-pink-500 min-h-[240px] rounded-lg flex items-center justify-center text-white text-3xl font-bold">Slide 7</tarot-slide>
+							</tarot-viewport>
+						</tarot-carousel>
+					</div>
+
+					<!-- Peacock Effect -->
+					<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20">
+						<h3 class="text-2xl font-bold text-white mb-4">Peacock Effect</h3>
+						<div class="max-w-[700px] mx-auto peacock-carousel">
+							<tarot-carousel>
+								<script type="application/json" data-tarot-options>
+									{ "effect": "peacock",
+									"loop": true }
+								</script>
+								<tarot-viewport>
+									<tarot-slide class="bg-gradient-to-br from-emerald-500 to-teal-500 min-h-[500px] rounded flex items-center justify-center text-center text-white text-3xl font-bold">Slide 1</tarot-slide>
+									<tarot-slide class="bg-gradient-to-br from-sky-500 to-blue-500 min-h-[500px] rounded flex items-center justify-center text-center text-white text-3xl font-bold">Slide 2</tarot-slide>
+									<tarot-slide class="bg-gradient-to-br from-amber-500 to-yellow-500 min-h-[500px] rounded flex items-center justify-center text-center text-white text-3xl font-bold">Slide 3</tarot-slide>
+									<tarot-slide class="bg-gradient-to-br from-rose-500 to-pink-500 min-h-[500px] rounded flex items-center justify-center text-center text-white text-3xl font-bold">Slide 4</tarot-slide>
+									<tarot-slide class="bg-gradient-to-br from-purple-500 to-indigo-500 min-h-[500px] rounded flex items-center justify-center text-center text-white text-3xl font-bold">Slide 5</tarot-slide>
+									<tarot-slide class="bg-gradient-to-br from-cyan-500 to-sky-500 min-h-[500px] rounded flex items-center justify-center text-center text-white text-3xl font-bold">Slide 6</tarot-slide>
+									<tarot-slide class="bg-gradient-to-br from-fuchsia-500 to-purple-500 min-h-[500px] rounded flex items-center justify-center text-center text-white text-3xl font-bold">Slide 7</tarot-slide>
+								</tarot-viewport>
+							</tarot-carousel>
+						</div>
+					</div>
+				</div>
+
 				<div class="text-center">
-					<button class="bg-white/10 backdrop-blur-[30px] text-white px-8 py-4 rounded-xl hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30">
+					<button class="bg-white/10 bg-noise backdrop-blur-[30px] text-white px-8 py-4 rounded-xl hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30">
 						Go to TAROT
 					</button>
 				</div>
@@ -89,8 +182,8 @@ import Layout from '../layouts/Layout.astro';
 			<!-- Contact Section -->
 			<section class="mb-20">
 				<h2 class="text-4xl font-bold mb-12 text-white text-center drop-shadow-lg">Get in Touch</h2>
-				<div class="bg-black/15 backdrop-blur-[30px] p-8 rounded-xl shadow-lg border border-white/20">
-					<p class="text-lg mb-8 text-white text-center leading-relaxed">
+				<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-8 rounded-xl shadow-lg border border-white/20">
+					<p class="text-lg mb-8 text-white text-center leading-relaxed text-pretty">
 						Fill out the form below and we'll get back to you as soon as possible.
 					</p>
 					
@@ -105,25 +198,25 @@ import Layout from '../layouts/Layout.astro';
 							<h3 class="text-lg font-semibold text-white mb-4">Your Info</h3>
 							<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 								<div class="input-field">
-									<input 
-										id="name" 
-										name="name" 
+									<input
+										id="name"
+										name="name"
 										type="text"
 										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-										placeholder="Your name" 
+										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
+										placeholder="Your name"
 									/>
 									<label for="name" class="floating-label">Name</label>
 								</div>
-								
+
 								<div class="input-field">
-									<input 
-										id="email" 
-										name="email" 
+									<input
+										id="email"
+										name="email"
 										type="email"
 										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-										placeholder="Your email" 
+										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
+										placeholder="Your email"
 									/>
 									<label for="email" class="floating-label">Email</label>
 								</div>
@@ -135,25 +228,25 @@ import Layout from '../layouts/Layout.astro';
 							<h3 class="text-lg font-semibold text-white mb-4">About Your Business</h3>
 							<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 								<div class="input-field">
-									<input 
-										id="company" 
-										name="company" 
+									<input
+										id="company"
+										name="company"
 										type="text"
 										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-										placeholder="Company name" 
+										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
+										placeholder="Company name"
 									/>
 									<label for="company" class="floating-label">Company Name</label>
 								</div>
-								
+
 								<div class="input-field">
-									<input 
-										id="website" 
-										name="website" 
+									<input
+										id="website"
+										name="website"
 										type="url"
 										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-										placeholder="https://yourwebsite.com" 
+										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
+										placeholder="https://yourwebsite.com"
 									/>
 									<label for="website" class="floating-label">Website URL</label>
 								</div>
@@ -208,14 +301,14 @@ import Layout from '../layouts/Layout.astro';
 
 						<!-- Project Details Section -->
 						<div class="space-y-4">
-							<h3 class="text-lg font-semibold text-white mb-4">Tell us about your project</h3>
+							<h3 class="text-lg font-semibold text-white mb-4">Tell me about your project</h3>
 							<div class="space-y-6">
 								<div class="input-field">
-									<select 
-										id="budget" 
-										name="budget" 
+									<select
+										id="budget"
+										name="budget"
 										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
+										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
 									>
 										<option value="" disabled selected></option>
 										<option value="$10,000 - $20,000">$10,000 - $20,000</option>
@@ -228,12 +321,12 @@ import Layout from '../layouts/Layout.astro';
 								</div>
 								
 								<div class="input-field">
-									<textarea 
-										id="project-description" 
-										name="project-description" 
+									<textarea
+										id="project-description"
+										name="project-description"
 										rows="4"
 										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 resize-none"
+										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 resize-none"
 										placeholder="Tell us about your project"
 									></textarea>
 									<label for="project-description" class="floating-label">Project Description</label>
@@ -242,9 +335,9 @@ import Layout from '../layouts/Layout.astro';
 						</div>
 						
 						<div class="text-center">
-							<button 
+							<button
 								type="submit"
-								class="bg-white/10 backdrop-blur-[30px] text-white px-8 py-3 rounded-lg hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/20"
+								class="bg-white/10 bg-noise backdrop-blur-[30px] text-white px-8 py-3 rounded-lg hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/20"
 							>
 								Send Message
 							</button>
@@ -256,178 +349,11 @@ import Layout from '../layouts/Layout.astro';
 	</main>
 
 	<div class="hint" id="hint">
-		colors auto-fade every 10s • click or double-tap to change manually
+		colors auto-fade every 10s • double-click or double-tap to change manually
 	</div>
 </Layout>
 
-<style>
-	:root {
-		/* warm sunset palette (default) */
-		--palette-0-1: #f3a840;
-		--palette-0-2: #d87c2c;
-		--palette-0-3: #ffd47a;
-		--palette-0-4: #e28d36;
-		--palette-0-5: #c45537;
-		--palette-0-6: #e07b3a;
-
-		/* dark magenta palette */
-		--palette-1-1: #8b1538;
-		--palette-1-2: #a91b60;
-		--palette-1-3: #6d1b45;
-		--palette-1-4: #b91a6b;
-		--palette-1-5: #4a0e29;
-		--palette-1-6: #9e1854;
-
-		/* deep ocean palette */
-		--palette-2-1: #1e3a5f;
-		--palette-2-2: #0f2847;
-		--palette-2-3: #0d1929;
-		--palette-2-4: #162544;
-		--palette-2-5: #0a1628;
-		--palette-2-6: #1a4d7a;
-
-		/* dark purple palette */
-		--palette-3-1: #4a148c;
-		--palette-3-2: #6a1b9a;
-		--palette-3-3: #311b92;
-		--palette-3-4: #512da8;
-		--palette-3-5: #1a0d40;
-		--palette-3-6: #3f1675;
-
-		/* active palette colors */
-		--color-1: var(--palette-0-1);
-		--color-2: var(--palette-0-2);
-		--color-3: var(--palette-0-3);
-		--color-4: var(--palette-0-4);
-		--color-5: var(--palette-0-5);
-		--color-6: var(--palette-0-6);
-	}
-
-	/* smooth color transitions - 2 second fade */
-	:root {
-		transition: --color-1 2s ease-in-out,
-		            --color-2 2s ease-in-out,
-		            --color-3 2s ease-in-out,
-		            --color-4 2s ease-in-out,
-		            --color-5 2s ease-in-out,
-		            --color-6 2s ease-in-out;
-	}
-
-	/* support for css variable transitions in modern browsers */
-	@property --color-1 { syntax: '<color>'; inherits: true; }
-	@property --color-2 { syntax: '<color>'; inherits: true; }
-	@property --color-3 { syntax: '<color>'; inherits: true; }
-	@property --color-4 { syntax: '<color>'; inherits: true; }
-	@property --color-5 { syntax: '<color>'; inherits: true; }
-	@property --color-6 { syntax: '<color>'; inherits: true; }
-
-	html,
-	body {
-		height: 100%;
-		margin: 0;
-		overflow-x: hidden;
-	}
-
-	#lavaCanvas {
-		position: fixed;
-		inset: 0;
-		width: 100%;
-		height: 100%;
-		display: block;
-		z-index: 0;
-		background: #391b14;
-		transition: background 2s ease-in-out;
-	}
-
-	/* background colors for different palettes */
-	body.palette-1 #lavaCanvas { background: #2a0817; }
-	body.palette-2 #lavaCanvas { background: #050a15; }
-	body.palette-3 #lavaCanvas { background: #0f0520; }
-
-	/* ui hint that fades out */
-	.hint {
-		position: fixed;
-		bottom: 20px;
-		left: 50%;
-		transform: translateX(-50%);
-		color: white;
-		font-family: system-ui, sans-serif;
-		font-size: 14px;
-		padding: 10px 20px;
-		background: rgba(0, 0, 0, 0.7);
-		border-radius: 20px;
-		pointer-events: none;
-		opacity: 1;
-		transition: opacity 0.5s ease;
-		z-index: 20;
-	}
-
-	.hint.fade {
-		opacity: 0;
-	}
-
-	/* Floating label styles */
-	.input-field {
-		position: relative;
-		width: 100%;
-	}
-
-	.input-field input::placeholder,
-	.input-field textarea::placeholder {
-		color: transparent;
-	}
-
-	.floating-label {
-		position: absolute;
-		pointer-events: none;
-		font-size: 1rem;
-		left: 1rem;
-		padding: 0px;
-		background: transparent;
-		color: rgba(255, 255, 255, 0.7);
-		top: 50%;
-		transition: all 150ms ease-out;
-		transform: translateY(-50%);
-		border-radius: 4px;
-	}
-
-	.input-field input:focus + .floating-label,
-	.input-field input:not(:placeholder-shown) + .floating-label,
-	.input-field textarea:focus + .floating-label,
-	.input-field textarea:not(:placeholder-shown) + .floating-label,
-	.input-field select:focus + .floating-label,
-	.input-field select:not([value=""]) + .floating-label {
-		top: 0.25rem;
-		font-size: 0.75rem;
-		transform: translateY(0%);
-		color: rgba(255, 255, 255, 1);
-		background: transparent;
-	}
-
-	/* Style select dropdown options */
-	.input-field select option {
-		background: rgba(0, 0, 0, 0.9);
-		color: white;
-	}
-
-	/* Special positioning for textarea labels */
-	.input-field textarea + .floating-label {
-		top: 1rem;
-		transform: translateY(0%);
-	}
-
-	.input-field textarea:focus + .floating-label,
-	.input-field textarea:not(:placeholder-shown) + .floating-label {
-		top: 0.25rem;
-		font-size: 0.75rem;
-		transform: translateY(0%);
-		color: rgba(255, 255, 255, 1);
-		background: transparent;
-	}
-</style>
-
-
-	<script>
+<script>
 		function init(canvas) {
 			const context = canvas.getContext('2d');
 			
@@ -582,35 +508,35 @@ import Layout from '../layouts/Layout.astro';
 			const doubleTapDelay = 300; // milliseconds
 			
 			/**
-			 * handles click events to cycle through color palettes
+			 * handles double click events to cycle through color palettes
 			 */
-			function onClick(event) {
+			function onDoubleClick(event) {
 				// manual click disables auto-transition
 				autoTransition = false;
 				isFading = false;
-				
+
 				currentPalette = (currentPalette + 1) % totalPalettes;
 				colours = getPaletteColors(currentPalette);
-				
+
 				// update body class for background color
 				document.body.className = currentPalette > 0 ? `palette-${currentPalette}` : '';
-				
+
 				// reset transition timer
 				lastTransitionTime = Date.now();
 			}
-			
+
 			/**
 			 * handles touch events with double tap detection
 			 */
 			function onTouch(event) {
 				const currentTime = new Date().getTime();
 				const tapLength = currentTime - lastTouchTime;
-				
+
 				if (tapLength < doubleTapDelay && tapLength > 0) {
 					// Double tap detected
-					onClick(event);
+					onDoubleClick(event);
 				}
-				
+
 				lastTouchTime = currentTime;
 			}
 
@@ -673,7 +599,7 @@ import Layout from '../layouts/Layout.astro';
 			window.addEventListener('resize', resize);
 			window.addEventListener('mousemove', onPointerMove);
 			window.addEventListener('touchmove', onPointerMove, { passive: true });
-			window.addEventListener('click', onClick);
+			window.addEventListener('dblclick', onDoubleClick);
 			window.addEventListener('touchstart', onTouch);
 			
 			// enable device orientation on first interaction (disabled for now)
