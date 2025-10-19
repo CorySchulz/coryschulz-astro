@@ -3,5 +3,6 @@ import './tarot.esm.js';
 import './effects/ripple.esm.js';
 import './effects/butterfly.esm.js';
 import './effects/peacock.esm.js';
+import './effects/spotlight.esm.js';
 
 // Add other JS library imports here
