@@ -1,11 +1,6 @@
 function init(canvas) {
 	const context = canvas.getContext('2d');
 
-	// hide hint after 5 seconds
-	setTimeout(() => {
-		document.getElementById('hint').classList.add('fade');
-	}, 5000);
-
 	// Motion effects disabled for now
 	// const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 	// if (isIOS && typeof DeviceOrientationEvent.requestPermission === 'function') {
