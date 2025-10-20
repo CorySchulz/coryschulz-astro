@@ -1,5 +1,45 @@
 @import "tailwindcss";
 
+/* ============================================ */
+/* Custom Fonts */
+/* ============================================ */
+
+@font-face {
+  font-family: 'Fields';
+  src: url('/fieldsdisplay-extrabold.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/Metropolis-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/Metropolis-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Metropolis';
+  src: url('/Metropolis-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-fields {
+  font-family: 'Fields', system-ui, sans-serif;
+}
+
 @theme {
   /* Lock container max-width at 1280px */
   --breakpoint-2xl: 1280px;
@@ -119,6 +159,8 @@ body {
   height: 100%;
   margin: 0;
   overflow-x: hidden;
+  font-family: 'Metropolis', system-ui, sans-serif;
+  font-weight: 500;
 }
 
 /* Text shadow for readability on animated backgrounds */
@@ -251,6 +293,12 @@ body.palette-3 #lavaCanvas {
   transform: translateY(0%);
   color: rgba(255, 255, 255, 1);
   background: transparent;
+}
+
+/* Special positioning for select labels */
+.input-field select:focus + .floating-label,
+.input-field select:not([value=""]) + .floating-label {
+  top: 0.375rem;
 }
 
 /* ============================================ */
