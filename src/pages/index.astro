@@ -24,7 +24,7 @@ import Layout from '../layouts/Layout.astro';
 		<div class="container py-12">
 			<!-- Hero Section -->
 			<section class="mb-20">
-				<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20">
+				<div class="bg-gray-900/50 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20">
 					<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 						<!-- Left: Photo and Name -->
 						<div class="flex flex-col items-center lg:items-start gap-6">
@@ -34,13 +34,13 @@ import Layout from '../layouts/Layout.astro';
 							<div class="text-center lg:text-left">
 								<h1 class="text-4xl lg:text-5xl font-black text-white mb-3 tracking-tight text-shadow-lg font-fields">Cory Schulz</h1>
 								<p class="text-white/80 text-lg lg:text-xl leading-relaxed max-w-[500px] font-normal text-shadow text-pretty text-semibold">
-									Hi! I'm the creator of Magic Spells and Tarot carousel. I love to design beautiful experiences and create tools that make the internet more fun. 
+									Hi! I'm the creator of Magic Spells and Tarot carousel. I love to design beautiful experiences and create tools that make the internet more fun. Feel free to send me a message if you're looking for a web developer and think I might be a good fit.
 								</p>
-								<a
-									href="mailto:cory@magicspells.io"
-									class="text-lg text-white/90 hover:text-white transition-colors block mt-4 font-medium text-shadow underline">
-										cory@magicspells.io
-								</a>
+								<button
+									id="scroll-to-contact"
+									class="mt-6 bg-white/10 bg-noise backdrop-blur-[30px] text-white px-6 py-3 rounded-xl hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30">
+									Send a Message
+								</button>
 							</div>
 						</div>
 
@@ -48,7 +48,7 @@ import Layout from '../layouts/Layout.astro';
 						<div class="grid grid-cols-1 gap-6">
 							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
 								<div class="flex items-center gap-4">
-									<div class="text-4xl font-bold">20</div>
+									<div class="text-6xl font-bold -mb-2 w-[80px] text-right">20</div>
 									<div>
 										<div class="text-lg font-semibold">Years</div>
 										<div class="text-white/80 text-sm">Full Stack Developer</div>
@@ -56,8 +56,8 @@ import Layout from '../layouts/Layout.astro';
 								</div>
 							</div>
 							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
-								<div class="flex items-center gap-4">
-									<div class="text-4xl font-bold">10</div>
+								<div class="flex items-center gap-4 ">
+									<div class="text-6xl font-bold  -mb-2 w-[80px] text-right">10</div>
 									<div>
 										<div class="text-lg font-semibold">Years</div>
 										<div class="text-white/80 text-sm">Shopify Developer</div>
@@ -66,15 +66,193 @@ import Layout from '../layouts/Layout.astro';
 							</div>
 							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
 								<div class="flex items-center gap-4">
-									<div class="text-4xl font-bold">4</div>
+									<div class="text-6xl font-bold  -mb-2 w-[80px] text-right">4</div>
 									<div>
 										<div class="text-lg font-semibold">Years</div>
 										<div class="text-white/80 text-sm">Designer</div>
 									</div>
 								</div>
 							</div>
+							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
+								<div class="flex items-center gap-4">
+									<div class="text-6xl font-bold  -mb-2 w-[80px] text-right">1</div>
+									<div>
+										<div class="text-lg font-semibold">Year</div>
+										<div class="text-white/80 text-sm">AI Engineer</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
+				</div>
+			</section>
+
+			<!-- Featured Work Section -->
+			<section class="mb-20">
+				<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20 text-white">
+					<h2 class="text-4xl font-bold mb-8 text-white drop-shadow-lg font-fields">Featured Work</h2>
+
+					<tarot-carousel>
+						<script type="application/json" data-tarot-options>
+							{
+								"gap": 16,
+								"loop": true,
+								"slidesPerView": 1,
+								"slidesPerMove": 1,
+								"navigation": {
+									"showButtons": false,
+									"showPagination": true,
+									"paginationPosition": "bottom",
+									"buttonsPosition": "bottom"
+								},
+								"breakpoints": {
+									"768": {
+										"gap": 20,
+										"slidesPerView": 2,
+										"slidesPerMove": 2
+									},
+									"1200": {
+										"gap": 24,
+										"slidesPerView": 3,
+										"slidesPerMove": 3
+									}
+								}
+							}
+						</script>
+						<tarot-viewport>
+							<tarot-slide>
+								<a href="https://www.casamigos.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
+									<div class="aspect-video bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white/50 text-sm relative">
+										<div class="absolute top-[13px] left-3 flex gap-2">
+											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
+										</div>
+										Project Image
+									</div>
+								</a>
+							</tarot-slide>
+							<tarot-slide>
+								<a href="https://www.milwaukeetool.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
+									<div class="aspect-video bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white/50 text-sm relative">
+										<div class="absolute top-[13px] left-3 flex gap-2">
+											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
+										</div>
+										Project Image
+									</div>
+								</a>
+							</tarot-slide>
+							<tarot-slide>
+								<a href="https://pura.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
+									<div class="aspect-video bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white/50 text-sm relative">
+										<div class="absolute top-[13px] left-3 flex gap-2">
+											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
+										</div>
+										Project Image
+									</div>
+								</a>
+							</tarot-slide>
+							<tarot-slide>
+								<a href="https://grandecosmetics.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
+									<div class="aspect-video bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white/50 text-sm">
+										Project Image
+									</div>
+										<div class="absolute top-[13px] left-3 flex gap-2">
+											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
+										</div>
+								</a>
+							</tarot-slide>
+							<tarot-slide>
+								<a href="https://ritualhockey.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
+									<div class="aspect-video bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center text-white/50 text-sm">
+										Project Image
+									</div>
+										<div class="absolute top-[13px] left-3 flex gap-2">
+											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
+										</div>
+								</a>
+							</tarot-slide>
+							<tarot-slide>
+								<a href="https://wilegalblank.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
+									<div class="aspect-video bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center text-white/50 text-sm relative">
+										<div class="absolute top-[13px] left-3 flex gap-2">
+											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DESIGN</span>
+											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
+										</div>
+										Project Image
+									</div>
+								</a>
+							</tarot-slide>
+							<tarot-slide>
+								<a href="https://dashingdiva.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
+									<div class="aspect-video bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white/50 text-sm relative">
+										<div class="absolute top-[13px] left-3 flex gap-2">
+											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
+										</div>
+										Project Image
+									</div>
+								</a>
+							</tarot-slide>
+							<tarot-slide>
+								<a href="https://www.sleepzzz.com.au/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
+									<div class="aspect-video bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center text-white/50 text-sm">
+										Project Image
+									</div>
+										<div class="absolute top-[13px] left-3 flex gap-2">
+											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
+										</div>
+								</a>
+							</tarot-slide>
+							<tarot-slide>
+								<a href="https://mogofitness.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
+									<div class="aspect-video bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-white/50 text-sm">
+										Project Image
+									</div>
+										<div class="absolute top-[13px] left-3 flex gap-2">
+											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
+										</div>
+								</a>
+							</tarot-slide>
+							<tarot-slide>
+								<a href="https://braxleybands.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
+									<div class="aspect-video bg-gradient-to-br from-amber-500 to-yellow-500 flex items-center justify-center text-white/50 text-sm">
+										Project Image
+									</div>
+										<div class="absolute top-[13px] left-3 flex gap-2">
+											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
+										</div>
+								</a>
+							</tarot-slide>
+							<tarot-slide>
+								<a href="https://www.rositausa.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
+									<div class="aspect-video bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center text-white/50 text-sm">
+										Project Image
+									</div>
+										<div class="absolute top-[13px] left-3 flex gap-2">
+											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
+										</div>
+								</a>
+							</tarot-slide>
+							<tarot-slide>
+								<a href="https://www.empirelevel.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
+									<div class="aspect-video bg-gradient-to-br from-slate-500 to-gray-500 flex items-center justify-center text-white/50 text-sm">
+										Project Image
+									</div>
+										<div class="absolute top-[13px] left-3 flex gap-2">
+											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
+										</div>
+								</a>
+							</tarot-slide>
+							<tarot-slide>
+								<a href="https://vibrantbodycompany.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
+									<div class="aspect-video bg-gradient-to-br from-fuchsia-500 to-pink-500 flex items-center justify-center text-white/50 text-sm">
+										Project Image
+									</div>
+										<div class="absolute top-[13px] left-3 flex gap-2">
+											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
+										</div>
+								</a>
+							</tarot-slide>
+						</tarot-viewport>
+					</tarot-carousel>
 				</div>
 			</section>
 
@@ -234,37 +412,37 @@ import Layout from '../layouts/Layout.astro';
 									}
 								</script>
 								<tarot-viewport>
-									<tarot-slide class="bg-gradient-to-br from-emerald-500 to-teal-500 min-h-[300px] lg:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
+									<tarot-slide class="bg-gradient-to-br from-emerald-500 to-teal-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
 										<div class="flex h-full w-full items-center justify-center">
 											<div class="slide-content">Slide 1</div>
 										</div>
 									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-sky-500 to-blue-500 min-h-[300px] lg:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
+									<tarot-slide class="bg-gradient-to-br from-sky-500 to-blue-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
 										<div class="flex h-full w-full items-center justify-center">
 											<div class="slide-content">Slide 2</div>
 										</div>
 									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-amber-500 to-yellow-500 min-h-[300px] lg:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
+									<tarot-slide class="bg-gradient-to-br from-amber-500 to-yellow-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
 										<div class="flex h-full w-full items-center justify-center">
 											<div class="slide-content">Slide 3</div>
 										</div>
 									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-rose-500 to-pink-500 min-h-[300px] lg:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
+									<tarot-slide class="bg-gradient-to-br from-rose-500 to-pink-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
 										<div class="flex h-full w-full items-center justify-center">
 											<div class="slide-content">Slide 4</div>
 										</div>
 									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-purple-500 to-indigo-500 min-h-[300px] lg:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
+									<tarot-slide class="bg-gradient-to-br from-purple-500 to-indigo-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
 										<div class="flex h-full w-full items-center justify-center">
 											<div class="slide-content">Slide 5</div>
 										</div>
 									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-cyan-500 to-sky-500 min-h-[300px] lg:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
+									<tarot-slide class="bg-gradient-to-br from-cyan-500 to-sky-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
 										<div class="flex h-full w-full items-center justify-center">
 											<div class="slide-content">Slide 6</div>
 										</div>
 									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-fuchsia-500 to-purple-500 min-h-[300px] lg:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
+									<tarot-slide class="bg-gradient-to-br from-fuchsia-500 to-purple-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
 										<div class="flex h-full w-full items-center justify-center">
 											<div class="slide-content">Slide 7</div>
 										</div>
@@ -335,8 +513,8 @@ import Layout from '../layouts/Layout.astro';
 			</section>
 
 			<!-- Contact Section -->
-			<section class="mb-20">
-				
+			<section id="contact-section" class="mb-20">
+
 				<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-8 rounded-xl shadow-lg border border-white/20">
 
 					<h2 class="text-4xl font-bold pt-2 mb-6 md:mb-8 lg:mb-6 text-white text-center drop-shadow-lg font-fields text-balance">
@@ -551,4 +729,14 @@ import Layout from '../layouts/Layout.astro';
 			console.error('Form submission error:', error);
 		}
 	});
+
+	// Smooth scroll to contact form
+	const scrollButton = document.getElementById('scroll-to-contact');
+	const contactSection = document.getElementById('contact-section');
+
+	if (scrollButton && contactSection) {
+		scrollButton.addEventListener('click', () => {
+			contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		});
+	}
 </script>

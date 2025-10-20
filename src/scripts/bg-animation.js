@@ -38,12 +38,12 @@ function init(canvas) {
 	function getPaletteColors(paletteIndex) {
 		// Hardcoded fallbacks for iOS Safari compatibility
 		const palettes = [
-			// Orange palette
-			['#f3a840', '#d87c2c', '#ffd47a', '#e28d36', '#c45537', '#e07b3a'],
-			// Magenta palette
-			['#8b1538', '#a91b60', '#6d1b45', '#b91a6b', '#4a0e29', '#9e1854'],
 			// Blue palette
 			['#1e3a5f', '#0f2847', '#0d1929', '#162544', '#0a1628', '#1a4d7a'],
+			// Magenta/Pink palette
+			['#8b1538', '#a91b60', '#6d1b45', '#b91a6b', '#4a0e29', '#9e1854'],
+			// Orange palette
+			['#f3a840', '#d87c2c', '#ffd47a', '#e28d36', '#c45537', '#e07b3a'],
 			// Purple palette
 			['#4a148c', '#6a1b9a', '#311b92', '#512da8', '#1a0d40', '#3f1675']
 		];
