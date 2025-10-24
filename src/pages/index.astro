@@ -28,10 +28,85 @@ import Layout from '../layouts/Layout.astro';
 		opacity: 1;
 		transform: translateY(0);
 	}
+
+	/* Dropdown Select Custom Styles Override */
+	dropdown-select {
+		--select-color-background: rgba(0, 0, 0, 0.15);
+		--select-color-border: rgba(255, 255, 255, 0.2);
+		--select-color-border-hover: rgba(255, 255, 255, 0.4);
+		--select-color-text: white;
+		--select-color-hover: rgba(255, 255, 255, 0.1);
+		--select-color-focus: rgba(255, 255, 255, 0.15);
+		--select-color-selected: rgba(255, 255, 255, 0.15);
+		--select-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+		--select-border-radius: 0.5rem;
+		--select-options-max-height: none;
+		width: 100%;
+	}
+
+	dropdown-select-trigger {
+		backdrop-filter: blur(30px);
+		-webkit-backdrop-filter: blur(30px);
+	}
+
+	dropdown-options {
+		/* Can't use backdrop-filter when nested inside an element that already has it */
+		/* Using a more opaque background with noise pattern instead */
+		background:
+			url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"),
+			rgba(0, 0, 0, 0.95) !important;
+		background-blend-mode: overlay;
+	}
+
+	dropdown-option {
+		position: relative;
+	}
+
+	dropdown-option:first-child {
+		border-top-left-radius: 0.5rem;
+		border-top-right-radius: 0.5rem;
+	}
+
+	dropdown-option:last-child {
+		border-bottom-left-radius: 0.5rem;
+		border-bottom-right-radius: 0.5rem;
+	}
+
+	dropdown-option[aria-selected="true"] {
+		background-color: rgba(255, 255, 255, 0.15) !important;
+		font-weight: 600;
+	}
+
+	dropdown-option:hover {
+		background-color: rgba(255, 255, 255, 0.1) !important;
+	}
+
+	dropdown-option:focus {
+		background-color: rgba(255, 255, 255, 0.15) !important;
+		box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3) !important;
+	}
+
+	/* Canvas wrapper to hide right edge rendering glitch */
+	.canvas-wrapper {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		overflow: hidden;
+		z-index: 0;
+	}
+
+	#lavaCanvas {
+		width: calc(100% + 10px);
+		height: 100%;
+	}
 </style>
 
 <Layout title="Cory Schulz - Full Stack Developer">
-	<canvas id="lavaCanvas"></canvas>
+	<div class="canvas-wrapper">
+		<canvas id="lavaCanvas"></canvas>
+	</div>
 
 	<main class="relative z-10 min-h-screen">
 		<div class="container py-12">
@@ -292,7 +367,7 @@ import Layout from '../layouts/Layout.astro';
 
 			<!-- Tarot Section -->
 			<section class="mb-20">
-				<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl mb-8 shadow-lg border border-white/20 text-white text-center">
+				<div data-section-trigger class="bg-gray-900/50 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl mb-8 shadow-lg border border-white/20 text-white text-center">
 					<h2 class="text-4xl font-bold mb-6 text-white drop-shadow-lg font-fields uppercase">Tarot</h2>
 					<p class="text-lg mb-6 leading-relaxed text-pretty">A modern carousel with beautiful physics based animations.</p>
 
@@ -606,10 +681,10 @@ import Layout from '../layouts/Layout.astro';
 									<input
 										id="website"
 										name="website"
-										type="url"
+										type="text"
 										required
 										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-										placeholder="https://yourwebsite.com"
+										placeholder="Your website"
 									/>
 									<label for="website" class="floating-label">Website URL</label>
 								</div>
@@ -622,45 +697,51 @@ import Layout from '../layouts/Layout.astro';
 						<div class="space-y-4">
 							<h3 class="text-lg font-semibold text-white mb-4 font-fields">Tell me about your project</h3>
 							<div class="space-y-6">
-								<div class="input-field">
-									<select
-										id="budget"
-										name="budget"
-										required
-										class="w-full px-4 pt-8 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 appearance-none min-h-[56px]"
-										style="-webkit-appearance: none; -moz-appearance: none;"
-									>
-										<option value="$10,000 - $20,000" selected>$10,000 - $20,000</option>
-										<option value="$20,000 - $40,000">$20,000 - $40,000</option>
-										<option value="$40,000 - $60,000">$40,000 - $60,000</option>
-										<option value="$60,000 - $100,000">$60,000 - $100,000</option>
-										<option value="$100,000+">$100,000+</option>
-									</select>
-									<label for="budget" class="floating-label">Budget</label>
-								</div>
+								<!-- Budget and Services Row - Side by side on desktop, stacked on mobile -->
+								<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+									<!-- Budget Column -->
+									<div class="relative">
+										<label class="block text-white mb-2 font-fields">Budget</label>
+										<dropdown-select class="w-full">
+											<dropdown-select-trigger class="w-full px-4 py-4 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 cursor-pointer flex justify-between items-center">
+												<span class="dropdown-label">$10,000 - $20,000</span>
+											</dropdown-select-trigger>
 
-								<!-- Services Section -->
-								<div class="space-y-4">
-									<h4 class="text-base font-semibold text-white font-fields">What services do you need?</h4>
-									<div class="space-y-3">
-										<label class="flex items-center gap-3 cursor-pointer group">
-											<input
-												type="checkbox"
-												name="services"
-												value="Custom Shopify Theme Development"
-												class="w-5 h-5 bg-black/15 bg-noise border-2 border-white/20 rounded checked:bg-white/20 checked:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 cursor-pointer"
-											/>
-											<span class="text-white group-hover:text-white/80 transition-colors duration-200">Custom Shopify Theme Development</span>
-										</label>
-										<label class="flex items-center gap-3 cursor-pointer group">
-											<input
-												type="checkbox"
-												name="services"
-												value="Shopify Site Design"
-												class="w-5 h-5 bg-black/15 bg-noise border-2 border-white/20 rounded checked:bg-white/20 checked:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 cursor-pointer"
-											/>
-											<span class="text-white group-hover:text-white/80 transition-colors duration-200">Shopify Site Design</span>
-										</label>
+											<input type="hidden" class="dropdown-hidden-input" name="budget" value="$10,000 - $20,000" required />
+
+											<dropdown-options class="w-full mt-2 border border-white/20 rounded-lg shadow-xl overflow-hidden">
+												<dropdown-option value="$10,000 - $20,000" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$10,000 - $20,000</dropdown-option>
+												<dropdown-option value="$20,000 - $40,000" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$20,000 - $40,000</dropdown-option>
+												<dropdown-option value="$40,000 - $60,000" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$40,000 - $60,000</dropdown-option>
+												<dropdown-option value="$60,000 - $100,000" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$60,000 - $100,000</dropdown-option>
+												<dropdown-option value="$100,000+" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$100,000+</dropdown-option>
+											</dropdown-options>
+										</dropdown-select>
+									</div>
+
+									<!-- Services Column -->
+									<div class="space-y-4">
+										<h4 class="text-base font-semibold text-white font-fields">What services do you need?</h4>
+										<div class="space-y-3">
+											<label class="flex items-center gap-3 cursor-pointer group">
+												<input
+													type="checkbox"
+													name="services"
+													value="Custom Shopify Theme Development"
+													class="w-5 h-5 bg-black/15 bg-noise border-2 border-white/20 rounded checked:bg-white/20 checked:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 cursor-pointer"
+												/>
+												<span class="text-white group-hover:text-white/80 transition-colors duration-200">Custom Shopify Theme Development</span>
+											</label>
+											<label class="flex items-center gap-3 cursor-pointer group">
+												<input
+													type="checkbox"
+													name="services"
+													value="Shopify Site Design"
+													class="w-5 h-5 bg-black/15 bg-noise border-2 border-white/20 rounded checked:bg-white/20 checked:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 cursor-pointer"
+												/>
+												<span class="text-white group-hover:text-white/80 transition-colors duration-200">Shopify Site Design</span>
+											</label>
+										</div>
 									</div>
 								</div>
 
@@ -671,9 +752,9 @@ import Layout from '../layouts/Layout.astro';
 										name="referral"
 										type="text"
 										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-										placeholder="How did you hear about us?"
+										placeholder="How did you find me?"
 									/>
-									<label for="referral" class="floating-label">How did you hear about us?</label>
+									<label for="referral" class="floating-label">How did you find me?</label>
 								</div>
 
 								<div class="input-field">
@@ -708,6 +789,7 @@ import Layout from '../layouts/Layout.astro';
 
 <script>
 	import '../scripts/bg-animation.js';
+	import '@magic-spells/dropdown-select';
 </script>
 
 <script is:inline>
