@@ -11,6 +11,7 @@
   "dependencies": {
     "@astrojs/vercel": "^8.2.10",
     "@magic-spells/scroll-progress": "^0.1.0",
+    "@magic-spells/scroll-trigger": "^0.1.2",
     "astro": "^5.14.6",
     "tailwindcss": "^4.0.0"
   },
