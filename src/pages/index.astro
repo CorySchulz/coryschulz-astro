@@ -185,7 +185,7 @@ import Layout from '../layouts/Layout.astro';
 			<!-- Featured Work Section -->
 			<section class="mb-20">
 				<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20 text-white">
-					<h2 class="text-4xl font-bold mb-8 text-white drop-shadow-lg font-fields">Featured Work</h2>
+					<h2 class="text-4xl font-bold mb-8 text-white drop-shadow-lg font-fields text-center">Featured Work</h2>
 
 					<tarot-carousel>
 						<script type="application/json" data-tarot-options>
@@ -379,10 +379,15 @@ import Layout from '../layouts/Layout.astro';
 
 			<!-- Tarot Section -->
 			<section class="mb-20">
-				<div data-section-trigger class="bg-gray-900/50 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl mb-8 shadow-lg border border-white/20 text-white text-center">
-					<h2 class="text-4xl font-bold mb-6 text-white drop-shadow-lg font-fields uppercase">Tarot</h2>
-					<p class="text-lg mb-6 leading-relaxed text-pretty">A modern carousel with beautiful physics based animations.</p>
 
+				<div data-section-trigger class="relative p-4 md:p-6 lg:p-10 rounded-xl mb-8 shadow-lg border border-white/20 text-white text-center overflow-hidden" style="background: url(/bg-noise.png) repeat 0 0 / 50px 50px, linear-gradient(to bottom right, rgb(15 23 42), rgb(30 58 138), rgb(30 41 59)); background-blend-mode: overlay;">
+	
+					<!-- Content -->
+					<div class="relative z-10">
+						<p class="text-sm uppercase tracking-wider text-white/70 my-4 font-semibold">Introducing</p>
+						<h2 class="text-6xl md:text-7xl lg:text-8xl font-black mb-6 text-white font-fields uppercase tracking-tight" style="text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);">Tarot</h2>
+						<p class="text-lg md:text-xl mb-6 leading-relaxed text-pretty max-w-2xl mx-auto px-4">A modern carousel with beautiful physics based animations.</p>
+					</div>
 				</div>
 
 				<!-- Tarot Examples -->
