@@ -8,7 +8,7 @@
 
    Tarot Carousel v0.1.0 - beta
    A highly customizable carousel with beautiful, physics-driven animations
-   Copyright 2025 Magic Spells LLC
+   Copyright 2026 Magic Spells LLC
 
    This software is source-available but not open source.
    See LICENSES for usage tiers and commercial terms.
@@ -24,8 +24,6 @@
      Issues: https://github.com/magic-spells/tarot/issues
    Licenses: https://www.magicspells.io/licenses
 */
-
-import { Tarot, TarotEffect } from '@magic-spells/tarot';
 
 class RippleWindow {
 	#value = 0;
@@ -56,7 +54,8 @@ class RippleWindow {
 		_.trackStartPos = widths.paddingLeft;
 
 		// we stop tracking after end position
-		_.trackEndPos = widths.viewport - widths.track + widths.gap - widths.paddingRight;
+		_.trackEndPos =
+			widths.viewport - widths.track + widths.gap - widths.paddingRight;
 	}
 
 	setMaxValue(maxValue) {
@@ -80,7 +79,11 @@ class RippleWindow {
 			_.#value -= trackDelta;
 
 			// not looping & transitioning to last slide
-		} else if (!_.options.loop && trackDelta < 0 && trackPos < _.trackEndPos + _.slideAndGapWidth) {
+		} else if (
+			!_.options.loop &&
+			trackDelta < 0 &&
+			trackPos < _.trackEndPos + _.slideAndGapWidth
+		) {
 			_.#value -= trackDelta;
 
 			// default - add trackDelta to value
@@ -94,6 +97,7 @@ class RippleWindow {
 		} else if (_.#value > _.#maxValue) {
 			_.#value = _.#maxValue;
 		}
+
 		return _.#value;
 	}
 
@@ -164,8 +168,8 @@ class TransformRegion {
 		trackPos *= -1;
 		const startPos = roundToHalfPixel(trackPos + _.startPos);
 		const endPos = roundToHalfPixel(trackPos + _.endPos);
-		// Use centerPoint property which is set by frame engine
-		const centerPos = roundToHalfPixel(slide.centerPoint || 0);
+		// Use _centerPoint property which is set by frame engine
+		const centerPos = roundToHalfPixel(slide._centerPoint || 0);
 
 		let percentInRange = 0;
 
@@ -228,55 +232,55 @@ class RippleTransforms {
 		// left ranges
 		_.leftEndToMin = new TransformRegion({
 			// name: 'left end to min',
-			property: 'leftWidthTrimmed',
+			property: "_leftWidthTrimmed",
 		});
 
 		_.leftMinToSquished = new TransformRegion({
 			// name: 'left min to squished',
-			property: 'leftWidthTrimmed',
+			property: "_leftWidthTrimmed",
 		});
 
 		_.leftSquishedToFull = new TransformRegion({
 			// name: 'left squished to full',
-			property: 'leftWidthTrimmed',
+			property: "_leftWidthTrimmed",
 		});
 
 		// Left Masked on exit
 		_.leftFullToMin = new TransformRegion({
 			// name: 'left full to min',
-			property: 'leftWidthTrimmed',
+			property: "_leftWidthTrimmed",
 		});
 
 		_.leftFullToMinEnd = new TransformRegion({
 			// name: 'left full to min end',
-			property: 'leftWidthTrimmed',
+			property: "_leftWidthTrimmed",
 		});
 
 		// right transform ranges
 		_.rightEndToMin = new TransformRegion({
-			name: 'right width end',
-			property: 'rightWidthTrimmed',
+			name: "right width end",
+			property: "_rightWidthTrimmed",
 		});
 
 		_.rightMinToSquished = new TransformRegion({
 			// name: 'right min to squished',
-			property: 'rightWidthTrimmed',
+			property: "_rightWidthTrimmed",
 		});
 
 		_.rightSquishedToFull = new TransformRegion({
 			// name: 'right squished to full',
-			property: 'rightWidthTrimmed',
+			property: "_rightWidthTrimmed",
 		});
 
 		// Right Masked on exit
 		_.rightFullToMin = new TransformRegion({
 			// name: 'right full to min',
-			property: 'rightWidthTrimmed',
+			property: "_rightWidthTrimmed",
 		});
 
 		_.rightFullToMinEnd = new TransformRegion({
 			// name: 'right full to min end',
-			property: 'rightWidthTrimmed',
+			property: "_rightWidthTrimmed",
 		});
 	}
 
@@ -288,7 +292,7 @@ class RippleTransforms {
 	reInit() {
 		const _ = this;
 		const widths = _.ctx.store.getWidths();
-		
+
 		_.viewportWidth = widths.viewport;
 		_.paddingLeftWidth = widths.paddingLeft;
 		_.paddingRightWidth = widths.paddingRight;
@@ -304,7 +308,10 @@ class RippleTransforms {
 	bindEvents() {
 		const _ = this;
 		_.ctx.emitter.on(_.ctx.events.window.resize, _.handlers.windowResize);
-		_.ctx.emitter.on(_.ctx.events.store.optionsChanged, _.handlers.optionsChanged);
+		_.ctx.emitter.on(
+			_.ctx.events.store.optionsChanged,
+			_.handlers.optionsChanged,
+		);
 	}
 
 	calculateTransformPoints() {
@@ -426,10 +433,12 @@ class RippleTransforms {
 
 		_.rightFullToMin.applyTransform(slide, percent, trackPos);
 		_.rightFullToMinEnd.applyTransform(slide, percent, trackPos);
-		
+
 		// Convert negative trim values to positive (width reduction)
-		if (slide.leftWidthTrimmed < 0) slide.leftWidthTrimmed = Math.abs(slide.leftWidthTrimmed);
-		if (slide.rightWidthTrimmed < 0) slide.rightWidthTrimmed = Math.abs(slide.rightWidthTrimmed);
+		if (slide._leftWidthTrimmed < 0)
+			slide._leftWidthTrimmed = Math.abs(slide._leftWidthTrimmed);
+		if (slide._rightWidthTrimmed < 0)
+			slide._rightWidthTrimmed = Math.abs(slide._rightWidthTrimmed);
 	}
 
 	// clean up our mess
@@ -438,7 +447,10 @@ class RippleTransforms {
 
 		// unbind events
 		_.ctx.emitter.off(_.ctx.events.window.resize, _.handlers.windowResize);
-		_.ctx.emitter.off(_.ctx.events.store.optionsChanged, _.handlers.optionsChanged);
+		_.ctx.emitter.off(
+			_.ctx.events.store.optionsChanged,
+			_.handlers.optionsChanged,
+		);
 
 		// if transform regions require cleanup, call their destroy methods if available
 		_.leftEndToMin?.destroy();
@@ -458,159 +470,175 @@ class RippleTransforms {
 	}
 }
 
-class RippleEffect extends TarotEffect {
-	static effectName = 'ripple';
+// Factory function - class is created when TarotEffect is available
+function createRippleEffect(TarotEffect) {
+	return class RippleEffect extends TarotEffect {
+		static effectName = "ripple";
 
-	static rules = {
-		min_slideWidth: 1,
-		max_slideWidth: Infinity,
-		min_slidesPerView: 1,
-		max_slidesPerView: Infinity,
-		loopBuffer: {
-			left: 2,
-			right: 2,
-		},
+		static rules = {
+			min_slideWidth: 1,
+			max_slideWidth: Infinity,
+			min_slidesPerView: 1,
+			max_slidesPerView: Infinity,
+			loopBuffer: {
+				left: 2,
+				right: 2,
+			},
+		};
+
+		constructor(ctx) {
+			super(ctx);
+			const _ = this;
+			_.ctx = ctx;
+
+			_.rippleWindow = new RippleWindow(ctx, _);
+			_.rippleTransforms = new RippleTransforms(ctx, _);
+
+			_.init();
+		}
+
+		init() {
+			this.rippleWindow.init();
+			this.rippleTransforms.init();
+		}
+
+		reInit() {
+			this.rippleWindow.reInit();
+			this.rippleTransforms.reInit();
+		}
+
+		/**
+		 * Main render function called every animation frame
+		 * Uses the frame-based architecture with dependency injection for utilities
+		 *
+		 * @param {Object} frame - Complete frame object with all carousel data
+		 * @param {Array} frame.slides - Sorted slides array with calculated positions
+		 * @param {Object} frame.widths - Layout measurements
+		 * @param {Object} frame.state - Carousel state
+		 * @param {Object} frame.animation - Animation data including trackPosition
+		 * @param {Object} frame.transformPoints - Named position points
+		 * @param {Object} utils - Frame utilities for position calculations
+		 */
+		render(frame, utils) {
+			const _ = this;
+			const { slides, widths, animation } = frame;
+
+			// Set the max value for the ripple window based on slide widths
+			_.rippleWindow.setMaxValue(widths.slide - widths.slideMin);
+
+			// render some stuff
+			_.renderTrackWidth(widths.track);
+			_.renderTrackPosition(animation);
+			_.renderSlideWidth(widths.slide);
+
+			// Extract animation details from frame
+			const trackPosition = animation.trackPosition;
+			const trackDelta = animation.trackDelta || 0;
+			const movementType = animation.movementType || "jump";
+			const progress = animation.progress || 1;
+
+			// Add amount to sliding window but only with 'animate' or 'drag' movements
+			if (
+				(movementType === "animate" || movementType === "drag") &&
+				progress <= 1
+			) {
+				_.rippleWindow.addAmount(trackDelta, trackPosition);
+			}
+
+			// Trigger settling animation when needed
+			if (
+				movementType === "settle" ||
+				(movementType === "animate" && progress > 0.75)
+			) {
+				_.rippleWindow.snapToValue(trackDelta, trackPosition);
+			}
+
+			// Get transform percentage from ripple window
+			const transformPercent = _.rippleWindow.getPercent();
+
+			// Slides are already sorted by renderIndex from frame engine
+			let totalRemovedRight = 0;
+			let slide;
+
+			// First pass: calculate width adjustments and positions
+			for (let i = 0, n = slides.length; i < n; ++i) {
+				slide = slides[i];
+
+				// clear left and right trimmed values
+				slide._rightWidthTrimmed = 0;
+				slide._leftWidthTrimmed = 0;
+
+				// Apply ripple transforms ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+				// there's a whole bunch of magic happening here 🪄
+				//  ╰( ͡◕ ͜ʖ ͡◕ )つ──~~⚝⚝⚝★★★🌟✨✨✨⚡⚡⚡💥💥💥🔥🔥🔥⚝:・ﾟ*~~~~~
+				_.rippleTransforms.applyTransforms(
+					slide,
+					trackPosition,
+					transformPercent,
+					frame,
+				);
+
+				// Calculate final display width
+				const displayWidth =
+					widths.slide -
+					slide._rightWidthTrimmed -
+					slide._leftWidthTrimmed;
+				slide.style.transition = "none";
+				slide.style.width = `${displayWidth}px`;
+
+				// Calculate position with accumulated right trim
+				// subtract the totalRemovedRight from track postion to pull
+				// the right slides towards the center
+				slide._renderPosition = slide._trackPosition - totalRemovedRight;
+
+				// Add to cumulative shift
+				totalRemovedRight += slide._rightWidthTrimmed;
+			}
+
+			// Second pass: handle left offset and apply transforms
+			let totalRemovedLeft = 0;
+			for (let k = slides.length - 1; k >= 0; --k) {
+				slide = slides[k];
+				// Add left width removed to total removed left
+				totalRemovedLeft += slide._leftWidthTrimmed;
+				// add the totalRemovedLeft from track postion to pull
+				// the left slides towards the center
+				slide._renderPosition += totalRemovedLeft;
+				// Update position on track for all slides
+				slide.style.transform = `translateX(${slide._renderPosition}px)`;
+			}
+		}
+
+		destroy() {
+			super.destroy();
+			const _ = this;
+
+			// call destroy on subcomponents
+			_.rippleWindow?.destroy();
+			_.rippleTransforms?.destroy();
+
+			// Clean up slide styles
+			const slides = _.ctx.store.getSlides() || [];
+			for (let i = 0, n = slides.length; i < n; ++i) {
+				const slide = slides[i];
+				if (!slide || !slide.style) continue;
+				slide.removeAttribute("aria-hidden");
+				slide.style.width = "";
+				slide.style.transform = "";
+				slide.style.transition = "";
+			}
+
+			// clear references for garbage collection
+			_.rippleWindow = null;
+			_.rippleTransforms = null;
+		}
 	};
-
-	constructor(ctx) {
-		super(ctx);
-		const _ = this;
-		_.ctx = ctx;
-
-		_.rippleWindow = new RippleWindow(ctx, _);
-		_.rippleTransforms = new RippleTransforms(ctx, _);
-
-		_.init();
-	}
-
-	init() {
-		// init ripple effects
-		this.rippleWindow.init();
-		this.rippleTransforms.init();
-	}
-
-	reInit() {
-		this.rippleWindow.reInit();
-		this.rippleTransforms.reInit();
-	}
-
-	/**
-	 * Main render function called every animation frame
-	 * Uses the frame-based architecture with dependency injection for utilities
-	 *
-	 * @param {Object} frame - Complete frame object with all carousel data
-	 * @param {Array} frame.slides - Sorted slides array with calculated positions
-	 * @param {Object} frame.widths - Layout measurements
-	 * @param {Object} frame.state - Carousel state
-	 * @param {Object} frame.animation - Animation data including trackPosition
-	 * @param {Object} frame.transformPoints - Named position points
-	 * @param {Object} utils - Frame utilities for position calculations
-	 */
-	render(frame, utils) {
-		const _ = this;
-		const { slides, widths, animation } = frame;
-
-		// Set the max value for the ripple window based on slide widths
-		_.rippleWindow.setMaxValue(widths.slide - widths.slideMin);
-
-		// render some stuff
-		_.renderTrackWidth(widths.track);
-		_.renderTrackPosition(animation);
-		_.renderSlideWidth(widths.slide);
-
-		// Extract animation details from frame
-		const trackPosition = animation.trackPosition;
-		const trackDelta = animation.trackDelta || 0;
-		const animationType = animation.type || 'jump';
-		const progress = animation.progress || 1;
-
-		// Add amount to sliding window but only with 'animate' or 'drag' movements
-		if ((animationType === 'animate' || animationType === 'drag') && progress <= 1) {
-			_.rippleWindow.addAmount(trackDelta, trackPosition);
-		}
-
-		// Trigger settling animation when needed
-		if (animationType === 'settle' || (animationType === 'animate' && progress > 0.75)) {
-			_.rippleWindow.snapToValue(trackDelta, trackPosition);
-		}
-
-		// Get transform percentage from ripple window
-		const transformPercent = _.rippleWindow.getPercent();
-
-		// Slides are already sorted by renderIndex from frame engine
-		let totalRemovedRight = 0;
-		let slide;
-
-		// First pass: calculate width adjustments and positions
-		for (let i = 0, n = slides.length; i < n; ++i) {
-			slide = slides[i];
-
-			// clear left and right trimmed values
-			slide.rightWidthTrimmed = 0;
-			slide.leftWidthTrimmed = 0;
-
-			// Apply ripple transforms ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-			// there's a whole bunch of magic happening here 🪄
-			//  ╰( ͡◕ ͜ʖ ͡◕ )つ──~~⚝⚝⚝★★★🌟✨✨✨⚡⚡⚡💥💥💥🔥🔥🔥⚝:・ﾟ*~~~~~
-			_.rippleTransforms.applyTransforms(slide, trackPosition, transformPercent, frame);
-
-			// Calculate final display width
-			const displayWidth = widths.slide - slide.rightWidthTrimmed - slide.leftWidthTrimmed;
-			slide.style.transition = 'none';
-			slide.style.width = `${displayWidth}px`;
-
-			// Calculate position with accumulated right trim
-			// subtract the totalRemovedRight from track postion to pull
-			// the right slides towards the center
-			slide.renderPosition = slide.trackPosition - totalRemovedRight;
-
-			// Add to cumulative shift
-			totalRemovedRight += slide.rightWidthTrimmed;
-		}
-
-		// Second pass: handle left offset and apply transforms
-		let totalRemovedLeft = 0;
-		for (let k = slides.length - 1; k >= 0; --k) {
-			slide = slides[k];
-			// Add left width removed to total removed left
-			totalRemovedLeft += slide.leftWidthTrimmed;
-			// add the totalRemovedLeft from track postion to pull
-			// the left slides towards the center
-			slide.renderPosition += totalRemovedLeft;
-			// Update position on track for all slides
-			slide.style.transform = `translateX(${slide.renderPosition}px)`;
-		}
-	}
-
-	destroy() {
-		super.destroy();
-		const _ = this;
-
-		// call destroy on subcomponents
-		_.rippleWindow?.destroy();
-		_.rippleTransforms?.destroy();
-
-		// Clean up slide styles
-		const slides = _.ctx.store.getSlides() || [];
-		for (let i = 0, n = slides.length; i < n; ++i) {
-			const slide = slides[i];
-			if (!slide || !slide.style) continue;
-			slide.removeAttribute('aria-hidden');
-			slide.style.width = '';
-			slide.style.transform = '';
-			slide.style.transition = '';
-		}
-
-		// clear references for garbage collection
-		_.rippleWindow = null;
-		_.rippleTransforms = null;
-	}
 }
 
+// Queue the factory (works regardless of whether Tarot is loaded)
+(window.TarotEffectQueue = window.TarotEffectQueue || []).push({
+	effectName: "ripple",
+	factory: createRippleEffect,
+});
 
-// Smart auto-registration - works with ESM bundlers and CDN/UMD
-if (typeof Tarot !== 'undefined') {
-  Tarot.registerEffect(RippleEffect);
-}
-
-export { RippleEffect as default };
+export { createRippleEffect as default };

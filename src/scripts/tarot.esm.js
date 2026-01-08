@@ -8,7 +8,7 @@
 
    Tarot Carousel v0.1.0 - beta
    A highly customizable carousel with beautiful, physics-driven animations
-   Copyright 2025 Magic Spells LLC
+   Copyright 2026 Magic Spells LLC
 
    This software is source-available but not open source.
    See LICENSES for usage tiers and commercial terms.
@@ -301,7 +301,7 @@ class DragHandler {
 		const slide = e.target.closest('tarot-slide');
 		if (slide) {
 			const index = parseInt(slide.getAttribute('index')) || 0;
-			const renderIndex = slide.renderIndex;
+			const renderIndex = slide._renderIndex;
 			_.ctx.emitter.emit(_.ctx.events.slides.click, {
 				index,
 				renderIndex,
@@ -417,7 +417,7 @@ class DragHandler {
 		}
 
 		// exit if has touch and direction is vertical or undefined
-		if (drag.hasTouch && drag.touchDirection != DIRECTION.HORIZONTAL) {
+		if (drag.hasTouch && drag.touchDirection !== DIRECTION.HORIZONTAL) {
 			// don't scroll and don't prevent default
 			return;
 		}
@@ -594,8 +594,7 @@ class EffectManager {
 		const NewEffectClass = _.#effectRegistry[effectName];
 
 		if (!NewEffectClass) {
-			console.warn(`Effect '${effectName}' not registered yet; falling back to 'carousel' until it loads`);
-			// Fallback to carousel effect to prevent broken state
+			// Effect not loaded yet - fall back to carousel and auto-upgrade when it registers
 			if (effectName !== 'carousel') {
 				this.loadEffect('carousel');
 			}
@@ -741,6 +740,7 @@ render-index:changed         { prevIndex, currentIndex, velocity?, animate? }
 selected-index:changed       { prevIndex, currentIndex }
 page-index:changed           { prevPageIndex, currentPageIndex }
 page-count:changed           { count }
+can-loop:changed             { canLoop:boolean }
 layout:changed               { prevWidths, currentWidths }
 slides:changed               { prevSlides, currentSlides }
 transform-points:changed     { prevPoints, currentPoints }
@@ -776,10 +776,10 @@ effect:changed               { previousEffect?, currentEffect, effectName }
 effect:loaded                { effect, effectName }
 effect:destroyed             { effectName }
 
-Animation
-animation:requested          { index, velocity, type }
-animation:started            { renderIndex, pageIndex, velocity, type }
-animation:completed          { renderIndex, pageIndex, type }
+Movement
+movement:requested           { index, pageIndex?, velocity, movementType }
+movement:started             { renderIndex, pageIndex, velocity, movementType }
+movement:completed           { renderIndex, pageIndex, movementType }
 
 Engine
 engine:position-changed      { position, velocity, progress, delta }
@@ -814,6 +814,7 @@ const EVENTS = Object.freeze({
 		slidesChanged: 'slides:changed',
 		pageIndexChanged: 'page-index:changed',
 		pageCountChanged: 'page-count:changed',
+		canLoopChanged: 'can-loop:changed',
 		selectedIndexChanged: 'selected-index:changed',
 		renderIndexChanged: 'render-index:changed',
 		transformPointsChanged: 'transform-points:changed',
@@ -865,11 +866,11 @@ const EVENTS = Object.freeze({
 		destroyed: 'effect:destroyed',
 	}),
 
-	// animation lifecycle
-	animation: Object.freeze({
-		requested: 'animation:requested',
-		started: 'animation:started',
-		completed: 'animation:completed',
+	// movement lifecycle
+	movement: Object.freeze({
+		requested: 'movement:requested',
+		started: 'movement:started',
+		completed: 'movement:completed',
 	}),
 
 	// physics engine events
@@ -928,7 +929,7 @@ class OptionsManager {
 				/** @type {number} - Base animation speed */
 				speed: 5,
 				/** @type {number} - Multiplier for initial velocity */
-				velocityBoost: 1.1,
+				velocityBoost: 1.4,
 			},
 
 			/** @type {object} - Autoplay settings */
@@ -1106,6 +1107,16 @@ class OptionsManager {
 		if (_.checkBreakpointsDebounced && typeof _.checkBreakpointsDebounced.cancel === 'function') {
 			_.checkBreakpointsDebounced.cancel();
 		}
+
+		// Clear references for garbage collection
+		_.ctx = null;
+		_.handlers = null;
+		_.checkBreakpointsDebounced = null;
+		_.userOptionsElement = null;
+		_.defaultOptions = null;
+		_.userOptions = null;
+		_.currentBreakpoint = null;
+		_.prevBreakpoint = null;
 	}
 
 	/**
@@ -1240,11 +1251,11 @@ class SlideManager {
 			_.reInit();
 		}, 4);
 
-        _.handlers = {
-            selectedIndexChanged: ({ currentIndex }) => {
-                _.renderSelectedIndex(currentIndex);
-            },
-        };
+		_.handlers = {
+			selectedIndexChanged: ({ currentIndex }) => {
+				_.renderSelectedIndex(currentIndex);
+			},
+		};
 
 		_.bindEvents();
 		_.init();
@@ -1311,8 +1322,8 @@ class SlideManager {
 
 	resetSlideIndexes(slides) {
 		for (let i = 0, n = slides.length; i < n; ++i) {
-			slides[i].renderIndex = i;
-			slides[i].index = i;
+			slides[i]._renderIndex = i;
+			slides[i]._index = i;
 			slides[i].setAttribute('index', i);
 		}
 	}
@@ -1337,15 +1348,15 @@ class SlideManager {
 			return Math.round(value * 2) / 2;
 		}
 
-		// Update trackPosition and centerPoint properties for all slides
+		// Update _trackPosition and _centerPoint properties for all slides
 		for (let i = 0, n = slides.length; i < n; ++i) {
 			const slide = slides[i]; // This is the actual <tarot-slide> DOM element
 
-			// Calculate trackPosition: renderIndex * slideAndGap
-			slide.trackPosition = roundToHalfPixel(slide.renderIndex * widths.slideAndGap);
+			// Calculate _trackPosition: _renderIndex * slideAndGap
+			slide._trackPosition = roundToHalfPixel(slide._renderIndex * widths.slideAndGap);
 
-			// Calculate centerPoint: trackPosition + (slide width / 2)
-			slide.centerPoint = roundToHalfPixel(slide.trackPosition + widths.slide / 2);
+			// Calculate _centerPoint: _trackPosition + (slide width / 2)
+			slide._centerPoint = roundToHalfPixel(slide._trackPosition + widths.slide / 2);
 		}
 	}
 
@@ -1356,20 +1367,27 @@ class SlideManager {
 	updateSlidePositions(trackPosition, slides, widths, options) {
 		const _ = this;
 
-		if (!_.ctx.utils.canLoop(slides.length, options)) {
+		// Quick reset if we can't loop
+		if (!_.ctx.store.getState().canLoop) {
 			_.resetAllSlides(slides);
 			return;
 		}
+
+		// Get effect buffer requirements for positioning
+		const effect = _.ctx.commands.getEffect();
+		const loopBuffer = effect?.constructor?.rules?.loopBuffer || { left: 0, right: 0 };
 
 		// Get viewport bounds
 		const viewportWidth = widths.viewport;
 		const slideWidth = widths.slide;
 		const gapWidth = widths.gap;
 		const slideAndGapWidth = slideWidth + gapWidth;
+		const halfSlideWidth = slideWidth / 2;
 
 		// Convert track position to viewport bounds
 		const viewportStart = -trackPosition;
 		const viewportEnd = viewportStart + viewportWidth;
+		const viewportCenter = viewportStart + viewportWidth / 2;
 
 		// Find all slide positions visible in the viewport
 		const visibleIndices = new Set();
@@ -1384,10 +1402,6 @@ class SlideManager {
 				visibleIndices.add(i);
 			}
 		}
-
-		// Add effect buffers
-		const effect = _.ctx.commands.getEffect();
-		const loopBuffer = effect?.constructor?.rules?.loopBuffer || { left: 0, right: 0 };
 
 		if (visibleIndices.size > 0) {
 			const indices = Array.from(visibleIndices);
@@ -1428,6 +1442,26 @@ class SlideManager {
 			}
 		}
 
+		// CRITICAL FIX: Handle position overflow when we need more positions than slides
+		// This happens during drag transitions when partial visibility on both edges
+		// causes visibleIndices + buffers to exceed slideCount
+		if (visibleIndices.size > slideCount) {
+			// Sort positions by distance to viewport center (closest first)
+			const sortedPositions = Array.from(visibleIndices).sort((a, b) => {
+				const centerA = a * slideAndGapWidth + halfSlideWidth;
+				const centerB = b * slideAndGapWidth + halfSlideWidth;
+				const distA = Math.abs(centerA - viewportCenter);
+				const distB = Math.abs(centerB - viewportCenter);
+				return distA - distB;
+			});
+
+			// Keep only the closest slideCount positions
+			visibleIndices.clear();
+			for (let i = 0; i < slideCount; i++) {
+				visibleIndices.add(sortedPositions[i]);
+			}
+		}
+
 		// Apply render indices
 		const assignments = new Map();
 
@@ -1440,18 +1474,17 @@ class SlideManager {
 		for (const slide of slides) {
 			const targetIndex = assignments.get(slide);
 			if (targetIndex !== undefined) {
-				slide.renderIndex = targetIndex;
+				slide._renderIndex = targetIndex;
 			}
 		}
 	}
-
 
 	/**
 	 * Reset all slides to their natural indices (no looping)
 	 */
 	resetAllSlides(slides) {
 		for (let i = 0; i < slides.length; i++) {
-			slides[i].renderIndex = i;
+			slides[i]._renderIndex = i;
 		}
 	}
 
@@ -1529,7 +1562,7 @@ class SlideManager {
 
 		for (let i = 0, n = slides.length; i < n; ++i) {
 			const slide = slides[i];
-			slide.selected = slide.index === newIndex;
+			slide._selected = slide._index === newIndex;
 		}
 	}
 
@@ -1556,6 +1589,7 @@ class PhysicsEngine {
 	#attraction;
 	#friction;
 	#frictionFactor;
+	#velocityBoost;
 	#velocity;
 	#currentValue;
 	#targetValue;
@@ -1570,8 +1604,9 @@ class PhysicsEngine {
 	 * creates an instance of physicsengine.
 	 * @param {number} [attraction=0.026] - the attraction value for physics-based animation (0 < attraction < 1).
 	 * @param {number} [friction=0.28] - the friction value for physics-based animation (0 < friction < 1).
+	 * @param {number} [velocityBoost=1.4] - multiplier applied to initial velocity for snappier response.
 	 */
-	constructor({ attraction = 0.026, friction = 0.28 } = {}) {
+	constructor({ attraction = 0.026, friction = 0.28, velocityBoost = 1.4 } = {}) {
 		const _ = this;
 		_.#validateAttraction(attraction);
 		_.#validateFriction(friction);
@@ -1579,6 +1614,7 @@ class PhysicsEngine {
 		_.#attraction = attraction;
 		_.#friction = friction;
 		_.#frictionFactor = 1 - friction;
+		_.#velocityBoost = velocityBoost;
 
 		_.#velocity = 0;
 		_.#currentValue = 0;
@@ -1607,15 +1643,15 @@ class PhysicsEngine {
 		}
 
 		if (isNaN(endValue)) {
-			console.log('end value is not a number');
+			console.warn(`PhysicsEngine.animateTo: endValue is NaN (received: ${endValue})`);
 			return;
 		}
 
 		// increment #animationId to mark this as our "active" animation
 		++_.#animationId;
 
-		// apply a velocity boost
-		initialVelocity *= 1.4;
+		// apply a velocity boost for snappier response
+		initialVelocity *= _.#velocityBoost;
 
 		_.#startValue = startValue;
 		_.#currentValue = startValue;
@@ -1744,6 +1780,14 @@ class PhysicsEngine {
 	}
 
 	/**
+	 * sets the velocity boost multiplier.
+	 * @param {number} velocityBoost - multiplier for initial velocity.
+	 */
+	setVelocityBoost(velocityBoost) {
+		this.#velocityBoost = velocityBoost;
+	}
+
+	/**
 	 * adds an event listener for the specified event.
 	 * @param {string} eventName - the name of the event.
 	 * @param {function} eventFunction - the function to call when the event is triggered.
@@ -1789,7 +1833,7 @@ class TrackAnimator {
 	#dragStartPos = 0;
 	#minVelocity = 0;
 	#targetPos = 0;
-	#animationType = '';
+	#movementType = '';
 	#direction = 0;
 
 	/**
@@ -1806,16 +1850,18 @@ class TrackAnimator {
 		_.engine = new PhysicsEngine({
 			attraction: options.animation.attraction,
 			friction: options.animation.friction,
+			velocityBoost: options.animation.velocityBoost,
 		});
 
 		_.#dragStartPos = 1;
 
 		// Define event handlers to enable proper cleanup
-        _.handlers = {
-            optionsChanged: ({ currentOptions }) => {
-                _.engine.setAttraction(currentOptions.animation?.attraction || 0.1);
-                _.engine.setFriction(currentOptions.animation?.friction || 0.8);
-            },
+		_.handlers = {
+			optionsChanged: ({ currentOptions }) => {
+				_.engine.setAttraction(currentOptions.animation?.attraction || 0.026);
+				_.engine.setFriction(currentOptions.animation?.friction || 0.24);
+				_.engine.setVelocityBoost(currentOptions.animation?.velocityBoost || 1.4);
+			},
 			dragStart: ({ event, drag }) => {
 				_.stop();
 				_.#dragStartPos = _.#currentPos;
@@ -1829,7 +1875,7 @@ class TrackAnimator {
 				_.ctx.emitter.emit(_.ctx.events.user.interacted, { via: 'drag', event });
 
 				if (Math.abs(drag.delta) < _.ctx.store.getOptions().dragThreshold) {
-					_.ctx.commands.getTrackManager().settleTrack();
+					_.ctx.commands.settleTrack();
 					return;
 				}
 
@@ -1843,15 +1889,20 @@ class TrackAnimator {
 			enginePositionChanged: ({ position, positionDelta, progress, velocity }) => {
 				if (progress === 1) {
 					// we have reached the end
-					_.setPos(_.#targetPos, progress, velocity, _.#animationType, _.#direction);
+					_.setPos(_.#targetPos, progress, velocity, _.#movementType, _.#direction);
 				} else {
 					// add delta to current position
-					_.setPos(_.#currentPos + positionDelta, progress, velocity, _.#animationType, _.#direction);
+					_.setPos(
+						_.#currentPos + positionDelta,
+						progress,
+						velocity,
+						_.#movementType,
+						_.#direction
+					);
 				}
 			},
-			engineAnimationFinished: () => {
-				// relay finished event to context emitter
-				_.ctx.emitter.emit('animationFinished', _.#targetPos);
+			engineMovementFinished: () => {
+				_.#emitMovementCompleted(_.#movementType);
 			},
 			trackRequestFrame: ({ time }) => {
 				// tick the physics engine when frame engine requests it
@@ -1879,7 +1930,7 @@ class TrackAnimator {
 
 		// Bind physics engine events
 		_.engine.on('engine:position-changed', _.handlers.enginePositionChanged);
-		_.engine.on('engine:finished', _.handlers.engineAnimationFinished);
+		_.engine.on('engine:finished', _.handlers.engineMovementFinished);
 	}
 
 	// @returns {number} - The current X position.
@@ -1891,37 +1942,30 @@ class TrackAnimator {
 		return this.engine.isAnimating();
 	}
 
-	/**
-	 * Check if we can loop based on options and slide count
-	 * @returns {boolean} - true if looping is possible
-	 */
-	canLoop() {
-		const _ = this;
-		const options = _.ctx.store.getOptions();
-		const slideCount = _.ctx.store.getSlides().length;
-		return _.ctx.utils.canLoop(slideCount, options);
-	}
-
 	stop() {
 		this.engine.stop();
 	}
 
-	animateToPosition(targetPos, velocity, animationType, direction = 0) {
+	goToPosition(targetPos, velocity, movementType, direction = 0) {
 		const _ = this;
 
+		// stop any current animations
 		_.stop();
 
-		// save animation type and direction for later
-		_.#animationType = animationType;
+		// save movement type and direction for later
+		_.#movementType = movementType;
 		_.#direction = direction;
 
-		if (animationType === 'jump') {
+		// check to see if it's a jump and then exit
+		if (movementType === 'jump') {
+			this.#emitMovementStarted(0, 'jump');
 			this.setPos(targetPos, 1, 0, 'jump', direction);
+			this.#emitMovementCompleted('jump');
 			return;
 		}
 
 		// don't animate if we're already going to that position
-		if (_.engine.isAnimating() && _.#targetPos == targetPos) {
+		if (_.engine.isAnimating() && _.#targetPos === targetPos) {
 			return;
 		}
 
@@ -1939,24 +1983,27 @@ class TrackAnimator {
 
 		// tell engine to go to target with velocity
 		_.engine.animateTo(_.#currentPos, targetPos, velocity);
+
+		// emit movement started event
+		_.#emitMovementStarted(velocity, movementType);
 	}
 
-	// type = 'animate', 'jump', settle
-	setPos(newPosition, progress, velocity = 0, animationType, direction = null) {
+	// movementType = 'animate', 'jump', 'settle', 'drag'
+	setPos(newPosition, progress, velocity = 0, movementType, direction = null) {
 		const _ = this;
 		let trackDelta = newPosition - _.#currentPos;
 		_.#currentPos;
 
 		// final delta is 0
-		if (animationType !== 'drag' && progress == 1) {
+		if (movementType !== 'drag' && progress === 1) {
 			trackDelta = 0;
 		}
 
 		// save new position
 		_.#currentPos = newPosition;
 
-		// check for automatic loop shifting (only if loop is enabled and not during a shift)
-		if (_.canLoop()) {
+		// check for automatic loop shifting (only if loop is enabled)
+		if (_.ctx.store.getState().canLoop) {
 			const widths = _.ctx.store.getWidths();
 			const trackWidth = widths.track;
 
@@ -1971,7 +2018,7 @@ class TrackAnimator {
 
 		// update track position in animation data
 		_.ctx.store.setAnimation({
-			type: animationType,
+			movementType: movementType,
 			trackPosition: newPosition,
 			trackDelta,
 			velocity,
@@ -2005,7 +2052,26 @@ class TrackAnimator {
 		// emit track shift event
 		_.ctx.emitter.emit(_.ctx.events.track.shifted, {
 			trackPosition: _.#currentPos,
-			animationType: 'shift',
+			movementType: 'shift',
+		});
+	}
+
+	#emitMovementStarted(velocity, movementType) {
+		const state = this.ctx.store.getState();
+		this.ctx.emitter.emit(this.ctx.events.movement.started, {
+			renderIndex: state.renderIndex,
+			pageIndex: state.pageIndex,
+			velocity,
+			movementType,
+		});
+	}
+
+	#emitMovementCompleted(movementType) {
+		const state = this.ctx.store.getState();
+		this.ctx.emitter.emit(this.ctx.events.movement.completed, {
+			renderIndex: state.renderIndex,
+			pageIndex: state.pageIndex,
+			movementType,
 		});
 	}
 
@@ -2015,7 +2081,7 @@ class TrackAnimator {
 		// clean up physics engine and its events
 		if (_.engine) {
 			_.engine.off('engine:position-changed', _.handlers.enginePositionChanged);
-			_.engine.off('engine:finished', _.handlers.engineAnimationFinished);
+			_.engine.off('engine:finished', _.handlers.engineMovementFinished);
 			_.engine.stop();
 			_.engine = null;
 		}
@@ -2036,13 +2102,13 @@ class TrackAnimator {
 }
 
 /**
- * Manages track animator state
+ * Manages track transitions
  * Converts slide indexes to track positions
- * Tells animator to animate or jump to new position
+ * Tells animator to go to new position (via animation or jump)
  * Relays and emits events back to the carousel
  *
  **/
-class TrackManager {
+class TransitionManager {
 	constructor(ctx, animator) {
 		const _ = this;
 
@@ -2050,14 +2116,18 @@ class TrackManager {
 		_.animator = animator;
 
 		_.handlers = {
-			animationRequested: (payload) => {
-				const { index, trackPosition, velocity, type } = payload;
+			movementRequested: ({ index, pageIndex, trackPosition, velocity, movementType }) => {
 				if (trackPosition !== undefined) {
 					// Direct track position request (continuous positioning)
-					this.animateToTrackPosition(trackPosition, velocity, type);
+					this.goToTrackPosition(trackPosition, velocity, movementType);
 				} else if (index !== undefined) {
+					// Set state for frame-based rendering
+					this.ctx.store.setState({
+						renderIndex: index,
+						pageIndex: pageIndex,
+					});
 					// Slide index request (discrete positioning)
-					this.animateToSlide(index, velocity, type);
+					this.goToSlide(index, velocity, movementType);
 				}
 			},
 		};
@@ -2073,150 +2143,140 @@ class TrackManager {
 		const _ = this;
 		const { emitter, events } = _.ctx;
 
-		// Listen for animation requests from the main carousel
-		emitter.on(events.animation.requested, _.handlers.animationRequested);
-	}
-
-	// settling track happens when the track has moved
-	// but the dragThreshold hasn't been reached
-	// this can be used in the effect render for certain animations
-	settleTrack() {
-		const renderIndex = this.ctx.store.getState().renderIndex;
-		this.animateToSlide(renderIndex, 0, 'settle');
+		// Listen for movement requests from the main carousel
+		emitter.on(events.movement.requested, _.handlers.movementRequested);
 	}
 
 	// calculates position on track and tells animator to go
-	animateToSlide(slideIndex, velocity, animationType) {
-		// Convert slide index to track position and delegate to animateToTrackPosition
+	goToSlide(slideIndex, velocity, movementType) {
+		// Convert slide index to track position and delegate to goToTrackPosition
 		const trackPosition = this.getTrackPosForIndex(slideIndex);
-		this.animateToTrackPosition(trackPosition, velocity, animationType);
+		this.goToTrackPosition(trackPosition, velocity, movementType);
 	}
 
-	// Direct track position animation for continuous positioning
-	animateToTrackPosition(trackPosition, velocity, animationType) {
+	// Direct track position movement for continuous positioning
+	goToTrackPosition(trackPosition, velocity, movementType) {
 		const _ = this;
 		const currentPos = _.animator.currentPos;
-		let newPos = trackPosition; // Direct position, no conversion needed
-		const trackWidth = _.ctx.store.getWidths().track;
+		let newPos = trackPosition;
+		const widths = _.ctx.store.getWidths();
+		const trackWidth = widths.track;
 
-		// Handle jump animation immediately
-		if (animationType === 'jump') {
-			_.animator.animateToPosition(newPos, 0, 'jump', 0); // direction = 0 for jump
+		// Handle jump immediately - no path calculation needed
+		if (movementType === 'jump') {
+			_.animator.goToPosition(newPos, 0, 'jump', 0);
 			return;
 		}
 
-		// Apply same looping logic as animateToSlide for consistency
+		// Apply looping path logic when loop is enabled
 		if (_.ctx.store.getOptions().loop) {
-			const posDelta = Math.abs(currentPos - newPos);
+			const pageCount = _.ctx.store.getState().pageCount;
+			const hasVelocity = velocity !== undefined && velocity !== 0;
 
-			// If move distance equals half track width, use velocity to decide direction
-			if (posDelta === trackWidth / 2) {
-				if (velocity && velocity != 0) {
-					if (velocity < 0) {
-						// Negative velocity: go next
-						if (newPos > currentPos) {
-							newPos -= trackWidth;
-						}
-					} else {
-						// Positive velocity: go previous
-						if (newPos <= currentPos) {
-							newPos += trackWidth;
-						}
-					}
-				} else if (newPos > currentPos) {
-					// No velocity control: go forward
+			// Special case: 2-page loops always follow velocity direction
+			if (pageCount <= 2 && hasVelocity) {
+				const wantsForward = velocity < 0;
+
+				if (wantsForward && newPos > currentPos) {
 					newPos -= trackWidth;
-				}
-			} else if (posDelta > trackWidth / 2) {
-				// Take shortest path for long distances
-				if (newPos >= currentPos) {
-					newPos -= trackWidth;
-				} else {
+				} else if (!wantsForward && newPos <= currentPos) {
 					newPos += trackWidth;
 				}
+			} else {
+				// Original distance-based logic
+				const posDelta = Math.abs(currentPos - newPos);
+				const halfTrack = trackWidth / 2;
+
+				if (posDelta === halfTrack) {
+					// Tie-breaker: use velocity if available
+					if (hasVelocity) {
+						if (velocity < 0 && newPos > currentPos) {
+							newPos -= trackWidth;
+						} else if (velocity > 0 && newPos <= currentPos) {
+							newPos += trackWidth;
+						}
+					} else if (newPos > currentPos) {
+						newPos -= trackWidth;
+					}
+				} else if (posDelta > halfTrack) {
+					// Take shortest path
+					if (newPos >= currentPos) {
+						newPos -= trackWidth;
+					} else {
+						newPos += trackWidth;
+					}
+				}
+				// posDelta < halfTrack: already on short path, no change
 			}
 		}
 
-		// Apply velocity logic if none provided
+		// Apply default velocity if none provided
 		if (velocity === undefined) {
 			velocity = newPos < currentPos ? -15 : 15;
 		} else {
-			// Give provided velocity a boost
 			velocity *= 1.2;
-			// Minimum velocity threshold
 			if (Math.abs(velocity) < 15) velocity *= 1.3;
 		}
 
-		// Calculate direction: -1 for left, 1 for right, 0 for no movement
+		// Calculate direction for animator
 		let direction = 0;
 		if (newPos < currentPos) {
-			direction = -1; // moving left
+			direction = -1;
 		} else if (newPos > currentPos) {
-			direction = 1; // moving right
+			direction = 1;
 		}
 
-		// Trigger animation
-		_.animator.animateToPosition(newPos, velocity, animationType, direction);
+		_.animator.goToPosition(newPos, velocity, movementType, direction);
 	}
 
-	// new jumpToSlide function that calls animator.jumpToPosition
-	// jumpToSlide(slideIndex, animationType) {
-	// 	this.animator.jumpToPosition(this.getTrackPosForIndex(slideIndex), animationType);
-	// }
-
 	/**
-	 * calculates the track position for a given slide index
+	 * Calculates the track position for a given slide index
 	 * @param {number} slideIndex - the index of the slide
 	 * @returns {number} the position on the track (negative for transform)
 	 */
 	getTrackPosForIndex(slideIndex) {
-		const _ = this;
-		const options = _.ctx.store.getOptions();
-		const widths = _.ctx.store.getWidths();
+		const options = this.ctx.store.getOptions();
+		const widths = this.ctx.store.getWidths();
 
-		// we're including the left and right padding in these calculations
-		let pos = slideIndex * (widths.slide + widths.gap);
-		const minPos = 0 - widths.paddingLeft;
-		const maxPos = widths.track - widths.viewport - widths.gap + widths.paddingRight - 0.1;
+		// Raw position of slide's left edge on the track
+		const slidePos = slideIndex * (widths.slide + widths.gap);
 
-		// are we centering selected slides?
-		if (pos != minPos && pos != maxPos && options.centerSelectedSlide) {
-			// center selected slide
-			pos -= widths.viewport / 2;
-			pos += widths.slide / 2;
+		let pos;
+
+		if (options.centerSelectedSlide) {
+			// Center the slide in the viewport
+			pos = slidePos - widths.viewport / 2 + widths.slide / 2;
 		} else {
-			// account for left padding
-			pos -= widths.paddingLeft;
+			// Left-align: account for left padding
+			pos = slidePos - widths.paddingLeft;
 		}
 
-		// keep left side in viewport range
-		// notice we ignore leftPadding and gapWidth here
-		if (!options.loop && pos < 0) {
-			pos = minPos;
+		// Apply boundary clamping (only when looping is not possible)
+		const state = this.ctx.store.getState();
+		if (!state.canLoop) {
+			const minPos = -widths.paddingLeft;
+			const maxPos = widths.track - widths.viewport - widths.gap + widths.paddingRight;
+			pos = Math.max(minPos, Math.min(pos, maxPos));
 		}
 
-		// keep right side in viewport range
-		// notice we ignore rightPadding here
-		// clamp if we are not looping
-		if (!options.loop && pos > maxPos) {
-			pos = maxPos;
-		}
-
-		// transforms are negative
-		if (pos !== 0) pos *= -1;
-
-		return pos;
+		// Transform values are negative (moving track left = positive pos)
+		return pos !== 0 ? -pos : 0;
 	}
 
 	/**
-	 * destroy the track manager and clean up event listeners
+	 * Destroy the transition manager and clean up event listeners
 	 */
 	destroy() {
 		const _ = this;
 		const { emitter, events } = _.ctx;
 
 		// Clean up event listeners
-		emitter.off(events.animation.requested, _.handlers.animationRequested);
+		emitter.off(events.movement.requested, _.handlers.movementRequested);
+
+		// Clear references for garbage collection
+		_.ctx = null;
+		_.animator = null;
+		_.handlers = null;
 	}
 }
 
@@ -2240,6 +2300,9 @@ class WindowEvents {
 		_.carousel = ctx.carousel;
 		_.viewport = ctx.viewport;
 
+		// track viewport width to ignore height-only changes (mobile Safari bottom bar)
+		_.lastViewportWidth = null;
+
 		// helper: check if an event originated inside the carousel
 		_.isInsideCarousel = (e) => {
 			const path = e?.composedPath?.() || [];
@@ -2257,7 +2320,9 @@ class WindowEvents {
 			// focus carousel on click for keyboard navigation
 			handleCarouselClick: (event) => {
 				// only focus if clicking on the carousel itself or viewport/track, not interactive elements
-				const isInteractive = event.target.matches('button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])');
+				const isInteractive = event.target.matches(
+					'button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])'
+				);
 				if (!isInteractive) {
 					_.carousel.focus({ preventScroll: true });
 				}
@@ -2290,7 +2355,7 @@ class WindowEvents {
 			// user inputs that imply interaction (for autoplay pause)
 			handleKeyDown: (event) => {
 				_.ctx.emitter.emit(_.ctx.events.user.interacted, { via: 'key', event });
-				
+
 				// core arrow key support only when carousel itself has focus
 				// plugins handle their own keyboard events and call stopPropagation()
 				if (['ArrowLeft', 'ArrowRight'].includes(event.key) && event.target === _.carousel) {
@@ -2305,14 +2370,25 @@ class WindowEvents {
 
 			// unified debounced handler for resize and orientation change
 			unifiedResizeHandler: _.ctx.utils.debounce((event) => {
+				const currentWidth = _.viewport?.clientWidth ?? window.innerWidth;
+				// skip height-only changes (e.g., mobile Safari bottom bar show/hide)
+				if (_.lastViewportWidth !== null && currentWidth === _.lastViewportWidth) {
+					return;
+				}
+				_.lastViewportWidth = currentWidth;
 				_.handlers.handleResize(event);
 			}, 4),
 		};
 
 		// create a resize observer for the viewport element (in case its size changes independently)
 		_.viewportObserver = new ResizeObserver((entries) => {
-			// trigger unified handler
-			_.handlers.unifiedResizeHandler(entries?.[0]);
+			const entry = entries?.[0];
+			const currentWidth = entry?.contentRect?.width;
+			// skip height-only changes early to avoid debounce overhead
+			if (currentWidth !== undefined && currentWidth === _.lastViewportWidth) {
+				return;
+			}
+			_.handlers.unifiedResizeHandler(entry);
 		});
 
 		_.init();
@@ -2323,29 +2399,34 @@ class WindowEvents {
 	 */
 	init() {
 		const _ = this;
+		const carousel = _.carousel;
+		const handlers = _.handlers;
 
 		// window resize and orientation change: both use the unified handler
-		window.addEventListener('resize', _.handlers.unifiedResizeHandler);
-		window.addEventListener('orientationchange', _.handlers.unifiedResizeHandler);
+		window.addEventListener('resize', handlers.unifiedResizeHandler);
+		window.addEventListener('orientationchange', handlers.unifiedResizeHandler);
 
 		// focus and blur events for window and carousel
-		window.addEventListener('focus', _.handlers.handleWindowFocus);
-		window.addEventListener('blur', _.handlers.handleWindowBlur);
-		_.carousel.addEventListener('focus', _.handlers.handleCarouselFocus, true);
-		_.carousel.addEventListener('blur', _.handlers.handleCarouselBlur, true);
+		window.addEventListener('focus', handlers.handleWindowFocus);
+		window.addEventListener('blur', handlers.handleWindowBlur);
+		carousel.addEventListener('focus', handlers.handleCarouselFocus, true);
+		carousel.addEventListener('blur', handlers.handleCarouselBlur, true);
 
 		// visibility change
 		document.addEventListener('visibilitychange', _.handlers.handleVisibilityChange);
 
 		// user inputs that imply interaction (for autoplay pause)
-		_.carousel.addEventListener('keydown', _.handlers.handleKeyDown, true);
-		_.carousel.addEventListener('wheel', _.handlers.handleWheel, { passive: true });
-		_.carousel.addEventListener('click', _.handlers.handleCarouselClick, true);
+		carousel.addEventListener('keydown', handlers.handleKeyDown, true);
+		carousel.addEventListener('wheel', handlers.handleWheel, { passive: true });
+		carousel.addEventListener('click', handlers.handleCarouselClick, true);
 
 		// start observing the viewport for size changes
 		if (_.viewport) {
 			_.viewportObserver.observe(_.viewport);
 		}
+
+		// initialize lastViewportWidth to current width
+		_.lastViewportWidth = _.viewport?.clientWidth ?? window.innerWidth;
 	}
 
 	/**
@@ -2452,7 +2533,7 @@ class SlideStateManager {
 		const allSlides = _.ctx.store.getSlides();
 
 		for (const slide of allSlides) {
-			if (slide.selected) {
+			if (slide._selected) {
 				slide.classList.add('tarot-selected');
 			} else {
 				slide.classList.remove('tarot-selected');
@@ -2604,9 +2685,35 @@ class SlideStateManager {
 			.map((info) => info.slide);
 	}
 
-	/** reset classes/attributes */
+	/**
+	 * handles slide navigation announcements for screen readers
+	 * @param {number} slideIndex - the newly selected slide index
+	 */
+	handleSlideNavigation(slideIndex) {
+		const _ = this;
+		const options = _.ctx.store.getOptions();
+
+		// check if announcements are enabled
+		if (!options.announcements || !_.ctx.announcements) return;
+
+		const slides = _.ctx.store.getSlides();
+		const total = slides.length;
+
+		// create announcement text
+		const announcement = `Slide ${slideIndex + 1} of ${total}`;
+
+		// update announcement element content
+		_.ctx.announcements.textContent = announcement;
+	}
+
+	/** cleanup: unbind events and reset slide state */
 	destroy() {
 		const _ = this;
+
+		// unbind event handlers
+		if (_.handlers?.renderIndexChanged) {
+			_.ctx.emitter.off(_.ctx.events.store.renderIndexChanged, _.handlers.renderIndexChanged);
+		}
 
 		// reset slide state
 		const slides = _.ctx.carousel.querySelectorAll('tarot-slide');
@@ -2623,7 +2730,6 @@ class SlideStateManager {
 			slide.style.removeProperty('--tarot-parallax');
 			slide.style.removeProperty('--tarot-parallax-visibility');
 			slide.removeAttribute('aria-hidden');
-			// aria-live cleanup no longer needed - handled by dedicated announcement region
 			slide.removeAttribute('aria-current');
 
 			// restore original tabindex values
@@ -2637,39 +2743,6 @@ class SlideStateManager {
 				}
 				element.removeAttribute('data-original-tabindex');
 			});
-		}
-	}
-
-	/**
-	 * handles slide navigation announcements for screen readers
-	 * @param {number} slideIndex - the newly selected slide index
-	 */
-	handleSlideNavigation(slideIndex) {
-		const _ = this;
-		const options = _.ctx.store.getOptions();
-		
-		// check if announcements are enabled
-		if (!options.announcements || !_.ctx.announcements) return;
-		
-		const slides = _.ctx.store.getSlides();
-		const total = slides.length;
-		
-		// create announcement text
-		const announcement = `Slide ${slideIndex + 1} of ${total}`;
-		
-		// update announcement element content
-		_.ctx.announcements.textContent = announcement;
-	}
-
-	/**
-	 * cleanup method for destroying the manager
-	 */
-	destroy() {
-		const _ = this;
-		
-		// unbind event handlers
-		if (_.handlers?.renderIndexChanged) {
-			_.ctx.emitter.off(_.ctx.events.store.renderIndexChanged, _.handlers.renderIndexChanged);
 		}
 	}
 }
@@ -2750,7 +2823,7 @@ function isSlideInRange(slide, pointNameA, pointNameB, trackPosition, transformP
 	const { start, end } = getRange(pointNameA, pointNameB, trackPosition, transformPoints);
 	const roundedStart = roundToHalfPixel(start);
 	const roundedEnd = roundToHalfPixel(end);
-	const roundedCenter = roundToHalfPixel(slide.centerPoint);
+	const roundedCenter = roundToHalfPixel(slide._centerPoint);
 
 	const isInRange = roundedCenter <= roundedStart && roundedCenter > roundedEnd;
 
@@ -2876,9 +2949,9 @@ class FrameEngine {
 		// Step 2: Get fresh snapshot with prepped slides
 		const snapshot = _.ctx.store.getSnapshot();
 
-		// Sort slides by renderIndex (important for transform calculations)
+		// Sort slides by _renderIndex (important for transform calculations)
 		// Create a copy for sorting since we shouldn't mutate the original array
-		const sortedSlides = [...snapshot.slides].sort((a, b) => a.renderIndex - b.renderIndex);
+		const sortedSlides = [...snapshot.slides].sort((a, b) => a._renderIndex - b._renderIndex);
 
 		// Step 3: Build frame object with all data
 		const frame = Object.freeze({
@@ -2886,7 +2959,7 @@ class FrameEngine {
 			widths: snapshot.widths, // all measured widths: viewport, slide, gap, etc.
 			options: snapshot.options, // current active options in datastore
 			slides: sortedSlides, // prepped slides array with calculated positions
-			animation: snapshot.animation, // { type, trackPosition, trackDelta, velocity, progress }
+			animation: snapshot.animation, // { movementType, trackPosition, trackDelta, velocity, progress }
 			transformPoints: snapshot.transformPoints, // named position points for effects
 			time: time, // current animation frame timestamp from requestAnimationFrame
 		});
@@ -2993,6 +3066,7 @@ class DataStore {
 			renderIndex: 0,
 			pageIndex: 0,
 			pageCount: 1,
+			canLoop: false,
 			isDragging: false,
 			slideCount: 0,
 		};
@@ -3009,7 +3083,7 @@ class DataStore {
 		_.#slides = [];
 		_.#transformPoints = {};
 		_.#animation = {
-			type: 'jump', // 'jump', 'animate', 'settle'
+			movementType: 'jump', // 'jump', 'animate', 'settle', 'drag'
 			trackPosition: 0,
 			trackDelta: 0,
 			velocity: 0,
@@ -3105,6 +3179,12 @@ class DataStore {
 		if (patch.pageCount !== undefined && patch.pageCount !== prevState.pageCount) {
 			_.#emitter.emit(EVENTS.store.pageCountChanged, {
 				count: patch.pageCount,
+			});
+		}
+
+		if (patch.canLoop !== undefined && patch.canLoop !== prevState.canLoop) {
+			_.#emitter.emit(EVENTS.store.canLoopChanged, {
+				canLoop: patch.canLoop,
 			});
 		}
 	}
@@ -3219,7 +3299,7 @@ class DataStore {
 	/**
 	 * updates animation state for frame-based rendering
 	 * @param {object} animationData - animation data
-	 * @param {string} animationData.type - animation type ('animate' | 'jump' | 'settle')
+	 * @param {string} animationData.movementType - movement type ('animate' | 'jump' | 'settle' | 'drag')
 	 * @param {number} [animationData.trackPosition] - current track position
 	 * @param {number} [animationData.trackDelta] - change in track position
 	 * @param {number} [animationData.velocity] - current velocity
@@ -3246,7 +3326,7 @@ class DataStore {
 				prevTrackPosition: prevAnimation.trackPosition,
 				currentTrackPosition: animationData.trackPosition,
 				trackDelta: (animationData.trackPosition - prevAnimation.trackPosition),
-				animationType: animationData.type || 'unknown',
+				movementType: animationData.movementType || 'unknown',
 			});
 		}
 	}
@@ -3264,7 +3344,7 @@ class DataStore {
 	 */
 	clearAnimation() {
 		this.#animation = {
-			type: 'jump',
+			movementType: 'jump',
 			trackPosition: 0,
 			trackDelta: 0,
 			velocity: 0,
@@ -3382,7 +3462,7 @@ function throttle(callback, limit) {
  */
 function debounce(func, wait, immediate) {
 	var timeout;
-	return function (...args) {
+	var debounced = function (...args) {
 		var context = this;
 		var later = function () {
 			timeout = null;
@@ -3397,6 +3477,11 @@ function debounce(func, wait, immediate) {
 			func.apply(context, args);
 		}
 	};
+	debounced.cancel = function () {
+		clearTimeout(timeout);
+		timeout = null;
+	};
+	return debounced;
 }
 
 /**
@@ -3426,13 +3511,17 @@ function deepMerge(target, source) {
 // accepts number (int or float), Pixel value "10px", or percent "10%"
 // returns a numerical value
 function convertValueToNumber(value, width) {
-	if (typeof value == 'number') {
+	if (typeof value === 'number') {
 		// if value is a percent between 0 and 1
 		if (value > 0 && value < 1) {
 			return value * width;
 		}
 		// else it's just a number
 		return value;
+	}
+	// must be a string to parse px/% values
+	if (typeof value !== 'string') {
+		return 0;
 	}
 	if (value.indexOf('px') > -1) {
 		return parseFloat(value.replace('px', ''));
@@ -3482,11 +3571,16 @@ function areOptionsEqual(obj1, obj2) {
  * Determines if looping is possible and should be enabled
  * @param {number} slideCount - Total number of slides
  * @param {Object} options - Carousel options containing loop and slidesPerView settings
+ * @param {Object} [loopBuffer={left:0,right:0}] - Effect buffer requirements for extra slides
  * @returns {boolean} true if looping should be enabled, false otherwise
  */
-function canLoop(slideCount, options) {
+function canLoop(slideCount, options, loopBuffer = { left: 0, right: 0 }) {
 	const slidesPerView = options.slidesPerView || 1;
-	return !!(options.loop && slideCount > slidesPerView);
+	const totalNeeded = Math.max(
+		slidesPerView + loopBuffer.left + loopBuffer.right,
+		slidesPerView + 1
+	);
+	return !!(options.loop && slideCount >= totalNeeded);
 }
 
 /**
@@ -3523,7 +3617,7 @@ function getSlidesInViewport(ctx, trackPosition = null, buffer = 0) {
 
 	for (let i = 0; i < slides.length; i++) {
 		const slide = slides[i];
-		const renderIndex = slide.renderIndex !== undefined ? slide.renderIndex : i;
+		const renderIndex = slide._renderIndex !== undefined ? slide._renderIndex : i;
 
 		// Calculate slide bounds in the viewport
 		const slideStart = renderIndex * slideAndGapWidth;
@@ -3675,18 +3769,20 @@ function calculateWidths({ viewportEl, options, slideCount }) {
 //  calculates page count based on navigation semantics
 //  pageCount = number of valid page indices where pageIndex * slidesPerMove = valid slideIndex
 function calculatePageCount({ loop, slidesPerMove, slidesPerView, slideCount }) {
-	//  looped mode: ceil(slideCount / slidesPerMove)
+	// if all slides are visible, only one page needed regardless of loop mode
+	if (slideCount <= slidesPerView) {
+		return 1;
+	}
+
+	// looped mode: ceil(slideCount / slidesPerMove)
 	if (loop) {
 		return Math.max(1, Math.ceil(slideCount / slidesPerMove));
 	}
 
-	//  non-looped: count valid starting positions for the viewport
-	//  viewport can start at slideIndex 0 through (slideCount - slidesPerView)
-	//  since navigation uses pageIndex * slidesPerMove = slideIndex,
-	//  we need: ceil((validSlidePositions) / slidesPerMove)
-	if (slideCount <= slidesPerView) {
-		return 1; // All slides fit in one page
-	}
+	// non-looped: count valid starting positions for the viewport
+	// viewport can start at slideIndex 0 through (slideCount - slidesPerView)
+	// since navigation uses pageIndex * slidesPerMove = slideIndex,
+	// we need: ceil((validSlidePositions) / slidesPerMove)
 	const validSlidePositions = slideCount - slidesPerView;
 	return Math.ceil(validSlidePositions / slidesPerMove) + 1;
 }
@@ -3777,7 +3873,7 @@ class TarotEffect {
 		max_slideWidth: Infinity,
 		min_slidesPerView: 1,
 		max_slidesPerView: Infinity,
-		loopBuffer: { left: 0, right: 0 },
+		loopBuffer: { left: 0, right: 1 },
 	};
 
 	/**
@@ -3882,15 +3978,15 @@ class CarouselEffect extends TarotEffect {
 		_.renderSlideWidth(widths.slide);
 		_.renderTrackPosition(animation);
 
-		// position each slide based on its calculated trackPosition
+		// position each slide based on its calculated _trackPosition
 		for (let i = 0, n = slides.length; i < n; ++i) {
 			const slide = slides[i]; // This is the actual <tarot-slide> DOM element
 			if (slide && slide.style) {
 				// clear any transitions for immediate positioning
 				slide.style.transition = 'none';
 
-				// position slide using its trackPosition property (set by frame engine)
-				slide.style.transform = `translateX(${slide.trackPosition}px)`;
+				// position slide using its _trackPosition property (set by frame engine)
+				slide.style.transform = `translateX(${slide._trackPosition}px)`;
 			}
 		}
 	}
@@ -3991,7 +4087,7 @@ class Fade extends TarotEffect {
 
 	applyHiddenLeftFilter(slide) {
 		slide.style.opacity = '0';
-		slide.style.display = 'none';
+		slide.hide();
 		slide.style.zIndex = '1';
 		slide.style.filter = `blur(${this.blurAmount}px)`;
 		slide.style.transform = `scale(${1 + this.scaleAmount})`;
@@ -4005,7 +4101,7 @@ class Fade extends TarotEffect {
 		const scale = 1 + (1 - percent) * this.scaleAmount;
 
 		slide.style.opacity = String(percent);
-		slide.style.display = 'block';
+		slide.show();
 		slide.style.zIndex = '1';
 		slide.style.filter = `blur(${blur}px)`;
 		slide.style.transform = `scale(${scale})`;
@@ -4013,7 +4109,7 @@ class Fade extends TarotEffect {
 
 	applyFadeRightFilter(slide) {
 		slide.style.opacity = '1';
-		slide.style.display = 'block';
+		slide.show();
 		slide.style.zIndex = '0';
 		slide.style.filter = 'blur(0px)';
 		slide.style.transform = 'scale(1)';
@@ -4021,7 +4117,7 @@ class Fade extends TarotEffect {
 
 	applyHiddenRightFilter(slide) {
 		slide.style.opacity = '0';
-		slide.style.display = 'none';
+		slide.hide();
 		slide.style.zIndex = '0';
 		slide.style.filter = 'blur(0px)';
 		slide.style.transform = 'scale(1)';
@@ -4035,7 +4131,7 @@ class Fade extends TarotEffect {
 			const slide = slides[i];
 			if (!slide || !slide.style) continue;
 			slide.style.opacity = '';
-			slide.style.display = '';
+			slide.show();
 			slide.style.zIndex = '';
 			slide.style.filter = '';
 			slide.style.transform = '';
@@ -4065,8 +4161,8 @@ class AsNavFor {
 
 		// define all event handlers in one object
 		_.handlers = {
-			// handler for other carousel's animation requested event
-			otherAnimationRequested: ({ index, velocity, type }) => {
+			// handler for other carousel's movement requested event
+			otherMovementRequested: ({ index, velocity, movementType }) => {
 				const currentIndex = _.ctx.store.getState().selectedIndex;
 				// return if we are already going to that index or already at it
 				if (currentIndex === index) {
@@ -4159,7 +4255,13 @@ class AsNavFor {
 
 		// give DOM a few ms to load the custom elements
 		setTimeout(() => {
-			_.otherCarousel.on(_.ctx.events.animation.requested, _.handlers.otherAnimationRequested);
+			try {
+				_.otherCarousel.on(_.ctx.events.movement.requested, _.handlers.otherMovementRequested);
+			} catch (e) {
+				console.warn('AsNavFor: failed to bind to other carousel - ensure target is a tarot-carousel element');
+				_.isActive = false;
+				return;
+			}
 			// Initialize nav classes
 			_.updateNavClasses(-1, _.ctx.store.getState().selectedIndex);
 			// Ensure selection matches render index at startup
@@ -4177,7 +4279,11 @@ class AsNavFor {
 		const _ = this;
 		// cleanup existing connection
 		if (_.otherCarousel) {
-			_.otherCarousel.off(_.ctx.events.animation.requested, _.handlers.otherAnimationRequested);
+			try {
+				_.otherCarousel.off(_.ctx.events.movement.requested, _.handlers.otherMovementRequested);
+			} catch (e) {
+				// silent - carousel may not have been properly connected
+			}
 			_.otherCarousel = null;
 		}
 		// disable UI until proven active again
@@ -4374,7 +4480,11 @@ class AsNavFor {
 		// tell carousel to go to the same selected index
 		// async hack
 		setTimeout(() => {
-			_.otherCarousel.goToSlide(currentIndex);
+			try {
+				_.otherCarousel.goToSlide(currentIndex);
+			} catch (e) {
+				// silent - other carousel may have been destroyed
+			}
 		}, 1);
 	}
 
@@ -4395,7 +4505,11 @@ class AsNavFor {
 
 		// unbind from other carousel events
 		if (_.otherCarousel) {
-			_.otherCarousel.off(_.ctx.events.animation.requested, _.handlers.otherAnimationRequested);
+			try {
+				_.otherCarousel.off(_.ctx.events.movement.requested, _.handlers.otherMovementRequested);
+			} catch (e) {
+				// silent - carousel may not have been properly connected
+			}
 		}
 
 		_.otherCarousel = null;
@@ -4420,8 +4534,8 @@ class SyncWith {
 
 		// define all event handlers in one object
 		_.handlers = {
-			// handler for other carousel's animation requested event
-			otherAnimationRequested: ({ index, velocity, type }) => {
+			// handler for other carousel's movement requested event
+			otherMovementRequested: ({ index, velocity, movementType }) => {
 				const currentIndex = _.ctx.store.getState().renderIndex;
 				// return if we are already going to that index or already at it
 				if (currentIndex === index) return;
@@ -4467,7 +4581,7 @@ class SyncWith {
 
 		// give DOM a few ms to load the custom elements
 		setTimeout(() => {
-			_.otherCarousel.on(_.ctx.events.animation.requested, _.handlers.otherAnimationRequested);
+			_.otherCarousel.on(_.ctx.events.movement.requested, _.handlers.otherMovementRequested);
 		}, 100);
 	}
 
@@ -4478,7 +4592,7 @@ class SyncWith {
 		const _ = this;
 		// cleanup existing connection
 		if (_.otherCarousel) {
-			_.otherCarousel.off(_.ctx.events.animation.requested, _.handlers.otherAnimationRequested);
+			_.otherCarousel.off(_.ctx.events.movement.requested, _.handlers.otherMovementRequested);
 			_.otherCarousel = null;
 		}
 		// reinitialize with new options
@@ -4521,7 +4635,7 @@ class SyncWith {
 
 		// unbind from other carousel events
 		if (_.otherCarousel) {
-			_.otherCarousel.off(_.ctx.events.animation.requested, _.handlers.otherAnimationRequested);
+			_.otherCarousel.off(_.ctx.events.movement.requested, _.handlers.otherMovementRequested);
 		}
 
 		_.otherCarousel = null;
@@ -4562,7 +4676,16 @@ class Autoplay {
 			tick: () => {
 				// exit if document doesn't have focus
 				if (!document.hasFocus?.()) return;
-				
+
+				const options = _.ctx.store.getOptions();
+				const state = _.ctx.store.getState();
+
+				// stop autoplay if we're at the end and loop is disabled
+				if (!options.loop && state.pageIndex >= state.pageCount - 1) {
+					_.stop();
+					return;
+				}
+
 				// go to next page
 				_.ctx.commands.next(-5);
 			},
@@ -4669,8 +4792,9 @@ class Buttons {
 		const _ = this;
 		_.ctx = ctx;
 		_.navOptions = {};
-		_.prevButtonButton = null;
-		_.nextButtonButton = null;
+		_.prevButton = null;
+		_.nextButton = null;
+		_.smartButtonImage = null;
 
 		// define all event handlers in one object
 		_.handlers = {
@@ -4711,6 +4835,10 @@ class Buttons {
 
 			windowResize: () => {
 				_.updateSmartButtons();
+			},
+
+			imageLoad: () => {
+				_.updateSmartButtons(_.smartButtonImage);
 			},
 		};
 
@@ -4782,9 +4910,8 @@ class Buttons {
 			if (firstImage && firstImage.complete) {
 				_.updateSmartButtons(firstImage);
 			} else if (firstImage) {
-				firstImage.onload = function () {
-					_.updateSmartButtons(firstImage);
-				};
+				_.smartButtonImage = firstImage;
+				firstImage.onload = _.handlers.imageLoad;
 			}
 		}
 	}
@@ -4803,6 +4930,10 @@ class Buttons {
 			_.nextButton.removeEventListener('click', _.handlers.nextClick, true);
 			_.nextButton.removeEventListener('focus', _.handlers.buttonFocus);
 			_.nextButton.removeEventListener('blur', _.handlers.buttonBlur);
+		}
+		if (_.smartButtonImage) {
+			_.smartButtonImage.onload = null;
+			_.smartButtonImage = null;
 		}
 	}
 
@@ -4843,7 +4974,7 @@ class Buttons {
 		// then check to see if there are any buttons inside the carousel
 		if (!_.prevButton) {
 			// query all child buttons
-			const allPrevButtons = _.ctx.carousel.querySelectorAll('[data-action="tarot-prev"]');
+			const allPrevButtons = _.ctx.carousel.querySelectorAll('[data-action-tarot-prev]');
 			// filter them so that their closest ancestor carousel is the current one.
 			_.prevButton =
 				Array.from(allPrevButtons).find((btn) => btn.closest('tarot-carousel') === _.ctx.carousel) ||
@@ -4851,7 +4982,7 @@ class Buttons {
 		}
 
 		if (!_.nextButton) {
-			const allNextButtons = _.ctx.carousel.querySelectorAll('[data-action="tarot-next"]');
+			const allNextButtons = _.ctx.carousel.querySelectorAll('[data-action-tarot-next]');
 			_.nextButton =
 				Array.from(allNextButtons).find((btn) => btn.closest('tarot-carousel') === _.ctx.carousel) ||
 				null;
@@ -4864,7 +4995,7 @@ class Buttons {
 	buildPrevButton() {
 		const _ = this;
 		const prevButtonHTML = `
-			<button class="tarot-button" data-action="tarot-prev" aria-label="previous slide">
+			<button class="tarot-button" data-action-tarot-prev aria-label="previous slide">
 				<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 					<title>angle left</title>
 					<path d="m21 7-9 9 9 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -4874,7 +5005,7 @@ class Buttons {
 		// add button to DOM
 		_.ctx.carousel.insertAdjacentHTML('afterbegin', prevButtonHTML);
 		// query DOM for button
-		_.prevButton = _.ctx.carousel.querySelector('[data-action="tarot-prev"]');
+		_.prevButton = _.ctx.carousel.querySelector('[data-action-tarot-prev]');
 	}
 
 	/**
@@ -4883,7 +5014,7 @@ class Buttons {
 	buildNextButton() {
 		const _ = this;
 		const nextButtonHTML = `
-			<button class="tarot-button" data-action="tarot-next" aria-label="next slide">
+			<button class="tarot-button" data-action-tarot-next aria-label="next slide">
 				<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
 					<title>angle right</title>
 					<path d="m11 25 9-9-9-9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
@@ -4891,7 +5022,7 @@ class Buttons {
 			</button>
 		`;
 		_.ctx.carousel.insertAdjacentHTML('afterbegin', nextButtonHTML);
-		_.nextButton = _.ctx.carousel.querySelector('[data-action="tarot-next"]');
+		_.nextButton = _.ctx.carousel.querySelector('[data-action-tarot-next]');
 	}
 
 	/**
@@ -5061,12 +5192,11 @@ class Buttons {
 	checkDisabledState() {
 		const _ = this;
 		const state = _.ctx.store.getState();
-		const options = _.ctx.store.getOptions();
 		const page = state.pageIndex;
 		const pageCount = state.pageCount;
 
-		// if we aren't looping
-		if (!options.loop) {
+		// if we aren't looping (canLoop accounts for effect buffer requirements)
+		if (!state.canLoop) {
 			// check prev button
 			if (_.prevButton) {
 				if (page == 0) {
@@ -5099,8 +5229,8 @@ class Buttons {
 		_.ctx.emitter.off(_.ctx.events.store.pageIndexChanged, _.handlers.pageChanged);
 		_.ctx.emitter.off(_.ctx.events.window.resize, _.handlers.windowResize);
 
-		_.prevButtonButton = null;
-		_.nextButtonButton = null;
+		_.prevButton = null;
+		_.nextButton = null;
 	}
 }
 
@@ -5222,7 +5352,7 @@ class Pagination {
 			//  handle clicks on pagination dots
 			paginationClick: (event) => {
 				_.ctx.emitter.emit(_.ctx.events.user.interacted, { via: 'pagination', event });
-				const target = event.target.closest('[data-action="tarot-go-to-page"]');
+				const target = event.target.closest('[data-action-tarot-go-to-page]');
 				if (!target) return;
 				const pageIndex = parseInt(target.getAttribute('data-page-index'), 10);
 				_.activateDot(pageIndex);
@@ -5237,16 +5367,16 @@ class Pagination {
 				const currentIndex = tabs.findIndex((tab) => tab.getAttribute('tabIndex') === '0');
 				let newIndex = currentIndex;
 
-				const options = _.ctx.store.getOptions();
+				const state = _.ctx.store.getState();
 
 				switch (event.key) {
 					case 'ArrowRight':
 						newIndex = currentIndex + 1;
-						if (newIndex >= tabs.length) newIndex = options.loop ? 0 : currentIndex;
+						if (newIndex >= tabs.length) newIndex = state.canLoop ? 0 : currentIndex;
 						break;
 					case 'ArrowLeft':
 						newIndex = currentIndex - 1;
-						if (newIndex < 0) newIndex = options.loop ? tabs.length - 1 : currentIndex;
+						if (newIndex < 0) newIndex = state.canLoop ? tabs.length - 1 : currentIndex;
 						break;
 					case 'Home':
 						newIndex = 0;
@@ -5315,11 +5445,9 @@ class Pagination {
 		//  if no container provided, generate one
 		if (!_.paginationContainer) {
 			_.isAutoGeneratedNav = true;
-			const nav = document.createElement('nav');
-			nav.setAttribute('aria-label', 'carousel navigation');
-			_.paginationContainer = document.createElement('div');
-			nav.appendChild(_.paginationContainer);
-			_.ctx.carousel.appendChild(nav);
+			_.paginationContainer = document.createElement('nav');
+			_.paginationContainer.setAttribute('aria-label', 'carousel navigation');
+			_.ctx.carousel.appendChild(_.paginationContainer);
 		}
 
 		//  clear existing content and set up the container
@@ -5365,7 +5493,7 @@ class Pagination {
 			button.classList.add('tarot-dots-button');
 			button.setAttribute('role', 'tab');
 			button.setAttribute('data-page-index', i);
-			button.setAttribute('data-action', 'tarot-go-to-page');
+			button.setAttribute('data-action-tarot-go-to-page', '');
 			button.setAttribute('aria-selected', page === i ? 'true' : 'false');
 			button.tabIndex = page === i ? 0 : -1;
 			button.setAttribute('aria-label', `page ${i + 1}`);
@@ -5412,20 +5540,12 @@ class Pagination {
 
 	//  show the pagination container
 	show() {
-		if (this.paginationContainer.parentElement) {
-			this.paginationContainer.parentElement.style.display = '';
-		} else {
-			this.paginationContainer.style.display = '';
-		}
+		this.paginationContainer.style.display = '';
 	}
 
 	//  hide the pagination container
 	hide() {
-		if (this.paginationContainer.parentElement) {
-			this.paginationContainer.parentElement.style.display = 'none';
-		} else {
-			this.paginationContainer.style.display = 'none';
-		}
+		this.paginationContainer.style.display = 'none';
 	}
 
 	//  destroy the pagination and unbind everything
@@ -5449,10 +5569,9 @@ class Pagination {
 		if (
 			_.isAutoGeneratedNav &&
 			_.paginationContainer &&
-			_.paginationContainer.parentNode &&
-			_.paginationContainer.parentNode.parentNode === _.ctx.carousel
+			_.paginationContainer.parentNode === _.ctx.carousel
 		) {
-			_.ctx.carousel.removeChild(_.paginationContainer.parentNode);
+			_.ctx.carousel.removeChild(_.paginationContainer);
 		}
 
 		_.paginationContainer = null;
@@ -5552,7 +5671,7 @@ class Tarot extends HTMLElement {
 	#store; // datastore for options/state/widths/slides
 	#ctx; // frozen module context passed to managers
 
-	#trackManager;
+	#transitionManager;
 	#trackAnimator;
 	#slideManager;
 	#optionsManager;
@@ -5617,7 +5736,7 @@ class Tarot extends HTMLElement {
 		_.#effectManager = new EffectManager(ctx, _.constructor.effects);
 		_.#dragHandler = new DragHandler(ctx);
 		_.#trackAnimator = new TrackAnimator(ctx);
-		_.#trackManager = new TrackManager(ctx, _.#trackAnimator);
+		_.#transitionManager = new TransitionManager(ctx, _.#trackAnimator);
 		_.#frameEngine = new FrameEngine(ctx);
 
 		// cross-module wiring
@@ -5628,6 +5747,9 @@ class Tarot extends HTMLElement {
 
 		// compute initial widths + page count
 		_.#recomputeLayout();
+
+		// re-initialize effect with correct widths (effects load before widths are calculated)
+		_.#effectManager.reInit();
 
 		// initialize plugins (errors should not break the instance)
 		const plugins = _.constructor.plugins;
@@ -5679,16 +5801,18 @@ class Tarot extends HTMLElement {
 
 			// minimal imperative api
 			commands: {
-				goToSlide: (index, velocity = 0) => _.goToSlide(index, velocity),
+				goToSlide: (index, velocity = 0, movementType = 'animate') =>
+					_.goToSlide(index, velocity, movementType),
 				jumpToSlide: (index) => _.jumpToSlide(index),
 				next: (velocity = 0) => _.next(velocity),
 				prev: (velocity = 0) => _.prev(velocity),
-				goToPage: (page, velocity = 0) => _.goToPage(page, velocity),
+				goToPage: (page, velocity = 0, movementType = 'animate') =>
+					_.goToPage(page, velocity, movementType),
 				jumpToPage: (page) => _.jumpToPage(page),
+				settleTrack: () => _.#settleTrack(),
 				requestTrackPosition: (position) => _.requestTrackPosition(position),
 				getEffect: () => _.#effectManager.getEffect(),
 				getSlideManager: () => _.#slideManager,
-				getTrackManager: () => _.#trackManager,
 				requestFrame: () => _.#frameEngine.requestFrame(0),
 			},
 		});
@@ -5785,6 +5909,11 @@ class Tarot extends HTMLElement {
 				_.next();
 			}
 		});
+
+		// recalculate canLoop when effect loads (effect may have different loopBuffer)
+		emitter.on(events.effect.loaded, () => {
+			_.#recomputeLayout(store.getOptions());
+		});
 	}
 
 	/**
@@ -5815,7 +5944,13 @@ class Tarot extends HTMLElement {
 			slidesPerView: options.slidesPerView,
 			slideCount: slides.length,
 		});
-		_.#store.setState({ pageCount });
+
+		// recalc canLoop (accounts for effect buffer requirements)
+		const effect = _.#effectManager?.getEffect?.();
+		const loopBuffer = effect?.constructor?.rules?.loopBuffer || { left: 0, right: 0 };
+		const canLoop = _.#ctx.utils.canLoop(slides.length, options, loopBuffer);
+
+		_.#store.setState({ pageCount, canLoop });
 	}
 
 	// ---------------------------------------------------------------------
@@ -5839,11 +5974,27 @@ class Tarot extends HTMLElement {
 	}
 
 	/**
+	 * settle the track back to current position
+	 * used after drag below threshold
+	 */
+	#settleTrack() {
+		const _ = this;
+		const state = _.#store.getState();
+
+		_.#eventEmitter.emit(EVENTS.movement.requested, {
+			index: state.renderIndex,
+			pageIndex: state.pageIndex,
+			velocity: 0,
+			movementType: 'settle',
+		});
+	}
+
+	/**
 	 * animate to a specific slide index (logical)
 	 * @param {number} index
 	 * @param {number} [velocity=0]
 	 */
-	goToSlide(index, velocity = 0) {
+	goToSlide(index, velocity = 0, movementType = 'animate') {
 		// exit if no index passed in
 		if (index === undefined) return;
 
@@ -5853,28 +6004,21 @@ class Tarot extends HTMLElement {
 		const slides = _.#store.getSlides();
 		const slideCount = state.slideCount ?? slides.length;
 
-		// bounds + looping
+		// bounds + looping (use state.canLoop which accounts for effect buffer requirements)
 		if (index < 0) {
-			const options = _.#store.getOptions();
-			index = options.loop ? ((index % slideCount) + slideCount) % slideCount : 0;
-			if (!options.loop && !velocity) velocity = 10;
+			index = state.canLoop ? ((index % slideCount) + slideCount) % slideCount : 0;
+			if (!state.canLoop && !velocity) velocity = 10;
 		} else if (index >= slideCount) {
-			const options = _.#store.getOptions();
-			index = options.loop ? index % slideCount : slideCount - 1;
-			if (!options.loop && !velocity) velocity = -10;
+			index = state.canLoop ? index % slideCount : slideCount - 1;
+			if (!state.canLoop && !velocity) velocity = -10;
 		}
 
-		// update state for frame-based animation
-		_.#store.setState({
-			renderIndex: index,
-			pageIndex: _.#getPageIndexForSlide(index),
-		});
-
-		// emit animation request event instead of calling track manager directly
-		_.#eventEmitter.emit(EVENTS.animation.requested, {
+		// emit movement request event - TransitionManager handles state + animation
+		_.#eventEmitter.emit(EVENTS.movement.requested, {
 			index,
+			pageIndex: _.#getPageIndexForSlide(index),
 			velocity,
-			type: 'animate',
+			movementType,
 		});
 	}
 
@@ -5883,61 +6027,36 @@ class Tarot extends HTMLElement {
 	 * @param {number} index
 	 */
 	jumpToSlide(index) {
-		// exit if no index passed in
-		if (index === undefined) return;
-
-		const _ = this;
-
-		const state = _.#store.getState();
-		const slides = _.#store.getSlides();
-		const max = (state.slideCount ?? slides.length) - 1;
-
-		if (index < 0 || index > max) {
-			throw new Error(`slide index ${index} is out of bounds. valid range is 0 to ${max}.`);
-		}
-
-		// update state for frame-based rendering
-		_.#store.setState({
-			renderIndex: index,
-			pageIndex: _.#getPageIndexForSlide(index),
-		});
-
-		// emit animation request event instead of calling track manager directly
-		_.#eventEmitter.emit(EVENTS.animation.requested, {
-			index,
-			velocity: 0,
-			type: 'jump',
-		});
+		this.goToSlide(index, 0, 'jump');
 	}
 
 	/**
 	 * go to a page (converts page -> slide) with animation
 	 * @param {number} newPage
 	 * @param {number} [velocity=0]
+	 * @param {string} [movementType='animate']
 	 */
-	goToPage(newPage, velocity = 0) {
-		// exit if no index passed in
+	goToPage(newPage, velocity = 0, movementType = 'animate') {
 		if (newPage === undefined) return;
 
 		const _ = this;
-
 		const state = _.#store.getState();
 		const options = _.#store.getOptions();
 
-		// clamp or wrap
+		// clamp or wrap (use state.canLoop which accounts for effect buffer requirements)
 		if (newPage < 0) {
-			newPage = options.loop
+			newPage = state.canLoop
 				? ((newPage % state.pageCount) + state.pageCount) % state.pageCount
 				: 0;
-			if (!options.loop && !velocity) velocity = 10;
+			if (!state.canLoop && !velocity) velocity = 10;
 		} else if (newPage >= state.pageCount) {
-			newPage = options.loop ? 0 : state.pageCount - 1;
-			if (!options.loop && !velocity) velocity = -10;
+			newPage = state.canLoop ? 0 : state.pageCount - 1;
+			if (!state.canLoop && !velocity) velocity = -10;
 		}
 
 		// every goToPage is actually converted to a goToSlide
 		const newIndex = newPage * (options.slidesPerMove ?? 1);
-		_.goToSlide(newIndex, velocity);
+		_.goToSlide(newIndex, velocity, movementType);
 	}
 
 	/**
@@ -5945,44 +6064,26 @@ class Tarot extends HTMLElement {
 	 * @param {number} newPage
 	 */
 	jumpToPage(newPage) {
-		// exit if no index passed in
-		if (newPage === undefined) return;
-
-		const _ = this;
-
-		const state = _.#store.getState();
-		const options = _.#store.getOptions();
-
-		if (newPage < 0) {
-			newPage = options.loop
-				? ((newPage % state.pageCount) + state.pageCount) % state.pageCount
-				: 0;
-		} else if (newPage >= state.pageCount) {
-			newPage = options.loop ? 0 : state.pageCount - 1;
-		}
-
-		// every jumpToPage is actually converted to a jumpToSlide
-		const newIndex = newPage * (options.slidesPerMove ?? 1);
-		_.jumpToSlide(newIndex);
+		this.goToPage(newPage, 0, 'jump');
 	}
 
 	/**
 	 * request a specific track position (continuous positioning system)
 	 * @param {number|string} position - position to move to:
 	 *   - number: treated as percentage (0-100)
-	 *   - string ending in '%': percentage (e.g., '50%')  
+	 *   - string ending in '%': percentage (e.g., '50%')
 	 *   - string ending in 'px': pixel position (e.g., '200px')
 	 *   - other string: treated as percentage number
 	 */
 	requestTrackPosition(position) {
 		const _ = this;
-		
+
 		// exit if no position passed in
 		if (position === undefined || position === null) return;
 
 		_.#store.getState();
 		_.#store.getOptions();
-		
+
 		let trackPosition = 0;
 
 		// parse the position input
@@ -6007,11 +6108,11 @@ class Tarot extends HTMLElement {
 			return;
 		}
 
-		// emit animation request event to follow the same pattern as jumpToSlide
-		_.#eventEmitter.emit(EVENTS.animation.requested, {
+		// emit movement request event to follow the same pattern as a jump
+		_.#eventEmitter.emit(EVENTS.movement.requested, {
 			trackPosition, // direct track position instead of index
 			velocity: 0,
-			type: 'jump',
+			movementType: 'jump',
 		});
 	}
 
@@ -6025,20 +6126,20 @@ class Tarot extends HTMLElement {
 		const _ = this;
 		const state = _.#store.getState();
 		const options = _.#store.getOptions();
-		
+
 		// ensure percent is within bounds
 		percent = Math.max(0, Math.min(100, percent));
-		
+
 		// if no pages or only one page, return 0
 		if (state.pageCount <= 1) return 0;
-		
+
 		// calculate the slide index of the last page
 		const lastPageIndex = state.pageCount - 1;
 		const lastPageSlideIndex = lastPageIndex * (options.slidesPerMove ?? 1);
-		
-		// get the track position for the last page using track manager
-		const lastPageTrackPos = _.#trackManager.getTrackPosForIndex(lastPageSlideIndex);
-		
+
+		// get the track position for the last page using transition manager
+		const lastPageTrackPos = _.#transitionManager.getTrackPosForIndex(lastPageSlideIndex);
+
 		// convert percentage to track position
 		// 0% = position 0, 100% = lastPageTrackPos
 		return (percent / 100) * lastPageTrackPos;
@@ -6082,23 +6183,33 @@ class Tarot extends HTMLElement {
 		return this.#track;
 	}
 
-	/** expose registered effects as canonical keys */
-	getEffects() {
+	/** registered effect keys */
+	get effects() {
 		return Object.keys(this.constructor.effects);
 	}
 
-	getUserOptions() {
-		return this.#optionsManager.getUserOptions?.();
+	/** user-provided options (before defaults applied) */
+	get userOptions() {
+		return this.#optionsManager.userOptions;
 	}
 
-	// convenience getters expected by external api
-	getIndex() {
+	/** update options (merges with existing) */
+	updateOptions(newOptions) {
+		this.#optionsManager.setUserOptions?.(newOptions);
+	}
+
+	/** current slide index */
+	get index() {
 		return this.state.renderIndex;
 	}
-	getPage() {
+
+	/** current page index */
+	get page() {
 		return this.state.pageIndex;
 	}
-	getSelectedIndex() {
+
+	/** selected slide index */
+	get selectedIndex() {
 		return this.state.selectedIndex;
 	}
 	setSelectedIndex(index) {
@@ -6114,16 +6225,18 @@ class Tarot extends HTMLElement {
 
 		// update selected index in store (triggers selection events)
 		_.#store.setState({ selectedIndex: index });
+
+		// should we go to slide on select?
+		if (_.#store.getOptions().goToSelectedSlide) {
+			_.goToSlide(index);
+		}
 	}
-	getSelectedSlide() {
+	/** currently selected slide element */
+	get selectedSlide() {
 		return this.#store.getSlides()[this.state.selectedIndex];
 	}
 	getSlideAtIndex(index) {
 		return this.#store.getSlides()[index];
-	}
-
-	updateOptions(newOptions) {
-		this.#optionsManager.updateOptions?.(newOptions);
 	}
 
 	// ---------------------------------------------------------------------
@@ -6148,11 +6261,6 @@ class Tarot extends HTMLElement {
 		this.#eventEmitter.off(event, listener);
 	}
 
-	/** private emit helper (kept for compatibility) */
-	_emit(event, ...args) {
-		this.#eventEmitter.emit(event, ...args);
-	}
-
 	// ---------------------------------------------------------------------
 	// teardown
 	// ---------------------------------------------------------------------
@@ -6164,7 +6272,7 @@ class Tarot extends HTMLElement {
 		_.#pluginInstances.forEach((plugin) => plugin?.destroy?.());
 		_.#pluginInstances.length = 0;
 
-		_.#trackManager?.destroy?.();
+		_.#transitionManager?.destroy?.();
 		_.#effectManager?.destroy?.();
 		_.#slideManager?.destroy?.();
 		_.#dragHandler?.destroy?.();
@@ -6177,7 +6285,7 @@ class Tarot extends HTMLElement {
 		}
 		_.#announcements = null;
 
-		_.#eventEmitter?.removeAllListeners?.();
+		_.#eventEmitter?.destroy?.();
 	}
 }
 
@@ -6205,21 +6313,31 @@ class TarotSlide extends HTMLElement {
 		super();
 
 		// the original slide index position loaded from the DOM (logical index)
-		this.index = 0;
+		this._index = 0;
 		// the render index of the slide on the track
 		// used by the slide manager to loop the slides around the viewport
-		this.renderIndex = 0;
+		this._renderIndex = 0;
 		// whether this slide is currently selected
-		this.selected = false;
+		this._selected = false;
 		// the original slide index position loaded from the DOM
-		this.trackPosition = 0;
+		this._trackPosition = 0;
 		// renderPosition - the final render position used in the DOM
 		// usually used after trimming the slides on the left and right
-		this.renderPosition = 0;
+		this._renderPosition = 0;
 		// the center point of the slide based on the renderIndex
 		// used in transform regions to calculate the percent
 		// between two points on the track to apply transforms
-		this.centerPoint = 0;
+		this._centerPoint = 0;
+	}
+
+	hide() {
+		this.style.visibility = 'hidden';
+		this.style.pointerEvents = 'none';
+	}
+
+	show() {
+		this.style.visibility = '';
+		this.style.pointerEvents = '';
 	}
 }
 
@@ -6244,6 +6362,35 @@ customElements.define('tarot-slide-icon', TarotSlideIcon);
 // styles
 
 // Core plugins are now built-in to Tarot
+
+// Process any effects that were queued before Tarot loaded
+(function() {
+	if (typeof window !== 'undefined' && Array.isArray(window.TarotEffectQueue)) {
+		window.TarotEffectQueue.forEach(function(item) {
+			if (item && item.factory) {
+				// Factory pattern: create class and register
+				var EffectClass = item.factory(TarotEffect);
+				Tarot.registerEffect(EffectClass);
+			} else if (typeof item === 'function') {
+				// Legacy: direct class
+				Tarot.registerEffect(item);
+			}
+		});
+	}
+	// Replace queue with proxy that registers immediately (for effects that load after)
+	if (typeof window !== 'undefined') {
+		window.TarotEffectQueue = {
+			push: function(item) {
+				if (item && item.factory) {
+					var EffectClass = item.factory(TarotEffect);
+					Tarot.registerEffect(EffectClass);
+				} else if (typeof item === 'function') {
+					Tarot.registerEffect(item);
+				}
+			}
+		};
+	}
+})();
 
 // register as custom element (class name != tag name is totally normal!)
 customElements.define('tarot-carousel', Tarot);
