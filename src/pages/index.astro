@@ -349,7 +349,11 @@ const morphCards = [
 					<div class="container">
 						<div class="section-head reveal reveal-fade-up">
 							<p class="eyebrow">2013&ndash;Today</p>
-							<h2 class="section-title">Experience</h2>
+							<h2 class="section-title">
+								<split-text effect="rise" split="chars" stagger="26" duration="820"
+									>Experience</split-text
+								>
+							</h2>
 							<p class="section-intro">
 								From a Fortune 500 rewrite to a billion-dollar tequila brand to founding a web app
 								framework and an open-source component library.
@@ -456,7 +460,7 @@ const morphCards = [
 			<div class="container">
 				<div class="section-head reveal reveal-fade-up">
 					<p class="eyebrow">Everyday Stack</p>
-					<h2 class="section-title tools-title">
+					<h2 class="section-title">
 						<split-text effect="rise" split="chars" stagger="26" duration="820">Tools I use</split-text>
 					</h2>
 				</div>
@@ -503,7 +507,11 @@ const morphCards = [
 			<div class="container container-wide">
 				<div class="section-head reveal reveal-fade-up">
 					<p class="eyebrow">Free &amp; Open Source</p>
-					<h2 class="section-title">Things I&rsquo;ve built</h2>
+					<h2 class="section-title">
+						<split-text effect="rise" split="chars" stagger="26" duration="820"
+							>Things I&rsquo;ve built</split-text
+						>
+					</h2>
 				</div>
 
 				<div class="proj-rows">
@@ -754,30 +762,25 @@ const morphCards = [
 						<div class="proj-demo proj-demo-morph">
 							<!-- A margin note, not a UI label: it leans a degree off true and
 							     fades out for good once a panel has been opened. -->
-							<p class="morph-hint" id="morph-hint">
-								<span class="morph-hint-text">click to see me morph</span>
-								<svg
-									class="morph-hint-arrow"
-									viewBox="0 0 40 56"
-									fill="none"
-									aria-hidden="true"
-									focusable="false">
-									<path
-										d="M30 3 C34 20 30 32 18 42"
-										stroke="currentColor"
-										stroke-width="1.6"
-										stroke-linecap="round"></path>
-									<path
-										d="M11 33 C13 39 16 43 19 45 M27 40 C24 43 21 45 19 45"
-										stroke="currentColor"
-										stroke-width="1.6"
-										stroke-linecap="round"
-										stroke-linejoin="round"></path>
-								</svg>
-							</p>
 							<!-- Fixed-height stage so the dialog's measured rect never depends on
 							     which card opened it, and the flight stays inside the panel. -->
 							<div class="morph-stage">
+								<p class="morph-hint" id="morph-hint">
+									<span class="morph-hint-text">click to see me morph</span>
+									<svg
+										class="morph-hint-arrow"
+										viewBox="0 0 56 72"
+										fill="none"
+										aria-hidden="true"
+										focusable="false">
+										<path
+											d="M8 6 C 32 14, 48 34, 42 62 M42 62 L33 53 M42 62 L52 55"
+											stroke="currentColor"
+											stroke-width="2.5"
+											stroke-linecap="round"
+											stroke-linejoin="round"></path>
+									</svg>
+								</p>
 								<div class="morph-grid" id="morph-grid" data-cards={JSON.stringify(morphCards)}>
 									{
 										morphCards.map((card) => (
@@ -793,7 +796,16 @@ const morphCards = [
 					</article>
 
 					<!-- ---------- CONSTELLATION ---------- -->
-					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
+					<article
+						class="proj-row proj-row-constellation reveal reveal-fade-up"
+						data-reveal-group="projects:110">
+						<!-- Ambient field, spanning the whole row and bleeding past it. It is
+						     decorative and non-interactive: pointer-events off so the copy
+						     stays selectable, and masked on every side so it has no edge a
+						     viewer could point at. -->
+						<div class="cf-wrap" aria-hidden="true">
+							<canvas id="cf-canvas"></canvas>
+						</div>
 						<div class="proj-copy">
 							<a
 								class="proj-pill"
@@ -816,19 +828,29 @@ const morphCards = [
 								<span class="dollar">$</span> npm i -g @magic-spells/constellation
 							</p>
 						</div>
-						<div class="proj-demo">
-							<div class="cf-wrap">
-								<canvas id="cf-canvas" aria-hidden="true"></canvas>
-							</div>
+						<div class="proj-demo proj-demo-constellation">
+							<img
+								class="cs-shot"
+								src="/constellation-viewer.webp"
+								alt="The Constellation viewer"
+								width="1600"
+								height="1147"
+								loading="lazy"
+								decoding="async"
+							/>
 						</div>
 					</article>
 				</div>
 
 				<p class="chips-lead reveal reveal-fade-up">Plus all of these</p>
-				<ul class="chips reveal reveal-fade-up">
+				<!-- Each chip reveals on its own so the set cascades. The step is
+				     batch-relative in @magic-spells/reveal, so the whole group lands in
+				     ~0.65s rather than accumulating a delay per index. Reduced motion is
+				     handled by the package: it shows everything at once. -->
+				<ul class="chips">
 					{
 						chips.map((c) => (
-							<li>
+							<li class="reveal reveal-fade-up" data-reveal-group="chips:20">
 								<a
 									class="chip"
 									href={`https://github.com/magic-spells/${c.repo}`}
@@ -894,7 +916,7 @@ const morphCards = [
 				<div class="contact-inner">
 					<div class="section-head reveal reveal-fade-up">
 						<img class="portrait" src="/cory.jpg" alt="Cory Schulz" width="76" height="76" loading="lazy" />
-						<h2 class="section-title contact-title">
+						<h2 class="section-title">
 							<split-text effect="rise" split="chars" stagger="26" duration="820"
 								>Have a project in mind?</split-text
 							>
@@ -1127,6 +1149,18 @@ const morphCards = [
 		   global heading rule's +0.01em. */
 		text-transform: none;
 		letter-spacing: -0.005em;
+	}
+
+	/* Every section title is split now. The block keeps the line wrapping as it
+	   did before the split, and the padding is the same descender fix the hero
+	   name carries: split-text masks each character, which shaves the tails on
+	   p, g and y without a little headroom. */
+	.section-title split-text {
+		display: block;
+	}
+
+	.section-title :global(.split-text-char) {
+		padding-bottom: 0.06em;
 	}
 
 	.section-intro {
@@ -1672,15 +1706,6 @@ const morphCards = [
 		padding-block: clamp(3.5rem, 8vw, 10rem);
 	}
 
-	/* Same split-text block/descender handling the other split headings carry. */
-	.tools-title split-text {
-		display: block;
-	}
-
-	.tools-title :global(.split-text-char) {
-		padding-bottom: 0.06em;
-	}
-
 	.tools-marquees {
 		display: flex;
 		flex-direction: column;
@@ -1765,6 +1790,13 @@ const morphCards = [
 
 	/* Things I've built — five feature rows          */
 	/* ============================================ */
+
+	/* The constellation field bleeds sideways out of its row; clip (not hidden,
+	   which would make this a scroll container) keeps that bleed from ever
+	   widening the page. */
+	.section-projects {
+		overflow-x: clip;
+	}
 
 	.proj-rows {
 		display: flex;
@@ -2174,15 +2206,22 @@ const morphCards = [
 
 	/* Reads as something scribbled in the margin: off-axis, gold, and gone for
 	   good once the reader has taken the hint. */
+	/* Label, arrow and card top read as one gesture: the label sits above the
+	   stage, the arrow starts at the end of the words and curves down-and-right
+	   so its tip lands inside the first card rather than in the gutter. Layered
+	   over the grid and click-through, so it never intercepts a card. */
 	.morph-hint {
+		position: absolute;
+		left: 0.5rem;
+		top: -34px;
+		z-index: 2;
 		display: flex;
-		align-items: flex-end;
-		gap: 0.375rem;
+		align-items: flex-start;
+		gap: 0.125rem;
 		width: fit-content;
-		/* Pushed toward the middle of the stage so the arrow lands between the
-		   two top cards rather than off the side of the panel. */
-		margin: 0 auto 0.25rem;
+		margin: 0;
 		color: var(--gold);
+		pointer-events: none;
 		transition: opacity 0.4s ease;
 	}
 
@@ -2199,8 +2238,8 @@ const morphCards = [
 	}
 
 	.morph-hint-arrow {
-		width: 26px;
-		height: 40px;
+		width: 56px;
+		height: 72px;
 		flex: none;
 	}
 
@@ -2571,12 +2610,87 @@ const morphCards = [
 
 	/* Constellation — node-graph field */
 
+	/* The row is the field's positioning context, and the only thing that puts
+	   the copy and the screenshot in front of it. */
+	.proj-row-constellation {
+		position: relative;
+	}
+
+	.proj-row-constellation > .proj-copy,
+	.proj-row-constellation > .proj-demo {
+		position: relative;
+		z-index: 1;
+	}
+
+	/* Bleeds well past the row on every side so the drift reads as part of the
+	   page rather than a panel that happens to be animated. .section-projects
+	   clips horizontally, so the side bleed can never widen the page. The mask
+	   is a long ellipse fade — by the time the canvas actually ends there is
+	   nothing left to see. */
 	.cf-wrap {
+		position: absolute;
+		inset: -90px -8vw;
+		z-index: 0;
+		pointer-events: none;
+		-webkit-mask-image: radial-gradient(
+			ellipse 62% 58% at 50% 50%,
+			rgba(0, 0, 0, 1) 0%,
+			rgba(0, 0, 0, 0.85) 38%,
+			rgba(0, 0, 0, 0.4) 66%,
+			rgba(0, 0, 0, 0) 100%
+		);
+		mask-image: radial-gradient(
+			ellipse 62% 58% at 50% 50%,
+			rgba(0, 0, 0, 1) 0%,
+			rgba(0, 0, 0, 0.85) 38%,
+			rgba(0, 0, 0, 0.4) 66%,
+			rgba(0, 0, 0, 0) 100%
+		);
+	}
+
+	/* Quieter than the hero's static stars: this is ambiance behind real
+	   content, not the subject. */
+	.cf-wrap canvas {
+		opacity: 0.42;
+	}
+
+	/* Unboxed like the tarot demo — the screenshot carries its own frame, so a
+	   panel around it would only double the chrome and give the field an edge. */
+	.proj-demo-constellation {
+		border: 0;
+		background: none;
+		padding: 0;
+		overflow: visible;
+	}
+
+	/* The app UI is dark, so the hairline is what finds its edge against the
+	   night ground, and the shadow lifts it off the drifting field. Cropped to
+	   the top-left, which is the sidebar-plus-content the app is recognised by. */
+	.cs-shot {
+		display: block;
 		width: 100%;
-		height: 290px;
-		border-radius: 10px;
-		overflow: hidden;
+		/* At the demo column's width this is just past the image's own cover
+		   height, so the UI is shown whole rather than scaled down inside a
+		   letterbox, and the card stands up to the copy column beside it. */
+		height: 400px;
+		object-fit: cover;
+		object-position: left top;
+		border: 1px solid var(--card-border);
+		border-radius: var(--radius-media);
 		background: var(--panel);
+		box-shadow:
+			0 24px 48px -12px rgba(0, 0, 0, 0.6),
+			0 4px 12px rgba(0, 0, 0, 0.45);
+	}
+
+	@media (max-width: 899px) {
+		.cs-shot {
+			height: 260px;
+		}
+
+		.cf-wrap {
+			inset: -60px -6vw;
+		}
 	}
 
 	#cf-canvas {
@@ -2677,18 +2791,6 @@ const morphCards = [
 		border-radius: 50%;
 		object-fit: cover;
 		border: 2px solid rgba(201, 168, 106, 0.6);
-	}
-
-	/* split-text lays the heading out per character, so the block needs to stay
-	   a block for the line to wrap as it did before. */
-	.contact-title split-text {
-		display: block;
-	}
-
-	/* Same descender fix the hero name carries: the "j" in "Project" is shaved
-	   by split-text's per-character overflow mask without a little headroom. */
-	.contact-title :global(.split-text-char) {
-		padding-bottom: 0.06em;
 	}
 
 	.contact-sub {
@@ -3204,12 +3306,20 @@ const morphCards = [
 		return initFireworks(fireworksMount as HTMLElement);
 	});
 
+	// Ambient settings: sparse, slow, and no gold constellation patterns — the
+	// field is background here, not the demo it was in the hero. It still pauses
+	// offscreen and on tab-hide through mountWhenNear, and the module parks it
+	// static under prefers-reduced-motion.
 	const cfCanvas = document.getElementById('cf-canvas');
 	mountWhenNear(cfCanvas, async () => {
 		const { default: initConstellationField } = await import(
 			'../scripts/demos/constellation-field.js'
 		);
-		return initConstellationField(cfCanvas as HTMLCanvasElement);
+		return initConstellationField(cfCanvas as HTMLCanvasElement, {
+			density: 0.4,
+			driftScale: 0.55,
+			maxEvents: 0,
+		});
 	});
 
 	// ---- Morph engine: card flies open into a real <dialog> -------------------

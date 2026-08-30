@@ -249,7 +249,14 @@ const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
  * @param {HTMLCanvasElement} canvas
  * @returns {{ destroy: () => void, pause: () => void, resume: () => void }}
  */
-export default function initConstellationField(canvas) {
+/**
+ * @param {HTMLCanvasElement} canvas
+ * @param {object} [options]
+ * @param {number} [options.density=1]    - multiplier on the computed node count
+ * @param {number} [options.driftScale=1] - multiplier on node drift speed
+ * @param {number} [options.maxEvents]    - concurrent constellation patterns
+ */
+export default function initConstellationField(canvas, options = {}) {
 	const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
 	if (!ctx) return { destroy() {}, pause() {}, resume() {} };
 
@@ -263,6 +270,16 @@ export default function initConstellationField(canvas) {
 			? window.matchMedia('(prefers-reduced-motion: reduce)')
 			: null;
 	let reduceMotion = motionQuery ? motionQuery.matches : false;
+
+	// Ambient tuning. Defaults reproduce the original hero field exactly, so a
+	// caller that passes nothing gets the behaviour this module always had.
+	const densityScale = Number(options.density) > 0 ? Number(options.density) : 1;
+	const driftScale = Number(options.driftScale) > 0 ? Number(options.driftScale) : 1;
+	const driftMin = DRIFT_MIN * driftScale;
+	const driftMax = DRIFT_MAX * driftScale;
+	const maxEvents = Number.isFinite(Number(options.maxEvents))
+		? Math.max(0, Math.round(Number(options.maxEvents)))
+		: MAX_EVENTS;
 
 	let W = 0;
 	let H = 0;
@@ -345,7 +362,11 @@ export default function initConstellationField(canvas) {
 		const vw = window.innerWidth || W;
 		const ceiling = vw < BREAKPOINT ? NODES_SM : NODES;
 		const scaled = Math.round(ceiling * Math.pow((W * H) / REF_AREA, DENSITY_EXP));
-		return Math.max(MIN_NODES, Math.min(ceiling, scaled));
+		const withDensity = Math.round(Math.min(ceiling, scaled) * densityScale);
+		// The pattern floor only matters while constellations are spawning; a
+		// field asked for ambiance only is allowed to go genuinely sparse.
+		const floor = maxEvents > 0 ? MIN_NODES : 8;
+		return Math.max(floor, withDensity);
 	};
 
 	const seed = () => {
@@ -360,7 +381,7 @@ export default function initConstellationField(canvas) {
 				y = Math.random() * H;
 			}
 			const gold = Math.random() < GOLD_RATIO;
-			const a = Math.random() * (DRIFT_MAX - DRIFT_MIN) + DRIFT_MIN;
+			const a = Math.random() * (driftMax - driftMin) + driftMin;
 			const dir = Math.random() * Math.PI * 2;
 			nodes.push({
 				x,
@@ -473,7 +494,7 @@ export default function initConstellationField(canvas) {
 				for (const n of ev.members) {
 					n.member = false;
 					const dir = Math.random() * Math.PI * 2;
-					const s = DRIFT_MIN + Math.random() * (DRIFT_MAX - DRIFT_MIN);
+					const s = driftMin + Math.random() * (driftMax - driftMin);
 					n.vx = Math.cos(dir) * s;
 					n.vy = Math.sin(dir) * s;
 				}
@@ -525,7 +546,7 @@ export default function initConstellationField(canvas) {
 			}
 
 			const sp = Math.hypot(n.vx, n.vy) || 1;
-			const clamped = Math.min(DRIFT_MAX, Math.max(DRIFT_MIN, sp));
+			const clamped = Math.min(driftMax, Math.max(driftMin, sp));
 			n.vx = (n.vx / sp) * clamped;
 			n.vy = (n.vy / sp) * clamped;
 
@@ -685,7 +706,7 @@ export default function initConstellationField(canvas) {
 			else rp.r = rippleR * (1 - (1 - rp.t) * (1 - rp.t));
 		}
 
-		if (events.length < MAX_EVENTS && clock * 1000 >= nextEventAt) {
+		if (maxEvents > 0 && events.length < maxEvents && clock * 1000 >= nextEventAt) {
 			if (startEvent()) {
 				nextEventAt = clock * 1000 + EVENT_MIN_MS + Math.random() * (EVENT_MAX_MS - EVENT_MIN_MS);
 			} else {
