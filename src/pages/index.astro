@@ -265,7 +265,7 @@ const morphCards = [
 
 			<div class="container hero-inner">
 				<p class="eyebrow hero-eyebrow">
-					<span>Front-End Engineer &middot; Tech Lead</span><span class="eyebrow-sep"> &middot; </span><span>Shopify Developer</span>
+					<span>Senior Front-End Engineer &middot; Tech Lead</span>
 				</p>
 
 				<h1 class="hero-name">
@@ -2700,11 +2700,16 @@ const morphCards = [
 	}
 
 	/* Chips */
-	/* Conversational lead-in, not an eyebrow: sentence case, no tracking. */
+	/* Conversational lead-in, not an eyebrow: sentence case, no tracking. Sized
+	   as a sub-heading so it introduces the chips rather than captioning them,
+	   with the gap below scaled to match. */
 	.chips-lead {
-		margin: clamp(2.5rem, 5vw, 4rem) 0 1rem;
+		margin: clamp(2.5rem, 5vw, 4rem) 0 1.5rem;
 		text-align: center;
-		font-size: 0.9375rem;
+		font-family: var(--font-body);
+		font-size: clamp(1.3125rem, 2.2vw, 1.5rem);
+		font-weight: 600;
+		line-height: 1.3;
 		color: var(--cream);
 	}
 
