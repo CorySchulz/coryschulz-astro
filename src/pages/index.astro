@@ -591,10 +591,7 @@ const morphCards = [
 										"navigation": {
 											"showButtons": true,
 											"smartButtons": false,
-											"showPagination": false
-										},
-										"scrollbar": {
-											"show": true
+											"showPagination": true
 										}
 									}
 								</script>
@@ -2081,8 +2078,7 @@ const morphCards = [
 		border: 0;
 		background: none;
 		/* Top padding gives the card shadows headroom; the bottom strip is
-		   where the scrollbar is lifted to. Deep enough to clear the plugin's
-		   44px coarse-pointer touch target at its lowered position. */
+		   where the pagination dots are lifted to. */
 		padding: 0.75rem 0 3.5rem;
 		min-height: 0;
 		/* The carousel's own clipping is off below so the shadows survive, which
@@ -2092,41 +2088,26 @@ const morphCards = [
 		overflow: hidden;
 	}
 
-	/* The scrollbar plugin replaces the pagination dots. It is lifted out of
-	   flow so tarot-carousel's box collapses to exactly the viewport's slide
-	   area — that is what makes the buttons below centre on the slides rather
-	   than on the slides-plus-scrollbar stack. Centred on a point just under
-	   the carousel, so a coarse-pointer track (which the plugin grows to a
-	   44px touch target) stays centred on the same rail. */
-	.proj-demo-tarot :global(.tarot-scrollbar) {
-		/* Night-palette theming for the plugin's own custom properties. They are
-		   declared on :root upstream, so redeclaring them here wins for this
-		   carousel and takes the prefers-color-scheme branch out of play. */
-		--tarot-scrollbar-height: 6px;
-		--tarot-scrollbar-bg: rgba(251, 248, 238, 0.12);
-		--tarot-scrollbar-thumb-bg: var(--gold);
-		--tarot-scrollbar-thumb-hover-bg: var(--gold-bright);
-		--tarot-scrollbar-thumb-active-bg: var(--gold-bright);
-		--tarot-scrollbar-border-radius: 999px;
-		--tarot-scrollbar-margin: 0;
-
+	/* Pagination dots (auto-appended to tarot-carousel, themed in app.css).
+	   Lifted out of flow so tarot-carousel's box collapses to exactly the
+	   viewport's slide area — that is what makes the buttons centre on the
+	   slides rather than on the slides-plus-dots stack. Centred on a point
+	   just under the card shadows. */
+	.proj-demo-tarot :global(.tarot-dots-list) {
 		position: absolute;
-		/* Sits clear of the card shadows rather than tight under the slides. */
 		top: calc(100% + 28px);
 		left: 50%;
 		transform: translate(-50%, -50%);
-		width: min(300px, 72%);
+		margin: 0;
 	}
 
-	/* The plugin sizes the thumb to the full track height, which on coarse
-	   pointers is the 44px touch target rather than the visible rail. Pin it to
-	   the rail's height and centre it so the thumb reads as a slim pill on
-	   every pointer type. */
-	.proj-demo-tarot :global(.tarot-scrollbar-thumb),
-	.proj-demo-tarot :global(.tarot-scrollbar-ghost) {
-		top: 50%;
-		height: var(--tarot-scrollbar-height);
-		transform: translateY(-50%);
+	/* Pulled past the grid column on desktop: a slice of the row gap on the
+	   copy side and the container gutter on the outer side, so the peacock
+	   spread renders larger and runs closer to the screen edges. */
+	@media (min-width: 900px) {
+		.proj-demo-tarot {
+			margin-inline: -2rem calc(var(--gutter) * -1);
+		}
 	}
 
 	/* The carousel's own chrome clips at the viewport edge, which would cut the
