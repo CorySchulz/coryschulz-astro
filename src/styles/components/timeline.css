@@ -1,0 +1,265 @@
+/* ==========================================================================
+   TIMELINE
+
+   Two renderings of the same seven stops: a scroll-scrubbed horizontal strip
+   from 768px up, and a ledger of rows below it.
+
+   This file is more conservative than hero.css or about.css, on purpose. The
+   strip is driven by @magic-spells/timeline-engine and index.astro's script
+   MEASURES it at runtime: stripEl.scrollWidth minus viewportEl.clientWidth is
+   the travel distance, which becomes both the tween's translateX and the
+   pinned section's height. Every declaration that feeds either of those two
+   numbers stays here rather than moving to a utility in markup, because a
+   utility that changes a computed width by a pixel changes the scrub silently
+   and no static screenshot shows it. The rules that stay for that reason say
+   so at the rule.
+
+   The three .is-scrubbed rules and the .tl-fits rule are the state machine
+   the script toggles. They are unlayered, like every house sheet, so they beat
+   any utility on the same element no matter how the utilities layer sorts.
+
+   Deleted: .tl-text, .tl-row-body, .tl-role, .tl-row-role, .tl-desc,
+   .tl-row-desc, .tl-brand-logo, .tl-media-brand, .ms-logo, .ms-logo-sm. All
+   were layout, spacing or type that the scale and the utilities cover.
+   ========================================================================== */
+
+/* The scroll driver's trigger. Its height is SET by the script
+   (window.innerHeight + travel) and its rect is read every frame, so nothing
+   about its box goes inline. */
+.tl-scroll {
+	position: relative;
+}
+
+.tl-viewport {
+	/* Edge to edge: the strip is deliberately outside .container and takes
+	   the full viewport width, so cards run off the screen edge rather than
+	   stopping at a gutter line. The side breathing room lives on the track
+	   below (.tl-strip padding-inline), which the travel math picks up
+	   because scrollWidth includes it.
+
+	   The whole rule stays CSS: clientWidth is the right-hand side of the
+	   travel subtraction, and overflow, snap and padding are all re-declared
+	   by the .is-scrubbed rule further down. Splitting the pair across markup
+	   and stylesheet would hide half of a state machine. */
+	width: 100%;
+	overflow-x: auto;
+	overflow-y: hidden;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: thin;
+	scrollbar-color: var(--hairline-strong) transparent;
+	padding-bottom: 1rem;
+}
+
+.tl-strip {
+	/* One source of truth for the strip's vertical metrics, so the gold
+	   hairline lands on the exact centre of the star nodes. */
+	--tl-media-h: 190px;
+	--tl-stack-gap: 0.75rem;
+	--tl-node-size: 18px;
+	--tl-node-margin: 2px;
+
+	position: relative;
+	display: flex;
+	gap: 3rem;
+	width: max-content;
+	/* The track carries the side spacing, not the viewport — that keeps the
+	   viewport full-bleed while the first and last cards still clear the
+	   screen edge. scrollWidth counts this padding, so the scrub travels
+	   the whole track. */
+	padding-inline: var(--gutter);
+}
+
+/* Very wide displays: the whole strip fits, so there is no travel and no
+   pin (see buildScrub). Without this it would sit flush-left with dead
+   space to the right; margin auto on a max-content block centres it. */
+.tl-scroll.tl-fits .tl-strip {
+	margin-inline: auto;
+}
+
+.tl-rule {
+	position: absolute;
+	/* media + stack gap + node's top margin + half the node = node centre.
+	   translateY(-50%) then centres the rule's own thickness on that line,
+	   so it stays exact whatever the rule's height is. */
+	top: calc(
+		var(--tl-media-h) + var(--tl-stack-gap) + var(--tl-node-margin) + var(--tl-node-size) / 2
+	);
+	transform: translateY(-50%);
+	left: 0;
+	right: 0;
+	height: 1px;
+	background: linear-gradient(
+		90deg,
+		rgba(201, 168, 106, 0) 0%,
+		var(--gold-soft) 6%,
+		var(--gold-soft) 94%,
+		rgba(201, 168, 106, 0) 100%
+	);
+}
+
+/* Stays whole. The card is 340px wide and there are seven of them, so this
+   rule IS the left-hand side of the travel subtraction, and the stack gap is
+   the same var .tl-rule offsets itself by. Moving the flex column to markup
+   would leave the gap behind and split one measurement across two places. */
+.tl-stop {
+	position: relative;
+	flex: 0 0 340px;
+	width: 340px;
+	display: flex;
+	flex-direction: column;
+	gap: var(--tl-stack-gap);
+	scroll-snap-align: center;
+}
+
+.tl-media {
+	width: 100%;
+	height: var(--tl-media-h);
+	object-fit: cover;
+	border-radius: var(--radius-media);
+	border: 1px solid var(--card-border);
+	background: var(--panel);
+}
+
+/* Centring is inline now; what is left is the face. Must stay ABOVE
+   .tl-row-thumb: that rule's border shorthand deliberately resets this gold
+   edge back to the card border for the ledger thumb. */
+.tl-media-mark {
+	border-color: rgba(201, 168, 106, 0.4);
+	background: linear-gradient(160deg, #0b1626 0%, var(--ground) 100%);
+	/* The wordmark is inlined SVG painted with currentColor — cream reads
+	   cleaner than gold against this card's dark blue gradient. */
+	color: var(--cream);
+}
+
+.tl-node {
+	/* The node margin and size are two of the four vars .tl-rule's calc reads,
+	   so the box that consumes them stays next to them. */
+	margin: var(--tl-node-margin) auto;
+	display: block;
+	width: var(--tl-node-size);
+	height: var(--tl-node-size);
+}
+
+/* A one-off, and staying one: a gold numeral on the display face above the
+   company name. Nothing else on the page sets type this way. */
+.tl-year {
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-size: 1.25rem;
+	color: var(--gold);
+}
+
+/* Both card titles are fs-body-lg font-semibold text-cream in markup. What is
+   left is the h3 reset plus one override: 1.6 is the right leading for a
+   paragraph and the wrong one for a dense card title, so these keep 1.3.
+   Unlayered, so it beats fs-body-lg's line-height whatever the sort order. */
+.tl-company,
+.tl-row-company {
+	text-transform: none;
+	letter-spacing: 0;
+	line-height: 1.3;
+}
+
+/* ==========================================================================
+   PINNED SCRUB STATE
+   Added and removed by index.astro's buildScrub. Unlayered and 0-3-0, so
+   nothing in markup can outrank them.
+   ========================================================================== */
+.tl-scroll.is-scrubbed .tl-pin {
+	position: sticky;
+	top: 0;
+	height: 100vh;
+	height: 100svh;
+	overflow: hidden;
+}
+
+.tl-scroll.is-scrubbed .tl-viewport {
+	overflow: hidden;
+	scroll-snap-type: none;
+	padding-bottom: 0;
+}
+
+.tl-scroll.is-scrubbed .tl-strip {
+	will-change: transform;
+}
+
+/* ==========================================================================
+   MOBILE LEDGER
+   ========================================================================== */
+
+/* Only the top rule. list-style, margin and padding came off: Tailwind's
+   preflight already zeroes all three on ol. */
+.tl-ledger {
+	border-top: 1px solid var(--hairline);
+}
+
+/* Stays whole. The column track is re-declared in the 419px block below, and
+   splitting a two-state grid across markup and stylesheet reads worse than
+   keeping both halves together. 419 is not a house breakpoint, so the
+   override cannot be an inline variant anyway. */
+.tl-row {
+	display: grid;
+	grid-template-columns: auto 1fr 104px;
+	align-items: center;
+	column-gap: 1.125rem;
+	row-gap: 0.75rem;
+	padding: 1.375rem 0;
+	border-bottom: 1px solid var(--hairline);
+}
+
+/* The other gold numeral, and also a one-off: it is the row's left column, so
+   its size drives the column width, and lining figures keep 2013 and 2024 on
+   the same baseline rather than hanging. */
+.tl-row-year {
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-size: clamp(2.75rem, 12vw, 3.375rem);
+	line-height: 0.9;
+	color: var(--gold);
+	font-variant-numeric: lining-nums;
+}
+
+.tl-row-thumb {
+	width: 116px;
+	/* Every timeline shot is 920x500 — the thumb keeps that ratio so the
+	   screenshot shows whole instead of cropping to a short band. */
+	aspect-ratio: 920 / 500;
+	height: auto;
+	object-fit: cover;
+	border-radius: 6px;
+	border: 1px solid var(--card-border);
+	background: var(--panel);
+}
+
+/* At the narrowest sizes the thumb drops below the text instead of shrinking */
+@media (max-width: 419px) {
+	.tl-row {
+		grid-template-columns: auto 1fr;
+	}
+	.tl-row-thumb {
+		grid-column: 2;
+		width: 100%;
+	}
+}
+
+/* Below 768px the horizontal strip is replaced by the ledger rows. Both
+   halves of the swap stay CSS: they are one decision, and the script reads
+   viewportEl.clientWidth, which is 0 while this display is none. */
+.tl-viewport {
+	display: none;
+}
+
+@media (min-width: 768px) {
+	.tl-viewport {
+		display: block;
+	}
+	.tl-ledger-wrap {
+		display: none;
+	}
+	/* Deliberately beats the py-section tail on the same element: the strip
+	   already ends in a screen of empty pinned space, so the seam into Tools
+	   wants far less air than a normal section break. */
+	.section-timeline {
+		padding-bottom: clamp(2rem, 4vw, 3rem);
+	}
+}

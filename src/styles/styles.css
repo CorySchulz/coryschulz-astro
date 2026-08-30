@@ -56,7 +56,8 @@
 	 (the split-text reach-ins, the hero eyebrow's off-scale size). */
 @import "./components/hero.css";
 @import "./components/about.css";
-/* TODO later phases: timeline, tools, projects, contact */
+@import "./components/timeline.css";
+/* TODO later phases: tools, projects, contact */
 
 /* ============================================
 	 Custom Utilities
