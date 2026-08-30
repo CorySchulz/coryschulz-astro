@@ -1,0 +1,44 @@
+/* Tools marquee. Two scrolling-content rows of square tiles. */
+
+.tools-marquee {
+	--scrolling-content-gap: 0.875rem;
+	display: block;
+}
+
+.tool-tile {
+	background: rgba(251, 248, 238, 0.05);
+	transition: background-color 0.25s ease;
+}
+
+.tool-tile:hover {
+	background: rgba(251, 248, 238, 0.08);
+}
+
+.tool-mark,
+.tool-wordmark {
+	opacity: 0.8;
+	transition: opacity 0.25s ease;
+}
+
+.tool-tile:hover .tool-mark,
+.tool-tile:hover .tool-wordmark {
+	opacity: 1;
+}
+
+/* The three brands simple-icons has no mark for. The label stands in for the
+   logo, with the caption below suppressed so the name is not printed twice. */
+.tool-tile-text .tool-label {
+	display: none;
+}
+
+/* Tiles are a fixed square so the marquee measures a stable item width. */
+@media (width < 600px) {
+	.tool-tile {
+		width: 92px;
+		height: 92px;
+	}
+
+	.tools-marquee {
+		--scrolling-content-fade: 3rem;
+	}
+}

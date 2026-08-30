@@ -57,6 +57,8 @@
 @import "./components/hero.css";
 @import "./components/about.css";
 @import "./components/timeline.css";
+@import "./components/tools.css";
+@import "./components/projects.css";
 /* TODO later phases: tools, projects, contact */
 
 /* ============================================

@@ -513,7 +513,7 @@ const morphCards = [
 		<!-- A light interstitial like About: an overline header and the marquee,
 		     no display-size title. The rows are full-bleed, so they sit outside
 		     the container the header uses. -->
-		<section class="py-section section-tools" id="tools">
+		<section class="py-section" id="tools">
 			<div class="container">
 				<div
 					class="flex flex-col items-center gap-md text-center mb-section-head reveal reveal-fade-up">
@@ -524,7 +524,7 @@ const morphCards = [
 				</div>
 			</div>
 
-			<div class="tools-marquees reveal reveal-fade-up">
+			<div class="flex flex-col gap-3.5 reveal reveal-fade-up">
 				{
 					[
 						{ row: toolRowA, direction: 'left', speed: 26 },
@@ -537,10 +537,11 @@ const morphCards = [
 							fade="6rem">
 							<scrolling-track>
 								{row.map((tool) => (
-									<div class={`tool-tile${tool.path ? '' : ' tool-tile-text'}`}>
+									<div
+										class={`tool-tile flex flex-col items-center justify-center gap-xs size-27 p-xs rounded-xl${tool.path ? '' : ' tool-tile-text'}`}>
 										{tool.path ? (
 											<svg
-												class="tool-mark"
+												class="tool-mark size-6.5 text-cream"
 												viewBox="0 0 24 24"
 												role="img"
 												aria-label={tool.name}
@@ -548,9 +549,11 @@ const morphCards = [
 												<path d={tool.path} fill="currentColor" />
 											</svg>
 										) : (
-											<span class="tool-wordmark">{tool.name}</span>
+											<span class="tool-wordmark font-mono fs-body-sm tracking-[0.01em] text-cream text-center">
+												{tool.name}
+											</span>
 										)}
-										<span class="tool-label">{tool.name}</span>
+										<span class="tool-label fs-body-xs text-slate-dim text-center">{tool.name}</span>
 									</div>
 								))}
 							</scrolling-track>
@@ -573,28 +576,28 @@ const morphCards = [
 					</h2>
 				</div>
 
-				<div class="proj-rows">
+				<div class="flex flex-col">
 					<!-- ---------- TAROT ---------- -->
-					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
-						<div class="proj-copy">
-							<a class="proj-pill" href="https://magicspells.io" target="_blank" rel="noopener noreferrer"
+					<article class="proj-row grid grid-cols-1 items-center gap-8 py-12 lg:gap-12 reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy flex flex-col items-start gap-3.5 min-w-0">
+							<a class="proj-pill inline-block rounded-full px-3.5 py-1.5 fs-mono-label tracking-[0.14em] text-gold" href="https://magicspells.io" target="_blank" rel="noopener noreferrer"
 								>magicspells.io/tarot</a
 							>
-							<h3 class="proj-title">
+							<h3 class="proj-title fs-heading-3 text-cream">
 								<split-text effect="bloom" split="chars" duration="700" stagger="35"
 									>Tarot</split-text
 								>
 							</h3>
-							<p class="proj-tagline">A carousel with real physics.</p>
-							<p class="proj-desc">
+							<p class="fs-subheading font-semibold text-cream text-balance">A carousel with real physics.</p>
+							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
 								A springy, scrubbable carousel that you can throw, catch, and scrub by hand. Every
 								frame is driven by a real spring, not a CSS transition.
 							</p>
-							<ul class="proj-specs">
+							<ul class="flex flex-col gap-1.5 mt-0.5">
 								{
 									tarotSpecs.map((spec) => (
-										<li class="proj-spec">
-											<svg class="proj-spec-mark" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+										<li class="flex items-center gap-2 text-sm text-cream">
+											<svg class="flex-none size-3" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
 												<path d={STAR} fill="var(--gold)" />
 											</svg>
 											<span>{spec}</span>
@@ -602,9 +605,9 @@ const morphCards = [
 									))
 								}
 							</ul>
-							<p class="proj-note">Free to use. Find it at magicspells.io</p>
+							<p class="mt-1.5 fs-body-sm text-slate-dim">Free to use. Find it at magicspells.io</p>
 						</div>
-						<div class="proj-demo proj-demo-tarot">
+						<div class="proj-demo flex items-center justify-center p-7 min-h-75 overflow-hidden min-w-0 proj-demo-tarot">
 							<tarot-carousel>
 								<script type="application/json" data-tarot-options>
 									{
@@ -643,29 +646,29 @@ const morphCards = [
 					</article>
 
 					<!-- ---------- PUZZLE ---------- -->
-					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
-						<div class="proj-copy">
+					<article class="proj-row grid grid-cols-1 items-center gap-8 py-12 lg:gap-12 reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy flex flex-col items-start gap-3.5 min-w-0">
 							<a
-								class="proj-pill"
+								class="proj-pill inline-block rounded-full px-3.5 py-1.5 fs-mono-label tracking-[0.14em] text-gold"
 								href="https://github.com/magic-spells/puzzle"
 								target="_blank"
 								rel="noopener noreferrer">@magic-spells/puzzle</a
 							>
-							<h3 class="proj-title">
+							<h3 class="proj-title fs-heading-3 text-cream">
 								<split-text effect="bloom" split="chars" duration="700" stagger="35"
 									>Puzzle</split-text
 								>
 							</h3>
-							<p class="proj-tagline">Built to compete with React, Vue, and Svelte.</p>
-							<p class="proj-desc">
+							<p class="fs-subheading font-semibold text-cream text-balance">Built to compete with React, Vue, and Svelte.</p>
+							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
 								A front-end web app framework: single-file <code>.pzl</code> components, reactive data,
 								and a Go + esbuild compiler.
 							</p>
-							<ul class="proj-specs">
+							<ul class="flex flex-col gap-1.5 mt-0.5">
 								{
 									puzzleSpecs.map((spec) => (
-										<li class="proj-spec">
-											<svg class="proj-spec-mark" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+										<li class="flex items-center gap-2 text-sm text-cream">
+											<svg class="flex-none size-3" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
 												<path d={STAR} fill="var(--gold)" />
 											</svg>
 											<span>{spec}</span>
@@ -673,9 +676,9 @@ const morphCards = [
 									))
 								}
 							</ul>
-							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/puzzle</p>
+							<p class="proj-install mt-1.5 rounded-[10px] px-4.5 py-3 font-mono fs-body-sm text-cream max-w-full overflow-x-auto whitespace-nowrap"><span class="text-gold mr-1.5">$</span> npm i @magic-spells/puzzle</p>
 							<a
-								class="proj-demo-link"
+								class="proj-demo-link inline-flex items-center gap-xs self-start mt-0.5 rounded-full px-4.5 py-2 fs-body-sm font-medium text-cream"
 								href="https://puzzle-music-demo.vercel.app/"
 								target="_blank"
 								rel="noopener noreferrer">
@@ -690,7 +693,7 @@ const morphCards = [
 								</svg>
 							</a>
 						</div>
-						<div class="proj-demo">
+						<div class="proj-demo flex items-center justify-center p-7 min-h-75 overflow-hidden min-w-0">
 							<pre class="code-card"><code><span class="c-punc">&lt;</span><span class="c-tag">puzzle-view</span><span class="c-punc">&gt;</span>
   <span class="c-punc">&lt;</span><span class="c-tag">button</span> <span class="c-attr">class</span>=<span class="c-str">"counter"</span> <span class="c-evt">@click</span>=<span class="c-bind">&#123; increment &#125;</span><span class="c-punc">&gt;</span>
     Clicked <span class="c-bind">&#123; count &#125;</span> times
@@ -709,54 +712,54 @@ const morphCards = [
 					</article>
 
 					<!-- ---------- TIMELINE ENGINE ---------- -->
-					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
-						<div class="proj-copy">
+					<article class="proj-row grid grid-cols-1 items-center gap-8 py-12 lg:gap-12 reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy flex flex-col items-start gap-3.5 min-w-0">
 							<a
-								class="proj-pill"
+								class="proj-pill inline-block rounded-full px-3.5 py-1.5 fs-mono-label tracking-[0.14em] text-gold"
 								href="https://github.com/magic-spells/timeline-engine"
 								target="_blank"
 								rel="noopener noreferrer">@magic-spells/timeline-engine</a
 							>
-							<h3 class="proj-title">
+							<h3 class="proj-title fs-heading-3 text-cream">
 								<split-text effect="bloom" split="chars" duration="700" stagger="35"
 									>Timeline Engine</split-text
 								>
 							</h3>
-							<p class="proj-tagline">Choreography you can scrub.</p>
-							<p class="proj-desc">
+							<p class="fs-subheading font-semibold text-cream text-balance">Choreography you can scrub.</p>
+							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
 								Group animation scenes in a timeline. Drive the timeline with scroll position, scroll
 								trigger, or scrub events. Loop scenes, randomize positions, and use physics based
 								animations.
 							</p>
-							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/timeline-engine</p>
+							<p class="proj-install mt-1.5 rounded-[10px] px-4.5 py-3 font-mono fs-body-sm text-cream max-w-full overflow-x-auto whitespace-nowrap"><span class="text-gold mr-1.5">$</span> npm i @magic-spells/timeline-engine</p>
 						</div>
-						<div class="proj-demo proj-demo-bare" id="fireworks-mount"></div>
+						<div class="proj-demo flex items-center justify-center p-7 min-h-75 overflow-hidden min-w-0 proj-demo-bare" id="fireworks-mount"></div>
 					</article>
 
 					<!-- ---------- SPLIT TEXT ---------- -->
-					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
-						<div class="proj-copy">
+					<article class="proj-row grid grid-cols-1 items-center gap-8 py-12 lg:gap-12 reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy flex flex-col items-start gap-3.5 min-w-0">
 							<a
-								class="proj-pill"
+								class="proj-pill inline-block rounded-full px-3.5 py-1.5 fs-mono-label tracking-[0.14em] text-gold"
 								href="https://github.com/magic-spells/split-text"
 								target="_blank"
 								rel="noopener noreferrer">@magic-spells/split-text</a
 							>
-							<h3 class="proj-title">
+							<h3 class="proj-title fs-heading-3 text-cream">
 								<split-text effect="bloom" split="chars" duration="700" stagger="35"
 									>Split Text</split-text
 								>
 							</h3>
-							<p class="proj-tagline">Text that makes an entrance.</p>
-							<p class="proj-desc">
+							<p class="fs-subheading font-semibold text-cream text-balance">Text that makes an entrance.</p>
+							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
 								A web component that splits a line into words, characters, or measured lines and animates
 								each unit on a CSS-driven stagger. Eight built-in effects, no dependencies, and no
 								framework to adopt. Drop the tag around your copy and it reveals itself when it scrolls
 								into view.
 							</p>
-							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/split-text</p>
+							<p class="proj-install mt-1.5 rounded-[10px] px-4.5 py-3 font-mono fs-body-sm text-cream max-w-full overflow-x-auto whitespace-nowrap"><span class="text-gold mr-1.5">$</span> npm i @magic-spells/split-text</p>
 						</div>
-						<div class="proj-demo proj-demo-split">
+						<div class="proj-demo flex items-center justify-center p-7 min-h-75 overflow-hidden min-w-0 proj-demo-split">
 							<div class="st-demo">
 								<p class="st-stage" id="st-stage"><split-text
 										id="st-specimen"
@@ -793,28 +796,28 @@ const morphCards = [
 					</article>
 
 					<!-- ---------- MORPH ENGINE ---------- -->
-					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
-						<div class="proj-copy">
+					<article class="proj-row grid grid-cols-1 items-center gap-8 py-12 lg:gap-12 reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy flex flex-col items-start gap-3.5 min-w-0">
 							<a
-								class="proj-pill"
+								class="proj-pill inline-block rounded-full px-3.5 py-1.5 fs-mono-label tracking-[0.14em] text-gold"
 								href="https://github.com/magic-spells/morph-engine"
 								target="_blank"
 								rel="noopener noreferrer">@magic-spells/morph-engine</a
 							>
-							<h3 class="proj-title">
+							<h3 class="proj-title fs-heading-3 text-cream">
 								<split-text effect="bloom" split="chars" duration="700" stagger="35"
 									>Morph Engine</split-text
 								>
 							</h3>
-							<p class="proj-tagline">Interfaces that morph into each other.</p>
-							<p class="proj-desc">
+							<p class="fs-subheading font-semibold text-cream text-balance">Interfaces that morph into each other.</p>
+							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
 								A spring-driven shared-element morph. It measures what you clicked, flies its rect,
 								radii, background, and shadow into the target&rsquo;s, and reveals the real element in
 								lockstep. Reverse it mid-flight and it simply turns around.
 							</p>
-							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/morph-engine</p>
+							<p class="proj-install mt-1.5 rounded-[10px] px-4.5 py-3 font-mono fs-body-sm text-cream max-w-full overflow-x-auto whitespace-nowrap"><span class="text-gold mr-1.5">$</span> npm i @magic-spells/morph-engine</p>
 						</div>
-						<div class="proj-demo proj-demo-morph">
+						<div class="proj-demo flex items-center justify-center p-7 min-h-75 overflow-hidden min-w-0 proj-demo-morph">
 							<!-- A margin note, not a UI label: it leans a degree off true and
 							     fades out for good once a panel has been opened. -->
 							<!-- Fixed-height stage so the dialog's measured rect never depends on
@@ -861,29 +864,29 @@ const morphCards = [
 						<div class="cf-wrap" aria-hidden="true">
 							<canvas id="cf-canvas"></canvas>
 						</div>
-						<div class="proj-copy">
+						<div class="proj-copy flex flex-col items-start gap-3.5 min-w-0">
 							<a
-								class="proj-pill"
+								class="proj-pill inline-block rounded-full px-3.5 py-1.5 fs-mono-label tracking-[0.14em] text-gold"
 								href="https://github.com/magic-spells/constellation"
 								target="_blank"
 								rel="noopener noreferrer">@magic-spells/constellation</a
 							>
-							<h3 class="proj-title">
+							<h3 class="proj-title fs-heading-3 text-cream">
 								<split-text effect="bloom" split="chars" duration="700" stagger="35"
 									>Constellation</split-text
 								>
 							</h3>
-							<p class="proj-tagline">Long-term memory for AI agents.</p>
-							<p class="proj-desc">
+							<p class="fs-subheading font-semibold text-cream text-balance">Long-term memory for AI agents.</p>
+							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
 								Plan your project as a connected graph of typed cards: pages, endpoints, tables, flows.
 								Agents read and update the graph as they work, so plans and context survive from
 								session to session instead of starting over every conversation.
 							</p>
-							<ul class="proj-specs">
+							<ul class="flex flex-col gap-1.5 mt-0.5">
 								{
 									constellationSpecs.map((spec) => (
-										<li class="proj-spec">
-											<svg class="proj-spec-mark" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+										<li class="flex items-center gap-2 text-sm text-cream">
+											<svg class="flex-none size-3" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
 												<path d={STAR} fill="var(--gold)" />
 											</svg>
 											<span>{spec}</span>
@@ -891,11 +894,11 @@ const morphCards = [
 									))
 								}
 							</ul>
-							<p class="proj-install">
-								<span class="dollar">$</span> npm i -g @magic-spells/constellation
+							<p class="proj-install mt-1.5 rounded-[10px] px-4.5 py-3 font-mono fs-body-sm text-cream max-w-full overflow-x-auto whitespace-nowrap">
+								<span class="text-gold mr-1.5">$</span> npm i -g @magic-spells/constellation
 							</p>
 						</div>
-						<div class="proj-demo proj-demo-constellation">
+						<div class="proj-demo flex items-center justify-center p-7 min-h-75 overflow-hidden min-w-0 proj-demo-constellation">
 							<img
 								class="cs-shot"
 								src="/constellation-viewer.webp"
@@ -1121,305 +1124,10 @@ const morphCards = [
 
 	/* The marquee rows need room on both sides of them: this is the seam
 	   between the timeline and Things I've Built, and both neighbours are dense. */
-	.section-tools {
-		padding-block: clamp(3.5rem, 8vw, 10rem);
-	}
-
-	.tools-marquees {
-		display: flex;
-		flex-direction: column;
-		gap: 0.875rem;
-	}
-
-	.tools-marquee {
-		--scrolling-content-gap: 0.875rem;
-		display: block;
-	}
-
-	/* Fixed width so the marquee measures a stable item and the tiles keep a
-	   square-ish face at every breakpoint. */
-	.tool-tile {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 0.5rem;
-		width: 108px;
-		height: 108px;
-		padding: 0.5rem;
-		border-radius: 12px;
-		background: rgba(251, 248, 238, 0.05);
-		transition: background-color 0.25s ease;
-	}
-
-	.tool-tile:hover {
-		background: rgba(251, 248, 238, 0.08);
-	}
-
-	.tool-mark {
-		width: 26px;
-		height: 26px;
-		color: var(--cream);
-		opacity: 0.8;
-		transition: opacity 0.25s ease;
-	}
-
-	.tool-tile:hover .tool-mark {
-		opacity: 1;
-	}
-
-	/* The three brands simple-icons has no mark for. A slightly larger label
-	   stands in for the logo, with the caption below suppressed so the name is
-	   not printed twice. */
-	.tool-wordmark {
-		font-family: var(--font-mono);
-		font-size: 0.8125rem;
-		letter-spacing: 0.01em;
-		color: var(--cream);
-		opacity: 0.8;
-		text-align: center;
-		transition: opacity 0.25s ease;
-	}
-
-	.tool-tile:hover .tool-wordmark {
-		opacity: 1;
-	}
-
-	.tool-tile-text .tool-label {
-		display: none;
-	}
-
-	.tool-label {
-		font-size: 0.6875rem;
-		line-height: 1.2;
-		text-align: center;
-		color: var(--slate-dim);
-	}
-
-	@media (max-width: 599px) {
-		.tool-tile {
-			width: 92px;
-			height: 92px;
-		}
-
-		.tools-marquee {
-			--scrolling-content-fade: 3rem;
-		}
-	}
-
 	/* Things I've built — five feature rows          */
 	/* ============================================ */
 
-	/* The constellation field bleeds sideways out of its row; clip (not hidden,
-	   which would make this a scroll container) keeps that bleed from ever
-	   widening the page. */
-	.section-projects {
-		overflow-x: clip;
-		/* The ms-outro closes this section with its own headroom, so the stock
-		   section tail would double up against contact's top padding. Trimmed on
-		   both sides of that seam. */
-		padding-bottom: clamp(3rem, 6vw, 6rem);
-	}
-
-	.proj-rows {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.proj-row {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 2rem;
-		align-items: center;
-		padding-block: clamp(3rem, 6vw, 5rem);
-		border-top: 1px solid var(--hairline);
-
-		/* Reveal tuning, scoped to these rows. The package's own stylesheet is
-		   imported after app.css and re-declares these on :root, so the global
-		   defaults there never reach the element — setting them here puts the
-		   value where nothing outranks it. data-reveal-group="projects:110"
-		   staggers each wave of arriving rows. Reduced motion is handled by the
-		   package's own media query, which cancels transform and transition. */
-		--reveal-duration: 0.72s;
-		--reveal-distance: 34px;
-	}
-
-	.proj-row:first-child {
-		border-top: 0;
-		padding-top: 0;
-	}
-
-	@media (min-width: 900px) {
-		.proj-row {
-			grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-			gap: clamp(2.5rem, 5vw, 4.5rem);
-		}
-		/* Alternate copy-left / demo-left down the column */
-		.proj-row:nth-child(even) .proj-copy {
-			order: 2;
-		}
-		/* Cap the copy block and centre it in its column so the row reads
-		   balanced against the filled demo panel instead of hugging the inner
-		   edge. Auto margins are symmetric, so it works either way round.
-		   The text itself stays left-aligned inside the block. */
-		.proj-copy {
-			max-width: 46ch;
-			margin-inline: auto;
-		}
-	}
-
-	.proj-copy {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 0.875rem;
-		min-width: 0;
-	}
-
-	.proj-pill {
-		display: inline-block;
-		border: 1px solid var(--gold-faint);
-		border-radius: 999px;
-		padding: 0.4375rem 0.875rem;
-		font-family: var(--font-mono);
-		font-size: 0.6875rem;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--gold);
-		transition:
-			border-color 0.2s ease,
-			color 0.2s ease;
-	}
-
-	.proj-pill:hover {
-		border-color: var(--gold);
-		color: var(--gold-bright);
-	}
-
-	.proj-title {
-		font-size: clamp(1.75rem, 3.6vw, 2.5rem);
-		color: var(--cream);
-	}
-
-	/* Product names keep their display casing; only the bloom is added. The
-	   block keeps the heading wrapping as it did before the split. */
-	.proj-title split-text {
-		display: block;
-	}
-
-	.proj-title :global(.split-text-char) {
-		padding-bottom: 0.06em;
-	}
-
-	.proj-tagline {
-		font-size: clamp(1.0625rem, 2vw, 1.1875rem);
-		font-weight: 600;
-		color: var(--cream);
-		text-wrap: balance;
-	}
-
-	.proj-desc {
-		font-size: 0.9375rem;
-		line-height: 1.65;
-		color: var(--slate-dim);
-		text-wrap: pretty;
-		max-width: 46ch;
-	}
-
-	.proj-desc code {
-		font-family: var(--font-mono);
-		font-size: 0.875em;
-		color: var(--slate);
-	}
-
-	.proj-install {
-		margin-top: 0.375rem;
-		border: 1px solid var(--card-border);
-		border-radius: 10px;
-		background: var(--panel);
-		padding: 0.75rem 1.125rem;
-		font-family: var(--font-mono);
-		font-size: 0.8125rem;
-		color: var(--cream);
-		max-width: 100%;
-		overflow-x: auto;
-		white-space: nowrap;
-	}
-
-	.proj-install .dollar {
-		color: var(--gold);
-		margin-right: 0.375rem;
-	}
-
-	/* Spec list: a gold star marker per line, carrying the numbers the
-	   description used to state inline. */
-	.proj-specs {
-		list-style: none;
-		margin: 0.125rem 0 0;
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 0.4375rem;
-	}
-
-	.proj-spec {
-		display: flex;
-		align-items: center;
-		gap: 0.5625rem;
-		font-size: 0.875rem;
-		color: var(--cream);
-	}
-
-	.proj-spec-mark {
-		flex: none;
-		width: 12px;
-		height: 12px;
-	}
-
-	/* Outlined pill link, sized down to sit in the copy column's rhythm rather
-	   than compete with the hero's actions. */
-	.proj-demo-link {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		align-self: flex-start;
-		margin-top: 0.125rem;
-		border: 1px solid rgba(251, 248, 238, 0.25);
-		border-radius: 999px;
-		padding: 0.5625rem 1.125rem;
-		font-size: 0.8125rem;
-		font-weight: 500;
-		color: var(--cream);
-		transition:
-			border-color 0.25s ease,
-			color 0.25s ease;
-	}
-
-	.proj-demo-link:hover {
-		border-color: var(--gold);
-		color: var(--gold-bright);
-	}
-
-	.proj-note {
-		margin-top: 0.375rem;
-		font-size: 0.8125rem;
-		color: var(--slate-dim);
-	}
-
 	/* Demo panels ------------------------------------------------ */
-
-	.proj-demo {
-		border: 1px solid var(--card-border);
-		border-radius: var(--radius-card);
-		background: var(--card-bg);
-		padding: 1.75rem;
-		min-height: 300px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		overflow: hidden;
-		min-width: 0;
-	}
 
 	/* No panel chrome at all: the carousel breaks out and fills the demo side
 	   of the row. The slides' own shadows give them definition against the
