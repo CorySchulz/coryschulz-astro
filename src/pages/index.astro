@@ -326,11 +326,13 @@ const morphCards = [
 					trained the team, then led the full rebuild of pura.com.
 				</p>
 
-				<!-- A quiet credits line, not cards: no boxes, no borders. -->
+				<!-- A display band of four tiles, wider than the text column above it.
+				     The numerals are static at their final values — the only motion here
+				     is the tiles' staggered rise, which the reveal group drives. -->
 				<ul class="stat-line">
 					{
 						heroStats.map((s) => (
-							<li class="stat">
+							<li class="stat reveal reveal-fade-up" data-reveal-group="stats:100">
 								<span class="stat-num">{s.num}</span>
 								<span class="stat-label">{s.label}</span>
 							</li>
@@ -867,9 +869,6 @@ const morphCards = [
 				     hands off to magicspells.io. Deliberately lighter than the contact
 				     CTA that follows, which still owns the end of the page. -->
 				<div class="ms-outro reveal reveal-fade-up">
-					<svg class="ms-outro-mark" viewBox="0 0 1193 238" role="img" aria-label="Magic Spells">
-						<path d={MS_LOGO} fill="currentColor" />
-					</svg>
 					<h3 class="ms-outro-title">What is Magic Spells?</h3>
 					<p class="ms-outro-copy">
 						Frameworks, interface systems, motion engines, and developer tools built to solve real
@@ -1242,10 +1241,6 @@ const morphCards = [
 		white-space: nowrap;
 	}
 
-	.hero-eyebrow .eyebrow-sep {
-		white-space: pre;
-	}
-
 	@media (max-width: 599px) {
 		.hero-eyebrow {
 			font-size: 0.6875rem;
@@ -1254,9 +1249,6 @@ const morphCards = [
 		/* Break into two balanced lines rather than three ragged ones */
 		.hero-eyebrow span {
 			display: block;
-		}
-		.hero-eyebrow .eyebrow-sep {
-			display: none;
 		}
 	}
 
@@ -1305,9 +1297,10 @@ const morphCards = [
 	.section-about {
 		/* Lighter than the headline sections, and no top hairline: it carries
 		   straight on from the hero. Kept at roughly 60% of .section's rhythm so
-		   it stays proportional as that scales, with a deeper tail so the stat
-		   line does not run straight into Experience. */
-		padding-block: clamp(3rem, 6vw, 7rem) clamp(4rem, 8vw, 9.5rem);
+		   it stays proportional as that scales. No tail of its own — the stat
+		   band ends the section and Experience's own top padding carries the
+		   seam, which keeps the tiles from sitting in a double gap. */
+		padding-block: clamp(3rem, 6vw, 7rem) 0;
 		border-top: 0;
 	}
 
@@ -1331,49 +1324,69 @@ const morphCards = [
 		margin-bottom: 0.375rem;
 	}
 
-	/* Credits line: a typographic row, deliberately no cards or borders, and
-	   sized to stay subordinate to the paragraphs above it. */
+	/* The stat band: four tiles in the page's established tile language (same
+	   face as .tool-tile), deliberately wider than the 620px text column above
+	   so it reads as a substantial closing beat rather than a caption. */
 	.stat-line {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		align-items: baseline;
-		gap: 0.5rem 1.75rem;
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1rem;
 		list-style: none;
-		margin: 0.75rem 0 0;
+		/* Escapes .about-inner's text measure — the band, not the prose, sets
+		   the width here. */
+		width: 100%;
+		max-width: 1080px;
+		margin: clamp(2.5rem, 5vw, 3.75rem) 0 0;
 		padding: 0;
-		font-size: 0.875rem;
 	}
 
 	.stat {
 		display: flex;
-		align-items: baseline;
-		gap: 0.4375rem;
-		white-space: nowrap;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.75rem;
+		padding: clamp(1.75rem, 3.2vw, 2.5rem) 1rem;
+		border-radius: 14px;
+		background: rgba(251, 248, 238, 0.05);
 	}
 
 	.stat-num {
 		font-family: var(--font-display);
 		font-weight: 800;
-		/* Relative to the row's own 14px, so the pair scales together. */
-		font-size: 1.1em;
+		font-size: clamp(2.5rem, 4.5vw, 4rem);
 		line-height: 1;
+		text-align: center;
 		color: var(--gold);
 		font-variant-numeric: lining-nums;
 	}
 
 	.stat-label {
+		font-size: 0.75rem;
 		font-weight: 500;
+		line-height: 1.3;
+		text-transform: uppercase;
+		letter-spacing: 0.14em;
+		text-align: center;
+		text-wrap: balance;
 		color: var(--slate-dim);
 	}
 
-	/* Deterministic 2x2 on phones rather than whatever the line-breaks give. */
+	/* 2x2 on phones, with the tiles kept roomy rather than squeezed. */
 	@media (max-width: 599px) {
 		.stat-line {
-			display: grid;
-			grid-template-columns: repeat(2, auto);
-			justify-content: center;
-			gap: 0.625rem 1.5rem;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 0.75rem;
+		}
+
+		.stat {
+			padding: 1.5rem 0.75rem;
+			gap: 0.625rem;
+		}
+
+		.stat-label {
+			font-size: 0.6875rem;
+			letter-spacing: 0.11em;
 		}
 	}
 
@@ -2161,7 +2174,9 @@ const morphCards = [
 	   wrapper, so the slide's overflow clips it to the rounded corners and the
 	   slide's own box-shadow is left alone. */
 	.proj-demo-tarot tarot-carousel:defined :global(tarot-slide.tarot-mini-slide .tarot-mini-inner) {
-		filter: blur(8px);
+		/* Soft focus, not frosted glass: enough to push the flanking cards back
+		   without making their logos unreadable. */
+		filter: blur(2.5px);
 		transition: filter 0.45s ease;
 	}
 
@@ -2749,12 +2764,6 @@ const morphCards = [
 		text-align: center;
 		gap: 1.25rem;
 		padding-block: clamp(3rem, 7vw, 6rem) 0;
-	}
-
-	.ms-outro-mark {
-		width: clamp(170px, 18vw, 210px);
-		height: auto;
-		color: var(--cream);
 	}
 
 	/* Near section scale, but a step down: the contact heading below is still
