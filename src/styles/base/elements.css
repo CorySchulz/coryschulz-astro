@@ -1,7 +1,9 @@
 /* ==========================================================================
    ELEMENT DEFAULTS
 
-   The bare-element half of the reset. h1-h6 are not here: they live in
+   The bare-element half of the reset, plus the skip link, which is a
+   page-level accessibility primitive rather than a component and belongs next
+   to the focus ring it shares its job with. h1-h6 are not here: they live in
    typography.css, inside @layer base, so an fs-heading-* utility can beat
    them on family, weight and case.
 
@@ -27,9 +29,9 @@ body {
 	overflow-x: hidden;
 }
 
-p {
-	margin: 0;
-}
+/* No `p { margin: 0 }` here. Tailwind's preflight already zeroes margin on
+   every element inside @layer base, so a house copy would be redundant, and
+   unlayered it silently beat every margin utility on a paragraph. */
 
 a {
 	color: var(--gold);
@@ -52,4 +54,23 @@ a:hover {
 	outline: 2px solid var(--gold-bright);
 	outline-offset: 3px;
 	border-radius: 4px;
+}
+
+/* Parked off-screen rather than display: none, which would take it out of the
+   tab order and defeat the point. Position and offset are inseparable from the
+   :focus state, so neither moves to a markup utility. */
+.skip-link {
+	position: absolute;
+	left: -9999px;
+	top: 0;
+	z-index: 100;
+	background: var(--gold);
+	color: var(--ground);
+	padding: 0.75rem 1.25rem;
+	border-radius: 0 0 8px 0;
+	font-weight: 600;
+}
+
+.skip-link:focus {
+	left: 0;
 }

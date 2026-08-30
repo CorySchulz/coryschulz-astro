@@ -17,8 +17,9 @@
 /* ============================================
 	 Element Styles
 	 ============================================ */
+@import "./elements/buttons.css";
 @import "./elements/input-fields.css";
-/* TODO phase 2: buttons.css, links.css, panels.css */
+/* TODO later phases: links.css, panels.css */
 
 /* ============================================
 	 Package Styles (Vanilla CSS)

@@ -269,7 +269,7 @@ const morphCards = [
 
 	<main id="top">
 		<!-- ============ HERO ============ -->
-		<section class="section hero">
+		<section class="py-section hero">
 			<!-- Decorative and deliberately full-bleed: it sits outside the
 			     container so it keeps sizing off the section, not the text column. -->
 			<svg class="constellation" viewBox="0 0 1200 360" aria-hidden="true" focusable="false">
@@ -286,7 +286,9 @@ const morphCards = [
 				</svg>
 
 			<div class="container hero-inner">
-				<p class="eyebrow hero-eyebrow">
+				<!-- leading-normal because this one wraps to two lines on phones,
+				     where fs-overline's line-height: 1 would close them up. -->
+				<p class="hero-eyebrow fs-overline text-gold leading-normal">
 					<span>Senior Front-End Engineer &middot; Tech Lead</span>
 				</p>
 
@@ -333,9 +335,9 @@ const morphCards = [
 		<!-- An interstitial beat between the hero and Experience: no big section
 		     title, no top hairline, so it reads as a continuation of the hero
 		     rather than the first headline section. -->
-		<section class="section section-about" id="about">
+		<section class="py-section section-about" id="about">
 			<div class="container about-inner reveal reveal-fade-up reveal-delay-500">
-				<p class="eyebrow">A Little About Me</p>
+				<p class="fs-overline text-gold mb-[0.375rem]">A Little About Me</p>
 
 				<p class="about-lede">
 					I&rsquo;m the creator of Magic Spells, an open-source suite of web components, and Tarot, a
@@ -372,20 +374,21 @@ const morphCards = [
 		</section>
 
 		<!-- ============ TIMELINE ============ -->
-		<section class="section section-timeline" id="experience">
+		<section class="py-section section-timeline" id="experience">
 			<!-- Desktop: scroll-scrubbed horizontal strip. The heading rides inside
 			     the pinned area so it stays with the strip while it scrubs. -->
 			<div class="tl-scroll" id="tl-scroll">
 				<div class="tl-pin">
 					<div class="container">
-						<div class="section-head reveal reveal-fade-up">
-							<p class="eyebrow">2013&ndash;Today</p>
-							<h2 class="section-title">
+						<div
+							class="flex flex-col items-center gap-md text-center mb-[clamp(2.5rem,5vw,4rem)] reveal reveal-fade-up">
+							<p class="fs-overline text-gold">2013&ndash;Today</p>
+							<h2 class="section-title fs-heading-2 text-cream text-balance">
 								<split-text effect="rise" split="chars" stagger="26" duration="820"
 									>Experience</split-text
 								>
 							</h2>
-							<p class="section-intro">
+							<p class="fs-body-lg text-slate-dim max-w-[560px] text-pretty">
 								From a Fortune 500 rewrite to a billion-dollar tequila brand to founding a web app
 								framework and an open-source component library.
 							</p>
@@ -484,14 +487,15 @@ const morphCards = [
 		</section>
 
 		<!-- ============ TOOLS ============ -->
-		<!-- A light interstitial like About: an eyebrow and the marquee, no
-		     display-size title. The rows are full-bleed, so they sit outside the
-		     container the eyebrow uses. -->
-		<section class="section section-tools" id="tools">
+		<!-- A light interstitial like About: an overline header and the marquee,
+		     no display-size title. The rows are full-bleed, so they sit outside
+		     the container the header uses. -->
+		<section class="py-section section-tools" id="tools">
 			<div class="container">
-				<div class="section-head reveal reveal-fade-up">
-					<p class="eyebrow">Everyday Stack</p>
-					<h2 class="section-title">
+				<div
+					class="flex flex-col items-center gap-md text-center mb-[clamp(2.5rem,5vw,4rem)] reveal reveal-fade-up">
+					<p class="fs-overline text-gold">Everyday Stack</p>
+					<h2 class="section-title fs-heading-2 text-cream text-balance">
 						<split-text effect="rise" split="chars" stagger="26" duration="820">Tools I use</split-text>
 					</h2>
 				</div>
@@ -534,11 +538,12 @@ const morphCards = [
 		</section>
 
 		<!-- ============ THINGS I'VE BUILT ============ -->
-		<section class="section section-projects" id="projects">
+		<section class="py-section section-projects" id="projects">
 			<div class="container container-wide">
-				<div class="section-head reveal reveal-fade-up">
-					<p class="eyebrow">Free &amp; Open Source</p>
-					<h2 class="section-title">
+				<div
+					class="flex flex-col items-center gap-md text-center mb-[clamp(2.5rem,5vw,4rem)] reveal reveal-fade-up">
+					<p class="fs-overline text-gold">Free &amp; Open Source</p>
+					<h2 class="section-title fs-heading-2 text-cream text-balance">
 						<split-text effect="rise" split="chars" stagger="26" duration="820"
 							>Things I&rsquo;ve built</split-text
 						>
@@ -952,12 +957,13 @@ const morphCards = [
 		</dialog>
 
 		<!-- ============ CONTACT ============ -->
-		<section class="section section-contact" id="contact">
+		<section class="py-section section-contact" id="contact">
 			<div class="container">
 				<div class="contact-inner">
-					<div class="section-head reveal reveal-fade-up">
+					<div
+						class="flex flex-col items-center gap-md text-center mb-[clamp(2.5rem,5vw,4rem)] reveal reveal-fade-up">
 						<img class="portrait" src="/cory.jpg" alt="Cory Schulz" width="76" height="76" loading="lazy" />
-						<h2 class="section-title">
+						<h2 class="section-title fs-heading-2 text-cream text-balance">
 							<split-text effect="rise" split="chars" stagger="26" duration="820"
 								>Have a project in mind?</split-text
 							>
@@ -1088,135 +1094,10 @@ const morphCards = [
 
 <style>
 	/* ============================================ */
-	/* Shared primitives                             */
-	/* ============================================ */
-
-	.skip-link {
-		position: absolute;
-		left: -9999px;
-		top: 0;
-		z-index: 100;
-		background: var(--gold);
-		color: var(--ground);
-		padding: 0.75rem 1.25rem;
-		border-radius: 0 0 8px 0;
-		font-weight: 600;
-	}
-	.skip-link:focus {
-		left: 0;
-	}
-
-	.eyebrow {
-		font-size: 0.75rem;
-		font-weight: 600;
-		letter-spacing: 0.22em;
-		text-transform: uppercase;
-		color: var(--gold);
-	}
-
-	.pill {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		border-radius: 999px;
-		font-family: var(--font-body);
-		font-size: 0.9375rem;
-		font-weight: 600;
-		letter-spacing: 0.04em;
-		text-transform: uppercase;
-		white-space: nowrap;
-		cursor: pointer;
-		transition:
-			background-color 0.25s ease,
-			border-color 0.25s ease,
-			color 0.25s ease,
-			transform 0.25s ease;
-	}
-
-	.pill-gold {
-		background: var(--gold);
-		color: var(--ground);
-		border: 1px solid var(--gold);
-		padding: 1rem 2.125rem;
-	}
-	.pill-gold:hover {
-		background: var(--gold-bright);
-		border-color: var(--gold-bright);
-		color: var(--ground);
-		transform: translateY(-1px);
-	}
-
-	.pill-outline {
-		background: transparent;
-		color: var(--cream);
-		border: 1px solid rgba(251, 248, 238, 0.25);
-		padding: 0.9375rem 1.75rem;
-		font-weight: 500;
-		text-transform: none;
-		letter-spacing: 0.01em;
-	}
-	.pill-outline:hover {
-		border-color: var(--gold);
-		color: var(--cream);
-		transform: translateY(-1px);
-	}
-
-	/* Sections own the vertical rhythm and the hairline that separates them.
-	   Horizontal gutters and the max width belong to the .container inside
-	   (global, in app.css) so nothing double-pads. */
-	.section {
-		/* Desktop maxima carry most of the rhythm: the clamp minimums keep
-		   phones tight while large viewports get real air between sections.
-		   No divider rule — the whitespace does that work now. */
-		padding-block: clamp(5rem, 10vw, 11rem) clamp(5.5rem, 11vw, 12rem);
-	}
-
-	.section-head {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		gap: 1rem;
-		margin-bottom: clamp(2.5rem, 5vw, 4rem);
-	}
-
-	.section-title {
-		font-size: clamp(2rem, 5.2vw, 3.25rem);
-		color: var(--cream);
-		text-wrap: balance;
-		/* Sentence case, like the hero name: Fields has a full lower case and
-		   reads better in it. Mixed case wants tighter tracking than caps, so
-		   this carries the hero's negative letter-spacing rather than the
-		   global heading rule's +0.01em. */
-		text-transform: none;
-		letter-spacing: -0.005em;
-	}
-
-	/* Every section title is split now. The block keeps the line wrapping as it
-	   did before the split, and the padding is the same descender fix the hero
-	   name carries: split-text masks each character, which shaves the tails on
-	   p, g and y without a little headroom. */
-	.section-title split-text {
-		display: block;
-	}
-
-	.section-title :global(.split-text-char) {
-		padding-bottom: 0.06em;
-	}
-
-	.section-intro {
-		font-size: clamp(0.9375rem, 1.8vw, 1.0625rem);
-		line-height: 1.6;
-		color: var(--slate-dim);
-		max-width: 560px;
-		text-wrap: pretty;
-	}
-
-	/* ============================================ */
 	/* Hero                                          */
 	/* ============================================ */
 
-	/* First section on the page, so it drops .section's top hairline. */
+	/* First section on the page, so it opens tighter than py-section. */
 	.hero {
 		position: relative;
 		padding-block: clamp(5rem, 11vw, 11rem) clamp(4rem, 9vw, 10rem);
@@ -1338,7 +1219,7 @@ const morphCards = [
 
 	.section-about {
 		/* Lighter than the headline sections, and no top hairline: it carries
-		   straight on from the hero. Kept at roughly 60% of .section's rhythm so
+		   straight on from the hero. Kept at roughly 60% of py-section's rhythm so
 		   it stays proportional as that scales. No tail of its own — the stat
 		   band ends the section and Experience's own top padding carries the
 		   seam, which keeps the tiles from sitting in a double gap. */
@@ -1360,10 +1241,6 @@ const morphCards = [
 		color: var(--slate);
 		max-width: 620px;
 		text-wrap: pretty;
-	}
-
-	.about-inner .eyebrow {
-		margin-bottom: 0.375rem;
 	}
 
 	.about-link {
@@ -2786,7 +2663,7 @@ const morphCards = [
 	}
 
 	/* Chips */
-	/* Conversational lead-in, not an eyebrow: sentence case, no tracking. Sized
+	/* Conversational lead-in, not an overline header: sentence case, no tracking. Sized
 	   as a sub-heading so it introduces the chips rather than captioning them,
 	   with the gap below scaled to match. */
 	.chips-lead {

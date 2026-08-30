@@ -54,3 +54,20 @@
 		max-width: var(--container-max-wide);
 	}
 }
+
+/* Section titles carry their own type in markup (fs-heading-2 text-cream).
+   What is left is the split-text reach-in, and it has to be UNLAYERED:
+   split-text.min.css declares `split-text { display: inline }` and
+   `split-text .split-text-char { overflow: hidden }` unlayered, and an
+   unlayered rule beats anything in a layer no matter how specific. A `block`
+   utility on the element would silently lose. 0-1-1 and 0-2-0 here, against
+   the package's 0-0-1 and 0-1-1. */
+.section-title split-text {
+	display: block;
+}
+
+/* split-text masks each character, which shaves the tails on p, g and y
+   without a little headroom. Same fix the hero name carries. */
+.section-title .split-text-char {
+	padding-bottom: 0.06em;
+}
