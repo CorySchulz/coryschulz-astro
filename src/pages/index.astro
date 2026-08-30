@@ -2103,9 +2103,14 @@ const morphCards = [
 		margin: 0;
 	}
 
-	/* Pulled past the grid column on desktop: a slice of the row gap on the
-	   copy side and the container gutter on the outer side, so the peacock
-	   spread renders larger and runs closer to the screen edges. */
+	/* Pulled past its box so the peacock spread renders larger. On the stacked
+	   mobile layout that is full bleed — both container gutters; on desktop it
+	   takes a slice of the row gap on the copy side and the container gutter
+	   on the outer side, running closer to the screen edge. */
+	.proj-demo-tarot {
+		margin-inline: calc(var(--gutter) * -1);
+	}
+
 	@media (min-width: 900px) {
 		.proj-demo-tarot {
 			margin-inline: -2rem calc(var(--gutter) * -1);
