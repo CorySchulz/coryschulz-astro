@@ -2279,6 +2279,14 @@ const morphCards = [
 		overflow: visible;
 	}
 
+	/* Stacked layout: the hint overhangs the stage by 34px, which eats most of
+	   the row gap above — give the cards their own headroom. */
+	@media (max-width: 899px) {
+		.proj-demo-morph {
+			margin-top: 2.5rem;
+		}
+	}
+
 	/* Reads as something scribbled in the margin: off-axis, gold, and gone for
 	   good once the reader has taken the hint. */
 	/* Label, arrow and card top read as one gesture: the label sits above the
