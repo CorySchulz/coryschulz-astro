@@ -139,7 +139,7 @@
 }
 
 .ms-logo-sm {
-	width: 86px;
+	width: 100px;
 }
 
 .tl-node {
@@ -290,6 +290,11 @@
 	.tl-row-thumb {
 		grid-column: 2;
 		width: 100%;
+	}
+	/* The card is full-width here, so the mark sizes off it the way the brand
+	   wordmarks do rather than holding its narrow-card pixel width. */
+	.ms-logo-sm {
+		width: 50%;
 	}
 }
 

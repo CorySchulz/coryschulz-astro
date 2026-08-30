@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
 import * as si from 'simple-icons';
+import puraShopify from '../assets/pura-shopify.webp';
 
 const stops = [
 	{
@@ -102,7 +104,6 @@ const chips = [
 	{ repo: 'collapsible-content', name: 'Collapsible Content' },
 	{ repo: 'dialog-panel', name: 'Dialog Panel' },
 	{ repo: 'dropdown-panel', name: 'Dropdown Panel' },
-	{ repo: 'dropdown-select', name: 'Dropdown Select' },
 	{ repo: 'event-emitter', name: 'Event Emitter' },
 	{ repo: 'focus-trap', name: 'Focus Trap' },
 	{ repo: 'frame-engine', name: 'Frame Engine' },
@@ -315,10 +316,12 @@ const morphCards = [
 						amazing things.</split-text
 					>
 				</p>
+				<!-- Both pills are `relative` so scripts/effects/spark-burst.js can hang
+				     its dots off their edges. -->
 				<div class="hero-actions relative flex flex-wrap items-center justify-center gap-[1.25rem]">
-					<a class="pill pill-gold" href="#contact" data-scroll-to-contact>Send a Message</a>
+					<a class="pill pill-gold relative" href="#contact" data-scroll-to-contact>Send a Message</a>
 					<a
-						class="pill pill-outline"
+						class="pill pill-outline relative"
 						href="https://www.linkedin.com/in/cory-schulz/"
 						target="_blank"
 						rel="noopener noreferrer">
@@ -360,14 +363,36 @@ const morphCards = [
 				<p class="fs-subheading text-slate text-pretty max-w-[620px]">
 					I&rsquo;ve also hired and built front-end teams from the ground up. At Pura I hired and
 					trained the team, then led the full rebuild of pura.com. The relaunch doubled the
-					site&rsquo;s conversion rate, and Shopify wrote a
-					<a
-						class="about-link"
-						href="https://www.shopify.com/case-studies/pura-scents"
-						target="_blank"
-						rel="noopener noreferrer">case study</a
-					> on it.
+					site&rsquo;s conversion rate, and Shopify did a case study on it.
 				</p>
+
+				<!-- The case study, given a card of its own now that the inline link is
+				     gone. Wider than the text column, and the only link in this beat. -->
+				<a
+					class="about-case relative block w-full max-w-[720px] mt-lg overflow-hidden rounded-[14px] border border-card-border reveal reveal-fade-up"
+					href="https://www.shopify.com/case-studies/pura-scents"
+					target="_blank"
+					rel="noopener noreferrer">
+					<Image
+						src={puraShopify}
+						alt="pura.com, the Shopify storefront rebuilt at Pura"
+						widths={[640, 960, 1320]}
+						sizes="(min-width: 780px) 720px, 92vw"
+						class="block w-full h-auto"
+					/>
+					<span
+						class="about-case-label absolute inset-x-0 bottom-0 flex items-center justify-center gap-xs px-md pt-10 pb-sm fs-body-sm font-medium text-cream">
+						Shopify case study: rebuilding pura.com
+						<svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+							<path
+								d="M7 17 L17 7 M9 7 L17 7 L17 15"
+								stroke="var(--gold)"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"></path>
+						</svg>
+					</span>
+				</a>
 
 				<!-- A display band of four tiles, wider than the text column above it.
 				     The numerals are static at their final values — the only motion here
@@ -556,7 +581,9 @@ const morphCards = [
 		</section>
 
 		<!-- ============ THINGS I'VE BUILT ============ -->
-		<section class="py-section section-projects" id="projects">
+		<!-- pb-xl, not the section tail: the boxed beat closes this section, so the
+		     full tail plus Contact own top padding reads as dead space under it. -->
+		<section class="pt-section pb-xl section-projects" id="projects">
 			<div class="container container-wide">
 				<div
 					class="flex flex-col items-center gap-md text-center mb-section-head reveal reveal-fade-up">
@@ -651,7 +678,7 @@ const morphCards = [
 									>Puzzle</split-text
 								>
 							</h3>
-							<p class="fs-subheading font-semibold text-cream text-balance">Built to compete with React, Vue, and Svelte.</p>
+							<p class="fs-subheading font-semibold text-cream text-balance">A complete web app framework that&rsquo;s simpler and faster to use than React, Vue, and Svelte.</p>
 							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
 								A front-end web app framework: single-file <code>.pzl</code> components, reactive data,
 								and a Go + esbuild compiler.
@@ -926,30 +953,35 @@ const morphCards = [
 				</ul>
 
 				<!-- Closing beat for the section: answers what the whole suite is, and
-				     hands off to magicspells.io. Deliberately lighter than the contact
-				     CTA that follows, which still owns the end of the page. -->
-				<div class="flex flex-col items-center text-center gap-5 pt-12 lg:pt-24 reveal reveal-fade-up">
-					<h3 class="fs-heading-3 fs-sentence-case text-cream">What is Magic Spells?</h3>
-					<p class="fs-body-lg text-slate text-pretty max-w-[560px]">
-						Magic Spells is named for that brain-freeze moment when something just works, feels
-						beautiful, and you want to know how it was done. Frameworks, interface systems, motion
-						engines, and developer tools built to chase that feeling. All free and open source.
-					</p>
-					<a
-						class="pill pill-gold mt-2"
-						href="https://magicspells.io"
-						target="_blank"
-						rel="noopener noreferrer">
-						Explore magicspells.io
-						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-							<path
-								d="M7 17 L17 7 M9 7 L17 7 L17 15"
-								stroke="currentColor"
-								stroke-width="2"
-								stroke-linecap="round"
-								stroke-linejoin="round"></path>
-						</svg>
-					</a>
+				     hands off to magicspells.io. Boxed so the bottom three sections
+				     read as three, not one continuous run of centred copy. Still
+				     lighter than the contact CTA that follows, which owns the end of
+				     the page. -->
+				<div class="pt-12 lg:pt-24 reveal reveal-fade-up">
+					<div
+						class="flex flex-col items-center text-center gap-5 rounded-[20px] border border-gold-faint bg-panel/60 px-lg py-xl lg:px-xl lg:py-16">
+						<h3 class="fs-heading-3 fs-sentence-case text-cream">What is Magic Spells?</h3>
+						<p class="fs-body-lg text-slate text-pretty max-w-[560px]">
+							Magic Spells is named for that brain-freeze moment when something just works, feels
+							beautiful, and you want to know how it was done. Frameworks, interface systems, motion
+							engines, and developer tools built to chase that feeling. All free and open source.
+						</p>
+						<a
+							class="pill pill-gold mt-2"
+							href="https://magicspells.io"
+							target="_blank"
+							rel="noopener noreferrer">
+							Explore magicspells.io
+							<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+								<path
+									d="M7 17 L17 7 M9 7 L17 7 L17 15"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"></path>
+							</svg>
+						</a>
+					</div>
 				</div>
 			</div>
 		</section>
@@ -1032,10 +1064,14 @@ const morphCards = [
 						<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
 							<div class="budget-field">
 								<p class="field-legend">Budget</p>
-								<dropdown-select>
-									<dropdown-select-trigger class="select-trigger" aria-label="Budget">
-										<span class="dropdown-label">$10,000 - $20,000</span>
-										<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+								<select-dropdown>
+									<!-- The svg carries the package's .select-icon class so it is taken
+									     as the caret rather than a second one being injected beside it.
+									     contact.css strips the package's border-triangle styling and
+									     keeps the flip-on-open it comes with. -->
+									<select-trigger class="select-trigger" aria-label="Budget">
+										<span class="select-label-text">$10,000 - $20,000</span>
+										<svg class="select-icon" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
 											<path
 												d="M2 4 L6 8 L10 4"
 												stroke="var(--slate-dim)"
@@ -1043,18 +1079,18 @@ const morphCards = [
 												stroke-linecap="round"
 												stroke-linejoin="round"></path>
 										</svg>
-									</dropdown-select-trigger>
+									</select-trigger>
 
-									<input type="hidden" class="dropdown-hidden-input" name="budget" value="$10,000 - $20,000" required />
+									<input type="hidden" name="budget" value="$10,000 - $20,000" required />
 
-									<dropdown-options class="select-options">
-										<dropdown-option value="$10,000 - $20,000" class="select-option">$10,000 - $20,000</dropdown-option>
-										<dropdown-option value="$20,000 - $40,000" class="select-option">$20,000 - $40,000</dropdown-option>
-										<dropdown-option value="$40,000 - $60,000" class="select-option">$40,000 - $60,000</dropdown-option>
-										<dropdown-option value="$60,000 - $100,000" class="select-option">$60,000 - $100,000</dropdown-option>
-										<dropdown-option value="$100,000+" class="select-option">$100,000+</dropdown-option>
-									</dropdown-options>
-								</dropdown-select>
+									<select-panel class="select-options">
+										<select-option value="$10,000 - $20,000" class="select-option" selected>$10,000 - $20,000</select-option>
+										<select-option value="$20,000 - $40,000" class="select-option">$20,000 - $40,000</select-option>
+										<select-option value="$40,000 - $60,000" class="select-option">$40,000 - $60,000</select-option>
+										<select-option value="$60,000 - $100,000" class="select-option">$60,000 - $100,000</select-option>
+										<select-option value="$100,000+" class="select-option">$100,000+</select-option>
+									</select-panel>
+								</select-dropdown>
 							</div>
 
 							<fieldset class="services">
@@ -1108,7 +1144,7 @@ const morphCards = [
 
 
 <script>
-	import '@magic-spells/dropdown-select';
+	import '@magic-spells/select-dropdown';
 	import '@magic-spells/split-text';
 	// Registers <scrolling-content> and injects its own layered stylesheet.
 	// Reduced motion is handled inside the component: the loop never starts and

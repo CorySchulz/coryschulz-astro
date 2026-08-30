@@ -76,7 +76,7 @@
 /* ==========================================================================
    SCALE
    Sizes are explicit per breakpoint rather than one scalar multiplier: the h1
-   hero spans 3.25 to 7.5rem while body copy never moves, so no single ratio
+   hero spans 3.25 to 6.5rem while body copy never moves, so no single ratio
    covers both.
    ========================================================================== */
 :root {
@@ -156,7 +156,7 @@
 
 @media (width >= 1024px) {
 	:root {
-		--font-size-h1: 7.5rem;
+		--font-size-h1: 6.5rem;
 		--font-size-h2: 3.25rem;
 		--font-size-h3: 2.5rem;
 		--font-size-h4: 1.75rem;

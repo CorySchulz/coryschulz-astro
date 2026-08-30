@@ -3,3 +3,6 @@
 // tarot-effects repos.
 import './tarot.esm.js';
 import './effects/peacock.esm.js';
+
+// Ours, not vendored: the hover sparks on the hero pills.
+import './effects/spark-burst.js';

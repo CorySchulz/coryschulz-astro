@@ -1,15 +1,13 @@
 /* ==========================================================================
    ABOUT
 
-   The interstitial beat between the hero and Experience, and the stat band
-   that closes it. Layout, spacing and colour live in the markup now; what is
-   left here is the underline treatment on the inline link, the stat tile's
+   The interstitial beat between the hero and Experience, the case study card,
+   and the stat band that closes it. Layout, spacing and colour live in the
+   markup now; what is left here is the card's hover state, the stat tile's
    face, the two type styles that are off the scale, and the phone layout.
 
-   Unlayered, like the rest of the house sheets. Two rules need it: .about-link
-   has to beat the unlayered `a { text-decoration: none }` in base/elements.css,
-   and the max-width block has to beat the grid, gap and padding utilities the
-   markup carries.
+   Unlayered, like the rest of the house sheets. The max-width block needs it,
+   to beat the grid, gap and padding utilities the markup carries.
 
    .section-about and .about-inner are gone. .about-lede is gone too: it is
    fs-subheading text-slate now, which is a point smaller than the clamp it
@@ -17,12 +15,26 @@
    scale as every other deck on the page.
    ========================================================================== */
 
-/* Only the underline treatment. Colour, hover and the transition already come
-   from the `a` default in base/elements.css, at the same values. */
-.about-link {
-	text-decoration: underline;
-	text-decoration-color: rgba(201, 168, 106, 0.4);
-	text-underline-offset: 0.2em;
+/* The Shopify case study card. Same lift and drop shadow the project media
+   carries, plus a gold hairline on hover so it reads as a link. */
+.about-case {
+	box-shadow:
+		0 24px 48px -12px rgba(0, 0, 0, 0.6),
+		0 4px 12px rgba(0, 0, 0, 0.45);
+	transition:
+		transform 0.3s ease,
+		border-color 0.3s ease;
+}
+
+.about-case:hover {
+	transform: translateY(-3px);
+	border-color: var(--gold-soft);
+}
+
+/* Night scrim under the label, so the caption reads whatever the shot does
+   behind it. */
+.about-case-label {
+	background: linear-gradient(180deg, rgba(2, 6, 15, 0) 0%, rgba(2, 6, 15, 0.85) 62%);
 }
 
 /* The stat band's tile face: the same recipe as .tool-tile, one step rounder.

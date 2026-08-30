@@ -62,20 +62,20 @@
 	padding: 0;
 }
 
-/* The package's own stylesheet loads after app.css, so the host's width is
-   re-asserted here where the scoped selector outranks it. */
-.budget-field dropdown-select {
-	display: block;
-	width: 100%;
+/* The package's own stylesheet loads after app.css, so anything it declares
+   on a bare element selector is re-asserted here, where the scoped selector
+   outranks it. The host's width and font live in packages/select-dropdown.css
+   instead: they are not specific to this field. */
+
+/* The package paints .select-icon as a CSS border triangle. Ours is an svg
+   wearing the class, so the border comes off and only the flip-on-open the
+   package drives is kept. */
+.budget-field .select-icon {
+	border: 0;
+	margin-left: 0;
 }
 
-/* dropdown-select appends its own caret, so the chevron in the markup would
-   be a second one. Hide the package's and keep ours, which is tokenized. */
-.budget-field .dropdown-caret {
-	display: none;
-}
-
-.budget-field dropdown-select-trigger.select-trigger {
+.budget-field select-trigger.select-trigger {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -91,18 +91,17 @@
 	transition: border-color 0.2s ease;
 }
 
-.budget-field dropdown-select-trigger.select-trigger:hover {
+.budget-field select-trigger.select-trigger:hover {
 	border-color: var(--gold-soft);
 }
 
-.budget-field dropdown-options.select-options {
+/* The component positions the panel itself, aligning the selected option over
+   the trigger, so nothing here may add a vertical offset. */
+.budget-field select-panel.select-options {
 	width: 100%;
-	margin-top: 0.5rem;
-	border-radius: var(--radius-input);
-	overflow: hidden;
 }
 
-.budget-field dropdown-option.select-option {
+.budget-field select-option.select-option {
 	display: block;
 	padding: 0.8125rem 1.25rem;
 	font-size: 0.9375rem;

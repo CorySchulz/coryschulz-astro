@@ -64,12 +64,18 @@ cursor: pointer;
 transition:
 border-color 0.2s ease,
 background-color 0.2s ease,
-color 0.2s ease;
+color 0.2s ease,
+transform 0.15s ease;
 }
 
 .st-chip:hover {
 border-color: var(--gold-soft);
 color: var(--cream);
+}
+
+/* Same physical press as the pills. No hover transform here to compose with. */
+.st-chip:active {
+transform: scale(0.97);
 }
 
 .st-chip[aria-pressed='true'] {

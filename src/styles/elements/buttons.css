@@ -36,7 +36,7 @@
 		background-color 0.25s ease,
 		border-color 0.25s ease,
 		color 0.25s ease,
-		transform 0.25s ease;
+		transform 0.15s ease;
 }
 
 /* The primary CTA. */
@@ -70,4 +70,11 @@
 	border-color: var(--gold);
 	color: var(--cream);
 	transform: translateY(-1px);
+}
+
+/* Physical press. Restates the hover lift so the two states compose instead of
+   the scale wiping it out, and sits below both variants' :hover so it wins the
+   specificity tie on source order. */
+.pill:active {
+	transform: translateY(-1px) scale(0.97);
 }

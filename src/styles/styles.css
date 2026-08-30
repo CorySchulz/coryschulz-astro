@@ -29,7 +29,7 @@
 	 which is the order Layout.astro shipped and the order everything downstream
 	 assumes. It is load-bearing, not cosmetic:
 
-	 - dropdown-select and tarot both re-declare the bare element selectors we
+	 - select-dropdown and tarot both re-declare the bare element selectors we
 		 theme, at the same specificity, so the vendor sheet wins ties on source
 		 order. That is what the !important flags in those two house files are
 		 for, and why the vendor @import cannot move above them.
@@ -43,8 +43,8 @@
 @import "./packages/tarot.css";
 @import "./tarot.min.css";
 
-@import "./packages/dropdown-select.css";
-@import "../../node_modules/@magic-spells/dropdown-select/dist/dropdown-select.min.css";
+@import "./packages/select-dropdown.css";
+@import "../../node_modules/@magic-spells/select-dropdown/dist/select-dropdown.min.css";
 
 @import "../../node_modules/@magic-spells/reveal/dist/reveal.css";
 @import "../../node_modules/@magic-spells/split-text/dist/split-text.min.css";
