@@ -389,21 +389,20 @@ const morphCards = [
 		</section>
 
 		<!-- ============ TIMELINE ============ -->
-		<section class="py-section section-timeline" id="experience">
+		<section class="section section-timeline" id="experience">
 			<!-- Desktop: scroll-scrubbed horizontal strip. The heading rides inside
 			     the pinned area so it stays with the strip while it scrubs. -->
 			<div class="tl-scroll" id="tl-scroll">
-				<div class="tl-pin flex flex-col justify-center">
+				<div class="tl-pin">
 					<div class="container">
-						<div
-							class="flex flex-col items-center gap-md text-center mb-section-head reveal reveal-fade-up">
-							<p class="fs-overline text-gold">2013&ndash;Today</p>
-							<h2 class="section-title fs-heading-2 text-cream text-balance">
+						<div class="section-head reveal reveal-fade-up">
+							<p class="eyebrow">2013&ndash;Today</p>
+							<h2 class="section-title">
 								<split-text effect="rise" split="chars" stagger="26" duration="820"
 									>Experience</split-text
 								>
 							</h2>
-							<p class="fs-body-lg text-slate-dim max-w-[560px] text-pretty">
+							<p class="section-intro">
 								From a Fortune 500 rewrite to a billion-dollar tequila brand to founding a web app
 								framework and an open-source component library.
 							</p>
@@ -422,15 +421,9 @@ const morphCards = [
 										{s.img ? (
 											<img class="tl-media" src={s.img} alt={s.alt} loading="lazy" decoding="async" />
 										) : s.logo ? (
-											/* Curated brand card: a flat brand colour behind a centred wordmark, the
-											   same read as the screenshots beside it. The colour is the stop's own
-											   data and the box is all utilities, so no class survives. The wordmark
-											   is a ~7:1 lockup, hence a width off the card rather than a height. */
-											<div
-												class="tl-media flex items-center justify-center p-md"
-												style={`background:${s.logoBg}`}>
+											<div class="tl-media tl-media-brand" style={`background:${s.logoBg}`}>
 												<img
-													class="w-[68%]"
+													class="tl-brand-logo"
 													src={s.logo}
 													alt={s.alt}
 													loading="lazy"
@@ -438,9 +431,9 @@ const morphCards = [
 												/>
 											</div>
 										) : (
-											<div class="tl-media tl-media-mark flex items-center justify-center">
+											<div class="tl-media tl-media-mark">
 												<svg
-													class="w-[170px]"
+													class="ms-logo"
 													viewBox="0 0 1193 238"
 													role="img"
 													aria-label="Magic Spells">
@@ -451,11 +444,11 @@ const morphCards = [
 										<svg class="tl-node" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
 											<path d={STAR} fill={s.img ? 'var(--gold)' : 'var(--gold-bright)'} />
 										</svg>
-										<div class="flex flex-col gap-[0.3125rem] text-center">
+										<div class="tl-text">
 											<p class="tl-year">{s.year}</p>
-											<h3 class="tl-company fs-body-lg font-semibold text-cream">{s.company}</h3>
-											<p class="fs-body-xs uppercase tracking-[0.08em] text-slate-dim">{s.role}</p>
-											<p class="fs-body-sm text-slate-dim text-pretty">{s.desc}</p>
+											<h3 class="tl-company">{s.company}</h3>
+											<p class="tl-role">{s.role}</p>
+											<p class="tl-desc">{s.desc}</p>
 										</div>
 									</article>
 								))
@@ -472,19 +465,17 @@ const morphCards = [
 						stops.map((s) => (
 							<li class="tl-row reveal reveal-fade-up" data-reveal-group="ledger:70">
 								<p class="tl-row-year">{s.shortYear}</p>
-								<div class="min-w-0 flex flex-col gap-2xs">
-									<h3 class="tl-row-company fs-body-lg font-semibold text-cream">{s.company}</h3>
-									<p class="fs-body-xs uppercase tracking-[0.08em] text-slate-dim">{s.role}</p>
-									<p class="fs-body-sm text-slate-dim text-pretty">{s.desc}</p>
+								<div class="tl-row-body">
+									<h3 class="tl-row-company">{s.company}</h3>
+									<p class="tl-row-role">{s.role}</p>
+									<p class="tl-row-desc">{s.desc}</p>
 								</div>
 								{s.img ? (
 									<img class="tl-row-thumb" src={s.img} alt={s.alt} loading="lazy" decoding="async" />
 								) : s.logo ? (
-									<div
-										class="tl-row-thumb flex items-center justify-center p-md"
-										style={`background:${s.logoBg}`}>
+									<div class="tl-row-thumb tl-media-brand" style={`background:${s.logoBg}`}>
 										<img
-											class="w-[68%]"
+											class="tl-brand-logo"
 											src={s.logo}
 											alt={s.alt}
 											loading="lazy"
@@ -492,9 +483,9 @@ const morphCards = [
 										/>
 									</div>
 								) : (
-									<div class="tl-row-thumb tl-media-mark flex items-center justify-center">
+									<div class="tl-row-thumb tl-media-mark">
 										<svg
-											class="w-[86px]"
+											class="ms-logo ms-logo-sm"
 											viewBox="0 0 1193 238"
 											role="img"
 											aria-label="Magic Spells">
