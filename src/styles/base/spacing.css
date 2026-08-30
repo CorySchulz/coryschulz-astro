@@ -23,33 +23,13 @@
 	--space-lg: 1.5rem;
 	--space-xl: 2.5rem;
 
-	/* Section rhythm. .section currently rides clamp(5rem, 10vw, 11rem), which
-	   renders 5rem up to ~800px, 6.4rem at 1024 and 8rem at 1280. These are
-	   those three points as discrete steps.
+	/* Section rhythm. One clamp, written once. The tail is the 10% longer
+	   value the page already ran, so the gap after a section belongs to that
+	   section rather than to the next one. */
+	--section-padding: clamp(5rem, 10vw, 11rem);
+	--section-padding-tail: clamp(5.5rem, 11vw, 12rem);
 
-	   The tail is 10% longer than the head, which is the ratio the page
-	   already runs (5rem / 5.5rem) and the reason it reads as separated
-	   sections rather than a stack of evenly boxed ones: the gap after a
-	   section belongs to that section, not to the next one. Derived rather
-	   than a second ladder, so the two can never drift. */
-	--section-padding: 5rem;
-	--section-padding-tail: calc(var(--section-padding) * 1.1);
-
-	/* The gap under a section head, from clamp(2.5rem, 5vw, 4rem): 2.5rem is
-	   the floor and still what renders at 768, 4rem is the ceiling and lands at
-	   1280. Sampled the same way as the section ladder above.
-
-	   NOT derived from --section-padding even though half of it hits 2.5rem and
-	   4rem exactly at the ends. In the 768 band half would be 3rem where the
-	   clamp is still pinned to its floor, 8px too much, so the two get their own
-	   ladders rather than one that is right twice and wrong in between. */
 	--section-head-margin: 2.5rem;
-}
-
-@media (width >= 768px) {
-	:root {
-		--section-padding: 6rem;
-	}
 }
 
 /* No 768 step for --section-head-margin: the clamp it replaces is still on its
@@ -57,7 +37,6 @@
 
 @media (width >= 1024px) {
 	:root {
-		--section-padding: 8rem;
 		--section-head-margin: 4rem;
 	}
 }
@@ -72,11 +51,9 @@
 	--spacing-xl: var(--space-xl);
 }
 
-/* Section rhythm is hand-written rather than registered as --spacing-section,
-   because the head and the tail are different numbers and a spacing token can
-   only carry one. Registering it would also silently win: Tailwind's generated
-   pb-section would sort after these and overwrite the tail. Vertical only, so
-   there is no p-section or mt-section. */
+/* Hand-written rather than registered as --spacing-section: head and tail are
+   different numbers, and a generated pb-section would sort after these and
+   overwrite the tail. Vertical only. */
 @utility pt-section {
 	padding-top: var(--section-padding);
 }

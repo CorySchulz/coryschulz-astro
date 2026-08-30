@@ -79,3 +79,9 @@
 		letter-spacing: 0.11em;
 	}
 }
+
+/* Opens tighter than a full section: it reads as a continuation of the hero,
+   and its bottom edge is closed by the timeline that follows. */
+.section-about {
+	padding-block: clamp(2.5rem, 4vw, 4rem) 0;
+}

@@ -345,7 +345,7 @@ const morphCards = [
 		     has no tail at all. The stat band ends it and Experience's own top
 		     padding carries the seam, which keeps the tiles out of a double gap.
 		     Still a clamp, so no rendered size moves. -->
-		<section class="pt-[clamp(2.5rem,4vw,4rem)]" id="about">
+		<section class="section-about" id="about">
 			<div
 				class="container flex flex-col items-center text-center gap-[0.875rem] reveal reveal-fade-up reveal-delay-500"
 			>
@@ -389,20 +389,21 @@ const morphCards = [
 		</section>
 
 		<!-- ============ TIMELINE ============ -->
-		<section class="section section-timeline" id="experience">
+		<section class="py-section section-timeline" id="experience">
 			<!-- Desktop: scroll-scrubbed horizontal strip. The heading rides inside
 			     the pinned area so it stays with the strip while it scrubs. -->
 			<div class="tl-scroll" id="tl-scroll">
 				<div class="tl-pin">
 					<div class="container">
-						<div class="section-head reveal reveal-fade-up">
-							<p class="eyebrow">2013&ndash;Today</p>
-							<h2 class="section-title">
+						<div
+							class="flex flex-col items-center gap-md text-center mb-section-head reveal reveal-fade-up">
+							<p class="fs-overline text-gold">2013&ndash;Today</p>
+							<h2 class="section-title fs-heading-2 text-cream text-balance">
 								<split-text effect="rise" split="chars" stagger="26" duration="820"
 									>Experience</split-text
 								>
 							</h2>
-							<p class="section-intro">
+							<p class="fs-body-lg text-slate-dim text-pretty max-w-[560px]">
 								From a Fortune 500 rewrite to a billion-dollar tequila brand to founding a web app
 								framework and an open-source component library.
 							</p>
