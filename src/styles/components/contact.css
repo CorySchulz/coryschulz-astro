@@ -13,10 +13,6 @@
 	color: var(--gold-bright);
 }
 
-.ms-outro-copy + .ms-outro-copy {
-	margin-top: 0.875rem;
-}
-
 /* The other half of the projects/contact seam trim above. */
 .section-contact {
 	padding-top: clamp(2.5rem, 5vw, 5rem);
