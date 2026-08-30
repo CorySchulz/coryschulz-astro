@@ -96,8 +96,8 @@ const splitEffects = [
 const chips = [
 	{ repo: 'animation-engine', name: 'Animation Engine' },
 	{ repo: 'bottom-sheet', name: 'Bottom Sheet' },
-	{ repo: 'cart-item', name: 'Cart Item' },
-	{ repo: 'cart-panel', name: 'Cart Panel' },
+	{ repo: 'cart', name: 'Cart Item' },
+	{ repo: 'cart', name: 'Cart Panel' },
 	{ repo: 'cart-progress-bar', name: 'Cart Progress Bar' },
 	{ repo: 'collapsible-content', name: 'Collapsible Content' },
 	{ repo: 'dialog-panel', name: 'Dialog Panel' },
@@ -106,7 +106,7 @@ const chips = [
 	{ repo: 'event-emitter', name: 'Event Emitter' },
 	{ repo: 'focus-trap', name: 'Focus Trap' },
 	{ repo: 'frame-engine', name: 'Frame Engine' },
-	{ repo: 'gift-with-purchase', name: 'Gift With Purchase' },
+	{ repo: 'cart', name: 'Gift With Purchase' },
 	{ repo: 'image-zoom', name: 'Image Zoom' },
 	{ repo: 'load-content', name: 'Load Content' },
 	{ repo: 'panel-stack', name: 'Panel Stack' },
@@ -202,6 +202,13 @@ const puzzleSpecs = [
 	'Over 90 prebuilt components in Puzzle Pieces',
 	'Compiler written in Go for quick compile times',
 	'Router, datastore, and view animations built in',
+];
+
+const constellationSpecs = [
+	'Agents build a complete plan before writing code',
+	'Plans live as files in your repo',
+	'Agents query the plan later for better context',
+	'Documentation for your entire project',
 ];
 
 // Morph Engine demo: each card flies open into the shared dialog. The copy
@@ -833,6 +840,18 @@ const morphCards = [
 								Agents read and update the graph as they work, so plans and context survive from
 								session to session instead of starting over every conversation.
 							</p>
+							<ul class="proj-specs">
+								{
+									constellationSpecs.map((spec) => (
+										<li class="proj-spec">
+											<svg class="proj-spec-mark" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+												<path d={STAR} fill="var(--gold)" />
+											</svg>
+											<span>{spec}</span>
+										</li>
+									))
+								}
+							</ul>
 							<p class="proj-install">
 								<span class="dollar">$</span> npm i -g @magic-spells/constellation
 							</p>
