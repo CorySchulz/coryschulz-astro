@@ -1587,13 +1587,13 @@ const morphCards = [
 	}
 
 	.ms-logo {
-		width: 150px;
+		width: 170px;
 		height: auto;
 		display: block;
 	}
 
 	.ms-logo-sm {
-		width: 74px;
+		width: 86px;
 	}
 
 	.tl-node {
@@ -1726,8 +1726,11 @@ const morphCards = [
 	}
 
 	.tl-row-thumb {
-		width: 104px;
-		height: 66px;
+		width: 116px;
+		/* Every timeline shot is 920x500 — the thumb keeps that ratio so the
+		   screenshot shows whole instead of cropping to a short band. */
+		aspect-ratio: 920 / 500;
+		height: auto;
 		object-fit: cover;
 		border-radius: 6px;
 		border: 1px solid var(--card-border);
@@ -1742,7 +1745,6 @@ const morphCards = [
 		.tl-row-thumb {
 			grid-column: 2;
 			width: 100%;
-			height: 96px;
 		}
 	}
 
