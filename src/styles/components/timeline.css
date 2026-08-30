@@ -1,9 +1,13 @@
-/* Timeline. Restored verbatim from the pre-refactor page: the strip's
-   geometry is measured by timeline-engine at runtime, and 419/768 are not
-   house breakpoints, so utilities bought nothing here. */
+/* Timeline. Kept as CSS rather than utilities: the strip's geometry is
+   measured by timeline-engine at runtime, and 419/768 are not house
+   breakpoints.
+
+   Scoped under .section-timeline because fireworks.css has its own .tl-ledger-row
+   inside .fw-demo. Astro's scope attribute used to keep these apart, and the
+   demo builds its rows at runtime so it never carried one. */
 
 /* ============================================ */
-/* Timeline . desktop scrubbed strip             */
+/* Desktop scrubbed strip                       */
 /* ============================================ */
 
 .tl-scroll {
@@ -43,7 +47,7 @@
 	display: flex;
 	gap: 3rem;
 	width: max-content;
-	/* The track carries the side spacing, not the viewport . that keeps the
+	/* The track carries the side spacing, not the viewport, which keeps the
 	   viewport full-bleed while the first and last cards still clear the
 	   screen edge. scrollWidth counts this padding, so the scrub travels
 	   the whole track. */
@@ -63,7 +67,8 @@
 	   translateY(-50%) then centres the rule's own thickness on that line,
 	   so it stays exact whatever the rule's height is. */
 	top: calc(
-		var(--tl-media-h) + var(--tl-stack-gap) + var(--tl-node-margin) + var(--tl-node-size) / 2
+		var(--tl-media-h) + var(--tl-stack-gap) + var(--tl-node-margin) +
+			var(--tl-node-size) / 2
 	);
 	transform: translateY(-50%);
 	left: 0;
@@ -103,7 +108,7 @@
 	justify-content: center;
 	border-color: rgba(201, 168, 106, 0.4);
 	background: linear-gradient(160deg, #0b1626 0%, var(--ground) 100%);
-	/* The wordmark is inlined SVG painted with currentColor . cream reads
+	/* The wordmark is inlined SVG painted with currentColor: cream reads
 	   cleaner than gold against this card's dark blue gradient. */
 	color: var(--cream);
 }
@@ -184,7 +189,7 @@
 	text-wrap: pretty;
 }
 
-/* Pinned scrub mode . enabled by JS */
+/* Pinned scrub mode, enabled by JS */
 .tl-scroll.is-scrubbed .tl-pin {
 	position: sticky;
 	top: 0;
@@ -204,7 +209,7 @@
 }
 
 /* ============================================ */
-/* Timeline . mobile ledger rows                 */
+/* Mobile ledger rows                            */
 /* ============================================ */
 
 .tl-ledger {
@@ -214,7 +219,7 @@
 	border-top: 1px solid var(--hairline);
 }
 
-.tl-row {
+.tl-ledger-row {
 	display: grid;
 	grid-template-columns: auto 1fr 104px;
 	align-items: center;
@@ -223,7 +228,6 @@
 	padding: 1.375rem 0;
 	border-bottom: 1px solid var(--hairline);
 }
-
 .tl-row-year {
 	font-family: var(--font-display);
 	font-weight: 800;
@@ -268,7 +272,7 @@
 
 .tl-row-thumb {
 	width: 116px;
-	/* Every timeline shot is 920x500 . the thumb keeps that ratio so the
+	/* Every timeline shot is 920x500, so the thumb keeps that ratio and the
 	   screenshot shows whole instead of cropping to a short band. */
 	aspect-ratio: 920 / 500;
 	height: auto;
@@ -280,7 +284,7 @@
 
 /* At the narrowest sizes the thumb drops below the text instead of shrinking */
 @media (max-width: 419px) {
-	.tl-row {
+	.tl-ledger-row {
 		grid-template-columns: auto 1fr;
 	}
 	.tl-row-thumb {
