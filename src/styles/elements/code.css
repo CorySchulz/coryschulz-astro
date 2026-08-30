@@ -1,6 +1,6 @@
 /* Syntax-highlighted code card. */
 
-	.code-card {
+.code-card {
 	width: 100%;
 	margin: 0;
 	background: var(--panel);
@@ -15,23 +15,23 @@
 }
 
 .c-tag {
-	color: var(--gold);
+color: var(--gold);
 }
 .c-punc {
-	color: var(--slate-dim);
+color: var(--slate-dim);
 }
 .c-attr {
-	color: var(--slate);
+color: var(--slate);
 }
 .c-str,
 .c-evt,
 .c-bind,
 .c-num {
-	color: var(--gold-bright);
+color: var(--gold-bright);
 }
 .c-kw {
-	color: var(--slate);
+color: var(--slate);
 }
 .c-fn {
-	color: var(--cream);
+color: var(--cream);
 }
