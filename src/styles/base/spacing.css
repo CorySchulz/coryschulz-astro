@@ -1,0 +1,76 @@
+/* Spacing: one section-rhythm var (py-section) plus a t-shirt scale.
+
+   The scale is deliberately coarser than the raw values on the page. Every
+   step below is a size the site already uses verbatim, so adopting a step is
+   never a nudge:
+
+     2xs 0.25rem, xs 0.5rem (11 uses), sm 0.75rem (15), md 1rem (10),
+     lg 1.5rem (7), xl 2.5rem
+
+   1.25rem is the second most common value on the page and is still NOT a step,
+   because it is the base gutter: that rhythm belongs to --spacing-gutter, and
+   a second name for the same number invites the two to drift. The optical
+   one-offs (0.375, 0.5625, 0.875, 1.125, 1.375, 1.75rem) stay literal rather
+   than being rounded onto a step.
+
+   Source vars are named --space-* so the @theme re-export below is not
+   self-referential. */
+:root {
+	--space-2xs: 0.25rem;
+	--space-xs: 0.5rem;
+	--space-sm: 0.75rem;
+	--space-md: 1rem;
+	--space-lg: 1.5rem;
+	--space-xl: 2.5rem;
+
+	/* Section rhythm. One clamp, written once. The tail is the 10% longer
+	   value the page already ran, so the gap after a section belongs to that
+	   section rather than to the next one. */
+	--section-padding: clamp(5rem, 10vw, 11rem);
+	--section-padding-tail: clamp(5.5rem, 11vw, 12rem);
+
+	--section-head-margin: 2.5rem;
+}
+
+/* No 768 step for --section-head-margin: the clamp it replaces is still on its
+   floor there, so the base value is the 768 value. */
+
+@media (width >= 1024px) {
+	:root {
+		--section-head-margin: 4rem;
+	}
+}
+
+/* Re-export as Tailwind spacing tokens: p-sm, gap-md, mt-lg. */
+@theme {
+	--spacing-2xs: var(--space-2xs);
+	--spacing-xs: var(--space-xs);
+	--spacing-sm: var(--space-sm);
+	--spacing-md: var(--space-md);
+	--spacing-lg: var(--space-lg);
+	--spacing-xl: var(--space-xl);
+}
+
+/* Hand-written rather than registered as --spacing-section: head and tail are
+   different numbers, and a generated pb-section would sort after these and
+   overwrite the tail. Vertical only. */
+@utility pt-section {
+	padding-top: var(--section-padding);
+}
+
+@utility pb-section {
+	padding-bottom: var(--section-padding-tail);
+}
+
+@utility py-section {
+	padding-top: var(--section-padding);
+	padding-bottom: var(--section-padding-tail);
+}
+
+/* The gap between a section head (overline, title, deck) and the content it
+   introduces. Hand-written for the same reason: registering
+   --spacing-section-head would generate p-, m-, gap- and inset- variants of a
+   number that only ever means this one distance. */
+@utility mb-section-head {
+	margin-bottom: var(--section-head-margin);
+}

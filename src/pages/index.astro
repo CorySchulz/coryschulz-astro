@@ -269,7 +269,9 @@ const morphCards = [
 
 	<main id="top">
 		<!-- ============ HERO ============ -->
-		<section class="section hero">
+		<!-- No py-section here: .hero rides a padding ladder of its own, so the
+		     utility would only be overridden. -->
+		<section class="hero">
 			<!-- Decorative and deliberately full-bleed: it sits outside the
 			     container so it keeps sizing off the section, not the text column. -->
 			<svg class="constellation" viewBox="0 0 1200 360" aria-hidden="true" focusable="false">
@@ -285,18 +287,23 @@ const morphCards = [
 				<circle class="twinkle twinkle-e" cx="1040" cy="310" r="1.3" fill="var(--cream)" opacity="0.4"></circle>
 				</svg>
 
-			<div class="container hero-inner">
-				<p class="eyebrow hero-eyebrow">
+			<!-- Every block below is `relative` on purpose: the constellation above
+			     is absolutely positioned, so only a positioned sibling later in the
+			     DOM paints over it. -->
+			<div class="container flex flex-col items-center text-center">
+				<!-- leading-normal because this one wraps to two lines on phones,
+				     where fs-overline's line-height: 1 would close them up. -->
+				<p class="hero-eyebrow fs-overline text-gold leading-normal text-balance relative mb-[1.75rem]">
 					<span>Senior Front-End Engineer &middot; Tech Lead</span>
 				</p>
 
-				<h1 class="hero-name">
+				<h1 class="hero-name fs-heading-1 text-cream relative mb-[2.25rem]">
 					<split-text split="chars" trigger="load" stagger="34" duration="900"
 						><span class="hero-name-part">Cory</span> <span class="hero-name-part">Schulz</span></split-text
 					>
 				</h1>
 
-				<p class="hero-thesis">
+				<p class="fs-subheading text-slate text-pretty relative max-w-[620px] mb-[2.75rem]">
 					<split-text
 						effect="bloom"
 						split="words"
@@ -308,7 +315,7 @@ const morphCards = [
 						amazing things.</split-text
 					>
 				</p>
-				<div class="hero-actions">
+				<div class="hero-actions relative flex flex-wrap items-center justify-center gap-[1.25rem]">
 					<a class="pill pill-gold" href="#contact" data-scroll-to-contact>Send a Message</a>
 					<a
 						class="pill pill-outline"
@@ -332,18 +339,25 @@ const morphCards = [
 		<!-- ============ ABOUT ============ -->
 		<!-- An interstitial beat between the hero and Experience: no big section
 		     title, no top hairline, so it reads as a continuation of the hero
-		     rather than the first headline section. -->
-		<section class="section section-about" id="about">
-			<div class="container about-inner reveal reveal-fade-up reveal-delay-500">
-				<p class="eyebrow">A Little About Me</p>
+		     rather than the first headline section.
 
-				<p class="about-lede">
+		     No py-section: this beat runs at roughly 60% of the section rhythm and
+		     has no tail at all. The stat band ends it and Experience's own top
+		     padding carries the seam, which keeps the tiles out of a double gap.
+		     Still a clamp, so no rendered size moves. -->
+		<section class="section-about" id="about">
+			<div
+				class="container flex flex-col items-center text-center gap-[0.875rem] reveal reveal-fade-up reveal-delay-500"
+			>
+				<p class="fs-overline text-gold mb-[0.375rem]">A Little About Me</p>
+
+				<p class="fs-subheading text-slate text-pretty max-w-[620px]">
 					I&rsquo;m the creator of Magic Spells, an open-source suite of web components, and Tarot, a
 					carousel with real physics. I&rsquo;ve been building for the web for over twenty years. I love working in Figma as
 					much as I do in code, and I care a lot about design systems.
 				</p>
 
-				<p class="about-lede">
+				<p class="fs-subheading text-slate text-pretty max-w-[620px]">
 					I&rsquo;ve also hired and built front-end teams from the ground up. At Pura I hired and
 					trained the team, then led the full rebuild of pura.com. The relaunch doubled the
 					site&rsquo;s conversion rate, and Shopify wrote a
@@ -358,12 +372,15 @@ const morphCards = [
 				<!-- A display band of four tiles, wider than the text column above it.
 				     The numerals are static at their final values — the only motion here
 				     is the tiles' staggered rise, which the reveal group drives. -->
-				<ul class="stat-line">
+				<ul class="stat-line grid grid-cols-4 gap-md w-full max-w-[1080px] mt-[clamp(2.5rem,5vw,3.75rem)]">
 					{
 						heroStats.map((s) => (
-							<li class="stat reveal reveal-fade-up" data-reveal-group="stats:100">
+							<li
+								class="stat flex flex-col items-center justify-center gap-sm px-md py-[clamp(1.75rem,3.2vw,2.5rem)] reveal reveal-fade-up"
+								data-reveal-group="stats:100"
+							>
 								<span class="stat-num">{s.num}</span>
-								<span class="stat-label">{s.label}</span>
+								<span class="stat-label text-slate-dim">{s.label}</span>
 							</li>
 						))
 					}
@@ -372,20 +389,21 @@ const morphCards = [
 		</section>
 
 		<!-- ============ TIMELINE ============ -->
-		<section class="section section-timeline" id="experience">
+		<section class="py-section section-timeline" id="experience">
 			<!-- Desktop: scroll-scrubbed horizontal strip. The heading rides inside
 			     the pinned area so it stays with the strip while it scrubs. -->
 			<div class="tl-scroll" id="tl-scroll">
 				<div class="tl-pin">
 					<div class="container">
-						<div class="section-head reveal reveal-fade-up">
-							<p class="eyebrow">2013&ndash;Today</p>
-							<h2 class="section-title">
+						<div
+							class="flex flex-col items-center gap-md text-center mb-section-head reveal reveal-fade-up">
+							<p class="fs-overline text-gold">2013&ndash;Today</p>
+							<h2 class="section-title fs-heading-2 text-cream text-balance">
 								<split-text effect="rise" split="chars" stagger="26" duration="820"
 									>Experience</split-text
 								>
 							</h2>
-							<p class="section-intro">
+							<p class="fs-body-lg text-slate-dim text-pretty max-w-[560px]">
 								From a Fortune 500 rewrite to a billion-dollar tequila brand to founding a web app
 								framework and an open-source component library.
 							</p>
@@ -446,7 +464,7 @@ const morphCards = [
 				<ol class="tl-ledger">
 					{
 						stops.map((s) => (
-							<li class="tl-row reveal reveal-fade-up" data-reveal-group="ledger:70">
+							<li class="tl-ledger-row reveal reveal-fade-up" data-reveal-group="ledger:70">
 								<p class="tl-row-year">{s.shortYear}</p>
 								<div class="tl-row-body">
 									<h3 class="tl-row-company">{s.company}</h3>
@@ -484,20 +502,21 @@ const morphCards = [
 		</section>
 
 		<!-- ============ TOOLS ============ -->
-		<!-- A light interstitial like About: an eyebrow and the marquee, no
-		     display-size title. The rows are full-bleed, so they sit outside the
-		     container the eyebrow uses. -->
-		<section class="section section-tools" id="tools">
+		<!-- A light interstitial like About: an overline header and the marquee,
+		     no display-size title. The rows are full-bleed, so they sit outside
+		     the container the header uses. -->
+		<section class="py-section" id="tools">
 			<div class="container">
-				<div class="section-head reveal reveal-fade-up">
-					<p class="eyebrow">Everyday Stack</p>
-					<h2 class="section-title">
+				<div
+					class="flex flex-col items-center gap-md text-center mb-section-head reveal reveal-fade-up">
+					<p class="fs-overline text-gold">Everyday Stack</p>
+					<h2 class="section-title fs-heading-2 text-cream text-balance">
 						<split-text effect="rise" split="chars" stagger="26" duration="820">Tools I use</split-text>
 					</h2>
 				</div>
 			</div>
 
-			<div class="tools-marquees reveal reveal-fade-up">
+			<div class="flex flex-col gap-3.5 reveal reveal-fade-up">
 				{
 					[
 						{ row: toolRowA, direction: 'left', speed: 26 },
@@ -510,10 +529,11 @@ const morphCards = [
 							fade="6rem">
 							<scrolling-track>
 								{row.map((tool) => (
-									<div class={`tool-tile${tool.path ? '' : ' tool-tile-text'}`}>
+									<div
+										class={`tool-tile flex flex-col items-center justify-center gap-xs size-27 p-xs rounded-xl${tool.path ? '' : ' tool-tile-text'}`}>
 										{tool.path ? (
 											<svg
-												class="tool-mark"
+												class="tool-mark size-6.5 text-cream"
 												viewBox="0 0 24 24"
 												role="img"
 												aria-label={tool.name}
@@ -521,9 +541,11 @@ const morphCards = [
 												<path d={tool.path} fill="currentColor" />
 											</svg>
 										) : (
-											<span class="tool-wordmark">{tool.name}</span>
+											<span class="tool-wordmark font-mono fs-body-sm tracking-[0.01em] text-cream text-center">
+												{tool.name}
+											</span>
 										)}
-										<span class="tool-label">{tool.name}</span>
+										<span class="tool-label fs-body-xs text-slate-dim text-center">{tool.name}</span>
 									</div>
 								))}
 							</scrolling-track>
@@ -534,39 +556,40 @@ const morphCards = [
 		</section>
 
 		<!-- ============ THINGS I'VE BUILT ============ -->
-		<section class="section section-projects" id="projects">
+		<section class="py-section section-projects" id="projects">
 			<div class="container container-wide">
-				<div class="section-head reveal reveal-fade-up">
-					<p class="eyebrow">Free &amp; Open Source</p>
-					<h2 class="section-title">
+				<div
+					class="flex flex-col items-center gap-md text-center mb-section-head reveal reveal-fade-up">
+					<p class="fs-overline text-gold">Free &amp; Open Source</p>
+					<h2 class="section-title fs-heading-2 text-cream text-balance">
 						<split-text effect="rise" split="chars" stagger="26" duration="820"
 							>Things I&rsquo;ve built</split-text
 						>
 					</h2>
 				</div>
 
-				<div class="proj-rows">
+				<div class="flex flex-col">
 					<!-- ---------- TAROT ---------- -->
-					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
-						<div class="proj-copy">
-							<a class="proj-pill" href="https://magicspells.io" target="_blank" rel="noopener noreferrer"
+					<article class="proj-row grid grid-cols-1 items-center gap-8 py-12 lg:py-20 lg:gap-12 reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy flex flex-col items-start gap-3.5 min-w-0">
+							<a class="proj-pill inline-block rounded-full px-3.5 py-1.5 fs-mono-label tracking-[0.14em] text-gold" href="https://magicspells.io" target="_blank" rel="noopener noreferrer"
 								>magicspells.io/tarot</a
 							>
-							<h3 class="proj-title">
+							<h3 class="proj-title fs-heading-3 text-cream">
 								<split-text effect="bloom" split="chars" duration="700" stagger="35"
 									>Tarot</split-text
 								>
 							</h3>
-							<p class="proj-tagline">A carousel with real physics.</p>
-							<p class="proj-desc">
+							<p class="fs-subheading font-semibold text-cream text-balance">A carousel with real physics.</p>
+							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
 								A springy, scrubbable carousel that you can throw, catch, and scrub by hand. Every
 								frame is driven by a real spring, not a CSS transition.
 							</p>
-							<ul class="proj-specs">
+							<ul class="flex flex-col gap-1.5 mt-0.5">
 								{
 									tarotSpecs.map((spec) => (
-										<li class="proj-spec">
-											<svg class="proj-spec-mark" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+										<li class="flex items-center gap-2 text-sm text-cream">
+											<svg class="flex-none size-3" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
 												<path d={STAR} fill="var(--gold)" />
 											</svg>
 											<span>{spec}</span>
@@ -574,9 +597,9 @@ const morphCards = [
 									))
 								}
 							</ul>
-							<p class="proj-note">Free to use. Find it at magicspells.io</p>
+							<p class="mt-1.5 fs-body-sm text-slate-dim">Free to use. Find it at magicspells.io</p>
 						</div>
-						<div class="proj-demo proj-demo-tarot">
+						<div class="proj-demo-tarot min-w-0">
 							<tarot-carousel>
 								<script type="application/json" data-tarot-options>
 									{
@@ -615,29 +638,29 @@ const morphCards = [
 					</article>
 
 					<!-- ---------- PUZZLE ---------- -->
-					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
-						<div class="proj-copy">
+					<article class="proj-row grid grid-cols-1 items-center gap-8 py-12 lg:py-20 lg:gap-12 reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy flex flex-col items-start gap-3.5 min-w-0">
 							<a
-								class="proj-pill"
+								class="proj-pill inline-block rounded-full px-3.5 py-1.5 fs-mono-label tracking-[0.14em] text-gold"
 								href="https://github.com/magic-spells/puzzle"
 								target="_blank"
 								rel="noopener noreferrer">@magic-spells/puzzle</a
 							>
-							<h3 class="proj-title">
+							<h3 class="proj-title fs-heading-3 text-cream">
 								<split-text effect="bloom" split="chars" duration="700" stagger="35"
 									>Puzzle</split-text
 								>
 							</h3>
-							<p class="proj-tagline">Built to compete with React, Vue, and Svelte.</p>
-							<p class="proj-desc">
+							<p class="fs-subheading font-semibold text-cream text-balance">Built to compete with React, Vue, and Svelte.</p>
+							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
 								A front-end web app framework: single-file <code>.pzl</code> components, reactive data,
 								and a Go + esbuild compiler.
 							</p>
-							<ul class="proj-specs">
+							<ul class="flex flex-col gap-1.5 mt-0.5">
 								{
 									puzzleSpecs.map((spec) => (
-										<li class="proj-spec">
-											<svg class="proj-spec-mark" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+										<li class="flex items-center gap-2 text-sm text-cream">
+											<svg class="flex-none size-3" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
 												<path d={STAR} fill="var(--gold)" />
 											</svg>
 											<span>{spec}</span>
@@ -645,9 +668,9 @@ const morphCards = [
 									))
 								}
 							</ul>
-							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/puzzle</p>
+							<p class="proj-install mt-1.5 rounded-[10px] px-4.5 py-3 font-mono fs-body-sm text-cream max-w-full overflow-x-auto whitespace-nowrap"><span class="text-gold mr-1.5">$</span> npm i @magic-spells/puzzle</p>
 							<a
-								class="proj-demo-link"
+								class="proj-demo-link inline-flex items-center gap-xs self-start mt-0.5 rounded-full px-4.5 py-2 fs-body-sm font-medium text-cream"
 								href="https://puzzle-music-demo.vercel.app/"
 								target="_blank"
 								rel="noopener noreferrer">
@@ -662,7 +685,7 @@ const morphCards = [
 								</svg>
 							</a>
 						</div>
-						<div class="proj-demo">
+						<div class="proj-demo flex items-center justify-center p-7 min-h-75 overflow-hidden min-w-0">
 							<pre class="code-card"><code><span class="c-punc">&lt;</span><span class="c-tag">puzzle-view</span><span class="c-punc">&gt;</span>
   <span class="c-punc">&lt;</span><span class="c-tag">button</span> <span class="c-attr">class</span>=<span class="c-str">"counter"</span> <span class="c-evt">@click</span>=<span class="c-bind">&#123; increment &#125;</span><span class="c-punc">&gt;</span>
     Clicked <span class="c-bind">&#123; count &#125;</span> times
@@ -681,54 +704,54 @@ const morphCards = [
 					</article>
 
 					<!-- ---------- TIMELINE ENGINE ---------- -->
-					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
-						<div class="proj-copy">
+					<article class="proj-row grid grid-cols-1 items-center gap-8 py-12 lg:py-20 lg:gap-12 reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy flex flex-col items-start gap-3.5 min-w-0">
 							<a
-								class="proj-pill"
+								class="proj-pill inline-block rounded-full px-3.5 py-1.5 fs-mono-label tracking-[0.14em] text-gold"
 								href="https://github.com/magic-spells/timeline-engine"
 								target="_blank"
 								rel="noopener noreferrer">@magic-spells/timeline-engine</a
 							>
-							<h3 class="proj-title">
+							<h3 class="proj-title fs-heading-3 text-cream">
 								<split-text effect="bloom" split="chars" duration="700" stagger="35"
 									>Timeline Engine</split-text
 								>
 							</h3>
-							<p class="proj-tagline">Choreography you can scrub.</p>
-							<p class="proj-desc">
+							<p class="fs-subheading font-semibold text-cream text-balance">Choreography you can scrub.</p>
+							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
 								Group animation scenes in a timeline. Drive the timeline with scroll position, scroll
 								trigger, or scrub events. Loop scenes, randomize positions, and use physics based
 								animations.
 							</p>
-							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/timeline-engine</p>
+							<p class="proj-install mt-1.5 rounded-[10px] px-4.5 py-3 font-mono fs-body-sm text-cream max-w-full overflow-x-auto whitespace-nowrap"><span class="text-gold mr-1.5">$</span> npm i @magic-spells/timeline-engine</p>
 						</div>
-						<div class="proj-demo proj-demo-bare" id="fireworks-mount"></div>
+						<div class="proj-demo flex items-center justify-center p-7 min-h-75 overflow-hidden min-w-0 proj-demo-bare" id="fireworks-mount"></div>
 					</article>
 
 					<!-- ---------- SPLIT TEXT ---------- -->
-					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
-						<div class="proj-copy">
+					<article class="proj-row grid grid-cols-1 items-center gap-8 py-12 lg:py-20 lg:gap-12 reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy flex flex-col items-start gap-3.5 min-w-0">
 							<a
-								class="proj-pill"
+								class="proj-pill inline-block rounded-full px-3.5 py-1.5 fs-mono-label tracking-[0.14em] text-gold"
 								href="https://github.com/magic-spells/split-text"
 								target="_blank"
 								rel="noopener noreferrer">@magic-spells/split-text</a
 							>
-							<h3 class="proj-title">
+							<h3 class="proj-title fs-heading-3 text-cream">
 								<split-text effect="bloom" split="chars" duration="700" stagger="35"
 									>Split Text</split-text
 								>
 							</h3>
-							<p class="proj-tagline">Text that makes an entrance.</p>
-							<p class="proj-desc">
+							<p class="fs-subheading font-semibold text-cream text-balance">Text that makes an entrance.</p>
+							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
 								A web component that splits a line into words, characters, or measured lines and animates
 								each unit on a CSS-driven stagger. Eight built-in effects, no dependencies, and no
 								framework to adopt. Drop the tag around your copy and it reveals itself when it scrolls
 								into view.
 							</p>
-							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/split-text</p>
+							<p class="proj-install mt-1.5 rounded-[10px] px-4.5 py-3 font-mono fs-body-sm text-cream max-w-full overflow-x-auto whitespace-nowrap"><span class="text-gold mr-1.5">$</span> npm i @magic-spells/split-text</p>
 						</div>
-						<div class="proj-demo proj-demo-split">
+						<div class="proj-demo flex items-center justify-center p-7 min-h-75 overflow-hidden min-w-0 proj-demo-split">
 							<div class="st-demo">
 								<p class="st-stage" id="st-stage"><split-text
 										id="st-specimen"
@@ -765,28 +788,28 @@ const morphCards = [
 					</article>
 
 					<!-- ---------- MORPH ENGINE ---------- -->
-					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
-						<div class="proj-copy">
+					<article class="proj-row grid grid-cols-1 items-center gap-8 py-12 lg:py-20 lg:gap-12 reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy flex flex-col items-start gap-3.5 min-w-0">
 							<a
-								class="proj-pill"
+								class="proj-pill inline-block rounded-full px-3.5 py-1.5 fs-mono-label tracking-[0.14em] text-gold"
 								href="https://github.com/magic-spells/morph-engine"
 								target="_blank"
 								rel="noopener noreferrer">@magic-spells/morph-engine</a
 							>
-							<h3 class="proj-title">
+							<h3 class="proj-title fs-heading-3 text-cream">
 								<split-text effect="bloom" split="chars" duration="700" stagger="35"
 									>Morph Engine</split-text
 								>
 							</h3>
-							<p class="proj-tagline">Interfaces that morph into each other.</p>
-							<p class="proj-desc">
+							<p class="fs-subheading font-semibold text-cream text-balance">Interfaces that morph into each other.</p>
+							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
 								A spring-driven shared-element morph. It measures what you clicked, flies its rect,
 								radii, background, and shadow into the target&rsquo;s, and reveals the real element in
 								lockstep. Reverse it mid-flight and it simply turns around.
 							</p>
-							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/morph-engine</p>
+							<p class="proj-install mt-1.5 rounded-[10px] px-4.5 py-3 font-mono fs-body-sm text-cream max-w-full overflow-x-auto whitespace-nowrap"><span class="text-gold mr-1.5">$</span> npm i @magic-spells/morph-engine</p>
 						</div>
-						<div class="proj-demo proj-demo-morph">
+						<div class="proj-demo flex items-center justify-center p-7 min-h-75 overflow-hidden min-w-0 proj-demo-morph">
 							<!-- A margin note, not a UI label: it leans a degree off true and
 							     fades out for good once a panel has been opened. -->
 							<!-- Fixed-height stage so the dialog's measured rect never depends on
@@ -824,7 +847,7 @@ const morphCards = [
 
 					<!-- ---------- CONSTELLATION ---------- -->
 					<article
-						class="proj-row proj-row-constellation reveal reveal-fade-up"
+						class="proj-row proj-row-constellation grid grid-cols-1 items-center gap-8 py-12 lg:py-20 lg:gap-12 reveal reveal-fade-up"
 						data-reveal-group="projects:110">
 						<!-- Ambient field, spanning the whole row and bleeding past it. It is
 						     decorative and non-interactive: pointer-events off so the copy
@@ -833,29 +856,29 @@ const morphCards = [
 						<div class="cf-wrap" aria-hidden="true">
 							<canvas id="cf-canvas"></canvas>
 						</div>
-						<div class="proj-copy">
+						<div class="proj-copy flex flex-col items-start gap-3.5 min-w-0">
 							<a
-								class="proj-pill"
+								class="proj-pill inline-block rounded-full px-3.5 py-1.5 fs-mono-label tracking-[0.14em] text-gold"
 								href="https://github.com/magic-spells/constellation"
 								target="_blank"
 								rel="noopener noreferrer">@magic-spells/constellation</a
 							>
-							<h3 class="proj-title">
+							<h3 class="proj-title fs-heading-3 text-cream">
 								<split-text effect="bloom" split="chars" duration="700" stagger="35"
 									>Constellation</split-text
 								>
 							</h3>
-							<p class="proj-tagline">Long-term memory for AI agents.</p>
-							<p class="proj-desc">
+							<p class="fs-subheading font-semibold text-cream text-balance">Long-term memory for AI agents.</p>
+							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
 								Plan your project as a connected graph of typed cards: pages, endpoints, tables, flows.
 								Agents read and update the graph as they work, so plans and context survive from
 								session to session instead of starting over every conversation.
 							</p>
-							<ul class="proj-specs">
+							<ul class="flex flex-col gap-1.5 mt-0.5">
 								{
 									constellationSpecs.map((spec) => (
-										<li class="proj-spec">
-											<svg class="proj-spec-mark" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+										<li class="flex items-center gap-2 text-sm text-cream">
+											<svg class="flex-none size-3" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
 												<path d={STAR} fill="var(--gold)" />
 											</svg>
 											<span>{spec}</span>
@@ -863,11 +886,11 @@ const morphCards = [
 									))
 								}
 							</ul>
-							<p class="proj-install">
-								<span class="dollar">$</span> npm i -g @magic-spells/constellation
+							<p class="proj-install mt-1.5 rounded-[10px] px-4.5 py-3 font-mono fs-body-sm text-cream max-w-full overflow-x-auto whitespace-nowrap">
+								<span class="text-gold mr-1.5">$</span> npm i -g @magic-spells/constellation
 							</p>
 						</div>
-						<div class="proj-demo proj-demo-constellation">
+						<div class="proj-demo flex items-center justify-center p-7 min-h-75 overflow-hidden min-w-0 proj-demo-constellation">
 							<img
 								class="cs-shot"
 								src="/constellation-viewer.webp"
@@ -881,17 +904,17 @@ const morphCards = [
 					</article>
 				</div>
 
-				<p class="chips-lead reveal reveal-fade-up">Plus all of these</p>
+				<p class="mt-section-head mb-lg text-center fs-subheading font-semibold text-cream reveal reveal-fade-up">Plus all of these</p>
 				<!-- Each chip reveals on its own so the set cascades. The step is
 				     batch-relative in @magic-spells/reveal, so the whole group lands in
 				     ~0.65s rather than accumulating a delay per index. Reduced motion is
 				     handled by the package: it shows everything at once. -->
-				<ul class="chips">
+				<ul class="flex flex-wrap justify-center gap-sm mb-7">
 					{
 						chips.map((c) => (
 							<li class="reveal reveal-fade-up" data-reveal-group="chips:20">
 								<a
-									class="chip"
+									class="chip block rounded-full px-4.5 py-2 fs-body-sm font-medium text-slate"
 									href={`https://github.com/magic-spells/${c.repo}`}
 									target="_blank"
 									rel="noopener noreferrer">
@@ -905,19 +928,15 @@ const morphCards = [
 				<!-- Closing beat for the section: answers what the whole suite is, and
 				     hands off to magicspells.io. Deliberately lighter than the contact
 				     CTA that follows, which still owns the end of the page. -->
-				<div class="ms-outro reveal reveal-fade-up">
-					<h3 class="ms-outro-title">What is Magic Spells?</h3>
-					<p class="ms-outro-copy">
-						The world is changing fast. With tools like AI you can design, prototype, and build in
-						hours what used to take weeks, and more of the web is starting to feel like magic.
-					</p>
-					<p class="ms-outro-copy">
+				<div class="flex flex-col items-center text-center gap-5 pt-12 lg:pt-24 reveal reveal-fade-up">
+					<h3 class="fs-heading-3 fs-sentence-case text-cream">What is Magic Spells?</h3>
+					<p class="fs-body-lg text-slate text-pretty max-w-[560px]">
 						Magic Spells is named for that brain-freeze moment when something just works, feels
 						beautiful, and you want to know how it was done. Frameworks, interface systems, motion
 						engines, and developer tools built to chase that feeling. All free and open source.
 					</p>
 					<a
-						class="pill pill-gold ms-outro-cta"
+						class="pill pill-gold mt-2"
 						href="https://magicspells.io"
 						target="_blank"
 						rel="noopener noreferrer">
@@ -952,17 +971,18 @@ const morphCards = [
 		</dialog>
 
 		<!-- ============ CONTACT ============ -->
-		<section class="section section-contact" id="contact">
+		<section class="py-section section-contact" id="contact">
 			<div class="container">
-				<div class="contact-inner">
-					<div class="section-head reveal reveal-fade-up">
-						<img class="portrait" src="/cory.jpg" alt="Cory Schulz" width="76" height="76" loading="lazy" />
-						<h2 class="section-title">
+				<div class="flex flex-col gap-10 max-w-[720px] mx-auto">
+					<div
+						class="flex flex-col items-center gap-md text-center mb-section-head reveal reveal-fade-up">
+						<img class="portrait size-19 rounded-full object-cover" src="/cory.jpg" alt="Cory Schulz" width="76" height="76" loading="lazy" />
+						<h2 class="section-title fs-heading-2 text-cream text-balance">
 							<split-text effect="rise" split="chars" stagger="26" duration="820"
 								>Have a project in mind?</split-text
 							>
 						</h2>
-						<p class="contact-sub">
+						<p class="fs-body-lg text-slate-dim text-pretty max-w-[520px]">
 							Tell me what you&rsquo;re building. If it sounds like a good fit, I&rsquo;ll get back to you as
 							soon as I can.
 						</p>
@@ -978,7 +998,7 @@ const morphCards = [
 						<p>Oops! Something went wrong. Please try again.</p>
 					</div>
 
-					<form id="contact-form" class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+					<form id="contact-form" class="contact-form flex flex-col gap-5" action="https://api.web3forms.com/submit" method="POST">
 						<!-- Hidden fields -->
 						<input type="hidden" name="access_key" value="585a106a-78ff-4313-b4c9-459b73515114" />
 						<input type="hidden" name="subject" value="New Business Inquiry from Cory Schulz Portfolio" />
@@ -987,7 +1007,7 @@ const morphCards = [
 						<!-- Honeypot Spam Protection (hidden from humans, visible to bots) -->
 						<input type="checkbox" name="botcheck" class="botcheck" style="display: none;" />
 
-						<div class="field-grid">
+						<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
 							<div class="input-field">
 								<input id="name" name="name" type="text" required placeholder="Your name" />
 								<label for="name" class="floating-label">Name</label>
@@ -998,7 +1018,7 @@ const morphCards = [
 							</div>
 						</div>
 
-						<div class="field-grid">
+						<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
 							<div class="input-field">
 								<input id="company" name="company" type="text" required placeholder="Company name" />
 								<label for="company" class="floating-label">Company</label>
@@ -1009,7 +1029,7 @@ const morphCards = [
 							</div>
 						</div>
 
-						<div class="field-grid">
+						<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
 							<div class="budget-field">
 								<p class="field-legend">Budget</p>
 								<dropdown-select>
@@ -1072,10 +1092,10 @@ const morphCards = [
 	</main>
 
 	<!-- ============ FOOTER ============ -->
-	<footer class="site-footer">
-		<div class="container footer-inner">
+	<footer class="site-footer py-8 fs-body-sm">
+		<div class="container flex flex-wrap items-center justify-between gap-md">
 			<p>&copy; 2026 Cory Schulz</p>
-			<nav class="footer-links" aria-label="Elsewhere">
+			<nav class="footer-links flex flex-wrap gap-5" aria-label="Elsewhere">
 				<a href="mailto:coryschulz@gmail.com">coryschulz@gmail.com</a>
 				<a href="https://www.linkedin.com/in/cory-schulz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
 				<a class="footer-gold" href="https://magicspells.io" target="_blank" rel="noopener noreferrer"
@@ -1086,2072 +1106,6 @@ const morphCards = [
 	</footer>
 </Layout>
 
-<style>
-	/* ============================================ */
-	/* Shared primitives                             */
-	/* ============================================ */
-
-	.skip-link {
-		position: absolute;
-		left: -9999px;
-		top: 0;
-		z-index: 100;
-		background: var(--gold);
-		color: var(--ground);
-		padding: 0.75rem 1.25rem;
-		border-radius: 0 0 8px 0;
-		font-weight: 600;
-	}
-	.skip-link:focus {
-		left: 0;
-	}
-
-	.eyebrow {
-		font-size: 0.75rem;
-		font-weight: 600;
-		letter-spacing: 0.22em;
-		text-transform: uppercase;
-		color: var(--gold);
-	}
-
-	.pill {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		border-radius: 999px;
-		font-family: var(--font-body);
-		font-size: 0.9375rem;
-		font-weight: 600;
-		letter-spacing: 0.04em;
-		text-transform: uppercase;
-		white-space: nowrap;
-		cursor: pointer;
-		transition:
-			background-color 0.25s ease,
-			border-color 0.25s ease,
-			color 0.25s ease,
-			transform 0.25s ease;
-	}
-
-	.pill-gold {
-		background: var(--gold);
-		color: var(--ground);
-		border: 1px solid var(--gold);
-		padding: 1rem 2.125rem;
-	}
-	.pill-gold:hover {
-		background: var(--gold-bright);
-		border-color: var(--gold-bright);
-		color: var(--ground);
-		transform: translateY(-1px);
-	}
-
-	.pill-outline {
-		background: transparent;
-		color: var(--cream);
-		border: 1px solid rgba(251, 248, 238, 0.25);
-		padding: 0.9375rem 1.75rem;
-		font-weight: 500;
-		text-transform: none;
-		letter-spacing: 0.01em;
-	}
-	.pill-outline:hover {
-		border-color: var(--gold);
-		color: var(--cream);
-		transform: translateY(-1px);
-	}
-
-	/* Sections own the vertical rhythm and the hairline that separates them.
-	   Horizontal gutters and the max width belong to the .container inside
-	   (global, in app.css) so nothing double-pads. */
-	.section {
-		/* Desktop maxima carry most of the rhythm: the clamp minimums keep
-		   phones tight while large viewports get real air between sections.
-		   No divider rule — the whitespace does that work now. */
-		padding-block: clamp(5rem, 10vw, 11rem) clamp(5.5rem, 11vw, 12rem);
-	}
-
-	.section-head {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		gap: 1rem;
-		margin-bottom: clamp(2.5rem, 5vw, 4rem);
-	}
-
-	.section-title {
-		font-size: clamp(2rem, 5.2vw, 3.25rem);
-		color: var(--cream);
-		text-wrap: balance;
-		/* Sentence case, like the hero name: Fields has a full lower case and
-		   reads better in it. Mixed case wants tighter tracking than caps, so
-		   this carries the hero's negative letter-spacing rather than the
-		   global heading rule's +0.01em. */
-		text-transform: none;
-		letter-spacing: -0.005em;
-	}
-
-	/* Every section title is split now. The block keeps the line wrapping as it
-	   did before the split, and the padding is the same descender fix the hero
-	   name carries: split-text masks each character, which shaves the tails on
-	   p, g and y without a little headroom. */
-	.section-title split-text {
-		display: block;
-	}
-
-	.section-title :global(.split-text-char) {
-		padding-bottom: 0.06em;
-	}
-
-	.section-intro {
-		font-size: clamp(0.9375rem, 1.8vw, 1.0625rem);
-		line-height: 1.6;
-		color: var(--slate-dim);
-		max-width: 560px;
-		text-wrap: pretty;
-	}
-
-	/* ============================================ */
-	/* Hero                                          */
-	/* ============================================ */
-
-	/* First section on the page, so it drops .section's top hairline. */
-	.hero {
-		position: relative;
-		padding-block: clamp(5rem, 11vw, 11rem) clamp(4rem, 9vw, 10rem);
-		border-top: 0;
-		background: var(--ground-glow);
-	}
-
-	.hero-inner {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-	}
-
-	.constellation {
-		position: absolute;
-		top: 1.25rem;
-		left: 50%;
-		transform: translateX(-50%);
-		width: min(1200px, 92%);
-		height: auto;
-		opacity: 0.7;
-		pointer-events: none;
-	}
-
-	.twinkle {
-		animation: twinkle 7s ease-in-out infinite;
-	}
-	.twinkle-b {
-		animation-duration: 9s;
-		animation-delay: -2s;
-	}
-	.twinkle-c {
-		animation-duration: 11s;
-		animation-delay: -5s;
-	}
-	.twinkle-d {
-		animation-duration: 8s;
-		animation-delay: -3.5s;
-	}
-	.twinkle-e {
-		animation-duration: 12s;
-		animation-delay: -1s;
-	}
-
-	@keyframes twinkle {
-		0%,
-		100% {
-			opacity: 0.15;
-		}
-		50% {
-			opacity: 0.85;
-		}
-	}
-
-	.hero-eyebrow {
-		position: relative;
-		font-size: 0.8125rem;
-		margin-bottom: 1.75rem;
-		text-wrap: balance;
-	}
-
-	.hero-eyebrow span {
-		white-space: nowrap;
-	}
-
-	@media (max-width: 599px) {
-		.hero-eyebrow {
-			font-size: 0.6875rem;
-			letter-spacing: 0.14em;
-		}
-		/* Break into two balanced lines rather than three ragged ones */
-		.hero-eyebrow span {
-			display: block;
-		}
-	}
-
-	/* The one mixed-case display line on the page. */
-	.hero-name {
-		position: relative;
-		font-size: clamp(3.25rem, 10.5vw, 8rem);
-		color: var(--cream);
-		margin-bottom: 2.25rem;
-		text-transform: none;
-		/* Roomy enough that the descenders on "y" and "z" clear the
-		   split-text char masks while the reveal is still running. */
-		line-height: 1.14;
-		letter-spacing: -0.005em;
-	}
-
-	.hero-name split-text {
-		display: block;
-	}
-
-	@media (max-width: 599px) {
-		.hero-name-part {
-			display: block;
-		}
-	}
-
-	.hero-name :global(.split-text-char) {
-		padding-bottom: 0.04em;
-	}
-
-	.hero-thesis {
-		position: relative;
-		font-size: clamp(1.0625rem, 2.2vw, 1.3125rem);
-		font-weight: 400;
-		line-height: 1.6;
-		color: var(--slate);
-		max-width: 620px;
-		margin-bottom: 2.75rem;
-		text-wrap: pretty;
-	}
-
-	/* ============================================ */
-	/* About — interstitial beat                     */
-	/* ============================================ */
-
-	.section-about {
-		/* Lighter than the headline sections, and no top hairline: it carries
-		   straight on from the hero. Kept at roughly 60% of .section's rhythm so
-		   it stays proportional as that scales. No tail of its own — the stat
-		   band ends the section and Experience's own top padding carries the
-		   seam, which keeps the tiles from sitting in a double gap. */
-		padding-block: clamp(2.5rem, 4vw, 4rem) 0;
-		border-top: 0;
-	}
-
-	.about-inner {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		gap: 0.875rem;
-	}
-
-	.about-lede {
-		font-size: clamp(1.1875rem, 2.2vw, 1.375rem);
-		line-height: 1.6;
-		color: var(--slate);
-		max-width: 620px;
-		text-wrap: pretty;
-	}
-
-	.about-inner .eyebrow {
-		margin-bottom: 0.375rem;
-	}
-
-	.about-link {
-		color: var(--gold);
-		text-decoration: underline;
-		text-decoration-color: rgba(201, 168, 106, 0.4);
-		text-underline-offset: 0.2em;
-		transition: color 0.2s ease;
-	}
-	.about-link:hover {
-		color: var(--gold-bright);
-	}
-
-	/* The stat band: four tiles in the page's established tile language (same
-	   face as .tool-tile), deliberately wider than the 620px text column above
-	   so it reads as a substantial closing beat rather than a caption. */
-	.stat-line {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 1rem;
-		list-style: none;
-		/* Escapes .about-inner's text measure — the band, not the prose, sets
-		   the width here. */
-		width: 100%;
-		max-width: 1080px;
-		margin: clamp(2.5rem, 5vw, 3.75rem) 0 0;
-		padding: 0;
-	}
-
-	.stat {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 0.75rem;
-		padding: clamp(1.75rem, 3.2vw, 2.5rem) 1rem;
-		border-radius: 14px;
-		background: rgba(251, 248, 238, 0.05);
-	}
-
-	.stat-num {
-		font-family: var(--font-display);
-		font-weight: 800;
-		font-size: clamp(2.5rem, 4.5vw, 4rem);
-		line-height: 1;
-		text-align: center;
-		color: var(--gold);
-		font-variant-numeric: lining-nums;
-	}
-
-	.stat-label {
-		font-size: 0.75rem;
-		font-weight: 500;
-		line-height: 1.3;
-		text-transform: uppercase;
-		letter-spacing: 0.14em;
-		text-align: center;
-		text-wrap: balance;
-		color: var(--slate-dim);
-	}
-
-	/* 2x2 on phones, with the tiles kept roomy rather than squeezed. */
-	@media (max-width: 599px) {
-		.stat-line {
-			grid-template-columns: repeat(2, 1fr);
-			gap: 0.75rem;
-		}
-
-		.stat {
-			padding: 1.5rem 0.75rem;
-			gap: 0.625rem;
-		}
-
-		.stat-label {
-			font-size: 0.6875rem;
-			letter-spacing: 0.11em;
-		}
-	}
-
-	.hero-actions {
-		position: relative;
-		display: flex;
-		gap: 1.25rem;
-		align-items: center;
-		flex-wrap: wrap;
-		justify-content: center;
-	}
-
-	/* Both CTAs are exactly the same height — the outline pill's 1px border
-	   is absorbed by border-box rather than adding 2px to its height. */
-	.hero-actions .pill {
-		box-sizing: border-box;
-		height: 54px;
-		padding-block: 0;
-		justify-content: center;
-	}
-
-	/* ============================================ */
-	/* Timeline — desktop scrubbed strip             */
-	/* ============================================ */
-
-	.tl-scroll {
-		position: relative;
-	}
-
-	.tl-pin {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-	}
-
-	.tl-viewport {
-		/* Edge to edge: the strip is deliberately outside .container and takes
-		   the full viewport width, so cards run off the screen edge rather than
-		   stopping at a gutter line. The side breathing room lives on the track
-		   below (.tl-strip padding-inline), which the travel math picks up
-		   because scrollWidth includes it. */
-		width: 100%;
-		overflow-x: auto;
-		overflow-y: hidden;
-		scroll-snap-type: x mandatory;
-		scrollbar-width: thin;
-		scrollbar-color: var(--hairline-strong) transparent;
-		padding-bottom: 1rem;
-	}
-
-	.tl-strip {
-		/* One source of truth for the strip's vertical metrics, so the gold
-		   hairline lands on the exact centre of the star nodes. */
-		--tl-media-h: 190px;
-		--tl-stack-gap: 0.75rem;
-		--tl-node-size: 18px;
-		--tl-node-margin: 2px;
-
-		position: relative;
-		display: flex;
-		gap: 3rem;
-		width: max-content;
-		/* The track carries the side spacing, not the viewport — that keeps the
-		   viewport full-bleed while the first and last cards still clear the
-		   screen edge. scrollWidth counts this padding, so the scrub travels
-		   the whole track. */
-		padding-inline: var(--gutter);
-	}
-
-	/* Very wide displays: the whole strip fits, so there is no travel and no
-	   pin (see buildScrub). Without this it would sit flush-left with dead
-	   space to the right; margin auto on a max-content block centres it. */
-	.tl-scroll.tl-fits .tl-strip {
-		margin-inline: auto;
-	}
-
-	.tl-rule {
-		position: absolute;
-		/* media + stack gap + node's top margin + half the node = node centre.
-		   translateY(-50%) then centres the rule's own thickness on that line,
-		   so it stays exact whatever the rule's height is. */
-		top: calc(
-			var(--tl-media-h) + var(--tl-stack-gap) + var(--tl-node-margin) + var(--tl-node-size) / 2
-		);
-		transform: translateY(-50%);
-		left: 0;
-		right: 0;
-		height: 1px;
-		background: linear-gradient(
-			90deg,
-			rgba(201, 168, 106, 0) 0%,
-			var(--gold-soft) 6%,
-			var(--gold-soft) 94%,
-			rgba(201, 168, 106, 0) 100%
-		);
-	}
-
-	.tl-stop {
-		position: relative;
-		flex: 0 0 340px;
-		width: 340px;
-		display: flex;
-		flex-direction: column;
-		gap: var(--tl-stack-gap);
-		scroll-snap-align: center;
-	}
-
-	.tl-media {
-		width: 100%;
-		height: var(--tl-media-h);
-		object-fit: cover;
-		border-radius: var(--radius-media);
-		border: 1px solid var(--card-border);
-		background: var(--panel);
-	}
-
-	.tl-media-mark {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border-color: rgba(201, 168, 106, 0.4);
-		background: linear-gradient(160deg, #0b1626 0%, var(--ground) 100%);
-		/* The wordmark is inlined SVG painted with currentColor — cream reads
-		   cleaner than gold against this card's dark blue gradient. */
-		color: var(--cream);
-	}
-
-	/* Curated brand card: a flat brand colour behind a centred wordmark, the
-	   same read as the Milwaukee and Casamigos screenshots next to it. The
-	   colour comes from the stop's own data, so only the layout lives here. */
-	.tl-media-brand {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding: 1rem;
-		border-color: var(--card-border);
-	}
-
-	/* The wordmark is a very wide lockup (~7:1), so it is sized off the card's
-	   width and left with generous vertical whitespace. */
-	.tl-brand-logo {
-		width: 68%;
-		height: auto;
-		display: block;
-	}
-
-	.ms-logo {
-		width: 170px;
-		height: auto;
-		display: block;
-	}
-
-	.ms-logo-sm {
-		width: 86px;
-	}
-
-	.tl-node {
-		margin: var(--tl-node-margin) auto;
-		display: block;
-		width: var(--tl-node-size);
-		height: var(--tl-node-size);
-	}
-
-	.tl-text {
-		display: flex;
-		flex-direction: column;
-		gap: 0.3125rem;
-		text-align: center;
-	}
-
-	.tl-year {
-		font-family: var(--font-display);
-		font-weight: 800;
-		font-size: 1.25rem;
-		color: var(--gold);
-	}
-
-	.tl-company {
-		font-family: var(--font-body);
-		font-size: 1.125rem;
-		font-weight: 600;
-		text-transform: none;
-		letter-spacing: 0;
-		line-height: 1.3;
-		color: var(--cream);
-	}
-
-	/* Quiet metadata line between the company and what the work was. */
-	.tl-role {
-		font-size: 0.6875rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		line-height: 1.35;
-		color: var(--slate-dim);
-	}
-
-	.tl-desc {
-		font-size: 0.8125rem;
-		line-height: 1.5;
-		color: var(--slate-dim);
-		text-wrap: pretty;
-	}
-
-	/* Pinned scrub mode — enabled by JS */
-	.tl-scroll.is-scrubbed .tl-pin {
-		position: sticky;
-		top: 0;
-		height: 100vh;
-		height: 100svh;
-		overflow: hidden;
-	}
-
-	.tl-scroll.is-scrubbed .tl-viewport {
-		overflow: hidden;
-		scroll-snap-type: none;
-		padding-bottom: 0;
-	}
-
-	.tl-scroll.is-scrubbed .tl-strip {
-		will-change: transform;
-	}
-
-	/* ============================================ */
-	/* Timeline — mobile ledger rows                 */
-	/* ============================================ */
-
-	.tl-ledger {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		border-top: 1px solid var(--hairline);
-	}
-
-	.tl-row {
-		display: grid;
-		grid-template-columns: auto 1fr 104px;
-		align-items: center;
-		column-gap: 1.125rem;
-		row-gap: 0.75rem;
-		padding: 1.375rem 0;
-		border-bottom: 1px solid var(--hairline);
-	}
-
-	.tl-row-year {
-		font-family: var(--font-display);
-		font-weight: 800;
-		font-size: clamp(2.75rem, 12vw, 3.375rem);
-		line-height: 0.9;
-		color: var(--gold);
-		font-variant-numeric: lining-nums;
-	}
-
-	.tl-row-body {
-		min-width: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 0.25rem;
-	}
-
-	.tl-row-company {
-		font-family: var(--font-body);
-		font-size: 1.125rem;
-		font-weight: 600;
-		text-transform: none;
-		letter-spacing: 0;
-		line-height: 1.3;
-		color: var(--cream);
-	}
-
-	/* Same quiet metadata treatment the strip uses, one step smaller. */
-	.tl-row-role {
-		font-size: 0.6875rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		line-height: 1.35;
-		color: var(--slate-dim);
-	}
-
-	.tl-row-desc {
-		font-size: 0.8125rem;
-		line-height: 1.5;
-		color: var(--slate-dim);
-		text-wrap: pretty;
-	}
-
-	.tl-row-thumb {
-		width: 116px;
-		/* Every timeline shot is 920x500 — the thumb keeps that ratio so the
-		   screenshot shows whole instead of cropping to a short band. */
-		aspect-ratio: 920 / 500;
-		height: auto;
-		object-fit: cover;
-		border-radius: 6px;
-		border: 1px solid var(--card-border);
-		background: var(--panel);
-	}
-
-	/* At the narrowest sizes the thumb drops below the text instead of shrinking */
-	@media (max-width: 419px) {
-		.tl-row {
-			grid-template-columns: auto 1fr;
-		}
-		.tl-row-thumb {
-			grid-column: 2;
-			width: 100%;
-		}
-	}
-
-	/* Below 768px the horizontal strip is replaced by the ledger rows. */
-	.tl-viewport {
-		display: none;
-	}
-
-	@media (min-width: 768px) {
-		.tl-viewport {
-			display: block;
-		}
-		.tl-ledger-wrap {
-			display: none;
-		}
-		.section-timeline {
-			padding-bottom: clamp(2rem, 4vw, 3rem);
-		}
-	}
-
-	/* ============================================ */
-	/* Tools — counter-scrolling marquees             */
-
-	/* The marquee rows need room on both sides of them: this is the seam
-	   between the timeline and Things I've Built, and both neighbours are dense. */
-	.section-tools {
-		padding-block: clamp(3.5rem, 8vw, 10rem);
-	}
-
-	.tools-marquees {
-		display: flex;
-		flex-direction: column;
-		gap: 0.875rem;
-	}
-
-	.tools-marquee {
-		--scrolling-content-gap: 0.875rem;
-		display: block;
-	}
-
-	/* Fixed width so the marquee measures a stable item and the tiles keep a
-	   square-ish face at every breakpoint. */
-	.tool-tile {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 0.5rem;
-		width: 108px;
-		height: 108px;
-		padding: 0.5rem;
-		border-radius: 12px;
-		background: rgba(251, 248, 238, 0.05);
-		transition: background-color 0.25s ease;
-	}
-
-	.tool-tile:hover {
-		background: rgba(251, 248, 238, 0.08);
-	}
-
-	.tool-mark {
-		width: 26px;
-		height: 26px;
-		color: var(--cream);
-		opacity: 0.8;
-		transition: opacity 0.25s ease;
-	}
-
-	.tool-tile:hover .tool-mark {
-		opacity: 1;
-	}
-
-	/* The three brands simple-icons has no mark for. A slightly larger label
-	   stands in for the logo, with the caption below suppressed so the name is
-	   not printed twice. */
-	.tool-wordmark {
-		font-family: var(--font-mono);
-		font-size: 0.8125rem;
-		letter-spacing: 0.01em;
-		color: var(--cream);
-		opacity: 0.8;
-		text-align: center;
-		transition: opacity 0.25s ease;
-	}
-
-	.tool-tile:hover .tool-wordmark {
-		opacity: 1;
-	}
-
-	.tool-tile-text .tool-label {
-		display: none;
-	}
-
-	.tool-label {
-		font-size: 0.6875rem;
-		line-height: 1.2;
-		text-align: center;
-		color: var(--slate-dim);
-	}
-
-	@media (max-width: 599px) {
-		.tool-tile {
-			width: 92px;
-			height: 92px;
-		}
-
-		.tools-marquee {
-			--scrolling-content-fade: 3rem;
-		}
-	}
-
-	/* Things I've built — five feature rows          */
-	/* ============================================ */
-
-	/* The constellation field bleeds sideways out of its row; clip (not hidden,
-	   which would make this a scroll container) keeps that bleed from ever
-	   widening the page. */
-	.section-projects {
-		overflow-x: clip;
-		/* The ms-outro closes this section with its own headroom, so the stock
-		   section tail would double up against contact's top padding. Trimmed on
-		   both sides of that seam. */
-		padding-bottom: clamp(3rem, 6vw, 6rem);
-	}
-
-	.proj-rows {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.proj-row {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 2rem;
-		align-items: center;
-		padding-block: clamp(3rem, 6vw, 5rem);
-		border-top: 1px solid var(--hairline);
-
-		/* Reveal tuning, scoped to these rows. The package's own stylesheet is
-		   imported after app.css and re-declares these on :root, so the global
-		   defaults there never reach the element — setting them here puts the
-		   value where nothing outranks it. data-reveal-group="projects:110"
-		   staggers each wave of arriving rows. Reduced motion is handled by the
-		   package's own media query, which cancels transform and transition. */
-		--reveal-duration: 0.72s;
-		--reveal-distance: 34px;
-	}
-
-	.proj-row:first-child {
-		border-top: 0;
-		padding-top: 0;
-	}
-
-	@media (min-width: 900px) {
-		.proj-row {
-			grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-			gap: clamp(2.5rem, 5vw, 4.5rem);
-		}
-		/* Alternate copy-left / demo-left down the column */
-		.proj-row:nth-child(even) .proj-copy {
-			order: 2;
-		}
-		/* Cap the copy block and centre it in its column so the row reads
-		   balanced against the filled demo panel instead of hugging the inner
-		   edge. Auto margins are symmetric, so it works either way round.
-		   The text itself stays left-aligned inside the block. */
-		.proj-copy {
-			max-width: 46ch;
-			margin-inline: auto;
-		}
-	}
-
-	.proj-copy {
-		display: flex;
-		flex-direction: column;
-		align-items: flex-start;
-		gap: 0.875rem;
-		min-width: 0;
-	}
-
-	.proj-pill {
-		display: inline-block;
-		border: 1px solid var(--gold-faint);
-		border-radius: 999px;
-		padding: 0.4375rem 0.875rem;
-		font-family: var(--font-mono);
-		font-size: 0.6875rem;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--gold);
-		transition:
-			border-color 0.2s ease,
-			color 0.2s ease;
-	}
-
-	.proj-pill:hover {
-		border-color: var(--gold);
-		color: var(--gold-bright);
-	}
-
-	.proj-title {
-		font-size: clamp(1.75rem, 3.6vw, 2.5rem);
-		color: var(--cream);
-	}
-
-	/* Product names keep their display casing; only the bloom is added. The
-	   block keeps the heading wrapping as it did before the split. */
-	.proj-title split-text {
-		display: block;
-	}
-
-	.proj-title :global(.split-text-char) {
-		padding-bottom: 0.06em;
-	}
-
-	.proj-tagline {
-		font-size: clamp(1.0625rem, 2vw, 1.1875rem);
-		font-weight: 600;
-		color: var(--cream);
-		text-wrap: balance;
-	}
-
-	.proj-desc {
-		font-size: 0.9375rem;
-		line-height: 1.65;
-		color: var(--slate-dim);
-		text-wrap: pretty;
-		max-width: 46ch;
-	}
-
-	.proj-desc code {
-		font-family: var(--font-mono);
-		font-size: 0.875em;
-		color: var(--slate);
-	}
-
-	.proj-install {
-		margin-top: 0.375rem;
-		border: 1px solid var(--card-border);
-		border-radius: 10px;
-		background: var(--panel);
-		padding: 0.75rem 1.125rem;
-		font-family: var(--font-mono);
-		font-size: 0.8125rem;
-		color: var(--cream);
-		max-width: 100%;
-		overflow-x: auto;
-		white-space: nowrap;
-	}
-
-	.proj-install .dollar {
-		color: var(--gold);
-		margin-right: 0.375rem;
-	}
-
-	/* Spec list: a gold star marker per line, carrying the numbers the
-	   description used to state inline. */
-	.proj-specs {
-		list-style: none;
-		margin: 0.125rem 0 0;
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 0.4375rem;
-	}
-
-	.proj-spec {
-		display: flex;
-		align-items: center;
-		gap: 0.5625rem;
-		font-size: 0.875rem;
-		color: var(--cream);
-	}
-
-	.proj-spec-mark {
-		flex: none;
-		width: 12px;
-		height: 12px;
-	}
-
-	/* Outlined pill link, sized down to sit in the copy column's rhythm rather
-	   than compete with the hero's actions. */
-	.proj-demo-link {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		align-self: flex-start;
-		margin-top: 0.125rem;
-		border: 1px solid rgba(251, 248, 238, 0.25);
-		border-radius: 999px;
-		padding: 0.5625rem 1.125rem;
-		font-size: 0.8125rem;
-		font-weight: 500;
-		color: var(--cream);
-		transition:
-			border-color 0.25s ease,
-			color 0.25s ease;
-	}
-
-	.proj-demo-link:hover {
-		border-color: var(--gold);
-		color: var(--gold-bright);
-	}
-
-	.proj-note {
-		margin-top: 0.375rem;
-		font-size: 0.8125rem;
-		color: var(--slate-dim);
-	}
-
-	/* Demo panels ------------------------------------------------ */
-
-	.proj-demo {
-		border: 1px solid var(--card-border);
-		border-radius: var(--radius-card);
-		background: var(--card-bg);
-		padding: 1.75rem;
-		min-height: 300px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		overflow: hidden;
-		min-width: 0;
-	}
-
-	/* No panel chrome at all: the carousel breaks out and fills the demo side
-	   of the row. The slides' own shadows give them definition against the
-	   night ground, so a border and a background would only box them in.
-	   padding-bottom reserves the strip the pagination is lifted into. */
-	.proj-demo-tarot {
-		position: relative;
-		display: block;
-		border: 0;
-		background: none;
-		/* Top padding gives the card shadows headroom; the bottom strip is
-		   where the pagination dots are lifted to. */
-		padding: 0.75rem 0 3.5rem;
-		min-height: 0;
-		/* The carousel's own clipping is off below so the shadows survive, which
-		   leaves its off-screen slides free to widen the page. This is the box
-		   that catches them — the visible slides sit ~80px inside it, so their
-		   shadows are never touched. */
-		overflow: hidden;
-	}
-
-	/* Pagination dots (auto-appended to tarot-carousel, themed in app.css).
-	   Lifted out of flow so tarot-carousel's box collapses to exactly the
-	   viewport's slide area — that is what makes the buttons centre on the
-	   slides rather than on the slides-plus-dots stack. Centred on a point
-	   just under the card shadows. */
-	.proj-demo-tarot :global(.tarot-dots-list) {
-		position: absolute;
-		top: calc(100% + 28px);
-		left: 50%;
-		transform: translate(-50%, -50%);
-		margin: 0;
-	}
-
-	/* Pulled past its box so the peacock spread renders larger. On the stacked
-	   mobile layout that is full bleed — both container gutters; on desktop it
-	   takes a slice of the row gap on the copy side and the container gutter
-	   on the outer side, running closer to the screen edge. */
-	.proj-demo-tarot {
-		margin-inline: calc(var(--gutter) * -1);
-	}
-
-	@media (min-width: 900px) {
-		.proj-demo-tarot {
-			margin-inline: -2rem calc(var(--gutter) * -1);
-		}
-	}
-
-	/* The carousel's own chrome clips at the viewport edge, which would cut the
-	   card shadows off. The slides sit well inside the panel and .proj-demo
-	   still clips at its rounded border, so letting these overflow is safe. */
-	.proj-demo-tarot tarot-carousel,
-	.proj-demo-tarot tarot-viewport {
-		overflow: visible;
-	}
-
-	/* Peacock animates the slide element's own width, so the slide is the
-	   visible card — it carries the corners and the shadow — while the fixed
-	   geometry lives on the inner wrapper it reveals. */
-	.proj-demo-tarot tarot-slide.tarot-mini-slide {
-		display: block;
-		border-radius: var(--radius-media);
-		overflow: hidden;
-		/* Two layers: a soft ambient throw plus a tight contact shadow, so the
-		   card still separates from the night ground. */
-		box-shadow:
-			0 24px 48px -12px rgba(0, 0, 0, 0.55),
-			0 4px 12px rgba(0, 0, 0, 0.4);
-	}
-
-	/* The card is a brand lockup (920x500): the frame matches that aspect and
-	   the image is contained, never cropped — a logo card that loses its edges
-	   looks broken. .w-tarot-slide holds the width; this centres it so the
-	   slide can open and close around a card that never moves or resizes. */
-	.proj-demo-tarot .tarot-mini-inner {
-		position: relative;
-		left: 50%;
-		transform: translateX(-50%);
-		aspect-ratio: 920 / 500;
-		overflow: hidden;
-		background: var(--panel);
-	}
-
-	/* Prev/next: circular icon buttons that ride over the slide area, hidden
-	   until the carousel is hovered. The package builds these at runtime, so
-	   they carry no scope attribute — hence :global(). */
-	.proj-demo-tarot :global(.tarot-button) {
-		/* Anchored to the viewport's slide area: tarot-carousel is the
-		   positioning context and, with the scrollbar lifted out of flow above,
-		   its box is exactly tarot-viewport's box — so 50% is the slides' centre
-		   line and the scrollbar below is excluded from the maths. */
-		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
-		z-index: 2;
-		width: 44px;
-		height: 44px;
-		padding: 0;
-		display: none;
-		align-items: center;
-		justify-content: center;
-		border-radius: 50%;
-		border: 1px solid var(--hairline-strong);
-		background: rgba(2, 6, 15, 0.72);
-		backdrop-filter: blur(6px);
-		color: var(--cream);
-		opacity: 0;
-		transition:
-			opacity 0.25s ease,
-			border-color 0.2s ease,
-			color 0.2s ease;
-	}
-
-	/* Symmetric inset from the viewport's own edges. */
-	.proj-demo-tarot :global(.tarot-previous) {
-		left: 12px;
-	}
-
-	.proj-demo-tarot :global(.tarot-next) {
-		right: 12px;
-	}
-
-	.proj-demo-tarot :global(.tarot-button svg) {
-		width: 22px;
-		height: 22px;
-	}
-
-	.proj-demo-tarot :global(.tarot-button:hover) {
-		border-color: var(--gold);
-		color: var(--gold-bright);
-	}
-
-	/* Pointer devices only — a touch screen has no hover to reveal them, so it
-	   stays on the scrollbar. Keyboard focus reveals them too, so they are never
-	   reachable-but-invisible. */
-	@media (hover: hover) and (min-width: 900px) {
-		.proj-demo-tarot :global(.tarot-button) {
-			display: flex;
-		}
-
-		.proj-demo-tarot:hover :global(.tarot-button),
-		.proj-demo-tarot :global(.tarot-button:focus-visible) {
-			opacity: 1;
-		}
-	}
-
-	/* Everything but the fully-in-view card sits behind a soft blur, so the
-	   fan reads as depth rather than five competing logos. Gated on
-	   tarot-carousel:defined: if the component never upgrades, the slides stay
-	   sharp instead of permanently blurred. The blur lives on the inner
-	   wrapper, so the slide's overflow clips it to the rounded corners and the
-	   slide's own box-shadow is left alone. */
-	.proj-demo-tarot tarot-carousel:defined :global(tarot-slide.tarot-mini-slide .tarot-mini-inner) {
-		/* Soft focus, not frosted glass: enough to push the flanking cards back
-		   without making their logos unreadable. */
-		filter: blur(2.5px);
-		transition: filter 0.3s ease;
-	}
-
-	/* Graduated focus, deepest at the edges of the fan: the neighbours right
-	   next to the active card stay near sharp, and the outermost cards carry
-	   the strongest soft-focus push. */
-	.proj-demo-tarot
-		tarot-carousel:defined
-		:global(tarot-slide.tarot-mini-slide.tarot-mostly-visible .tarot-mini-inner) {
-		filter: blur(1.25px);
-	}
-
-	.proj-demo-tarot
-		tarot-carousel:defined
-		:global(tarot-slide.tarot-mini-slide.tarot-partially-visible .tarot-mini-inner) {
-		filter: blur(3px);
-	}
-
-	.proj-demo-tarot
-		tarot-carousel:defined
-		:global(tarot-slide.tarot-mini-slide.tarot-fully-visible .tarot-mini-inner) {
-		filter: none;
-	}
-
-	/* tarot.min.css's peacock rule pushes slide images around with
-	   position/left/transform and crops them with object-fit: cover — the
-	   inner wrapper already handles placement, so undo all of that here. */
-	.proj-demo-tarot .tarot-mini-inner img {
-		position: static;
-		left: auto;
-		transform: none;
-		width: 100%;
-		max-width: 100%;
-		height: 100%;
-		object-fit: contain;
-		display: block;
-	}
-
-	/* Morph engine — cards that fly open into a dialog ------------- */
-
-	/* The panel is unboxed like the tarot one: the cards carry their own
-	   surfaces, so a frame around them would only double the chrome. */
-	/* .proj-demo centres its children in a row; this one stacks so the margin
-	   note sits above the stage rather than beside it. */
-	.proj-demo-morph {
-		border: 0;
-		background: none;
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		align-items: stretch;
-		/* .proj-demo clips its panel; that cut the card off mid-morph as it flew
-		   toward the dialog. The blob and the dialog are both position: fixed, so
-		   nothing here needs clipping to stay in bounds. */
-		overflow: visible;
-	}
-
-	/* Stacked layout: the hint overhangs the stage by 34px, which eats most of
-	   the row gap above — give the cards their own headroom. */
-	@media (max-width: 899px) {
-		.proj-demo-morph {
-			margin-top: 2.5rem;
-		}
-	}
-
-	/* Reads as something scribbled in the margin: off-axis, gold, and gone for
-	   good once the reader has taken the hint. */
-	/* Label, arrow and card top read as one gesture: the label sits above the
-	   stage, the arrow starts at the end of the words and curves down-and-right
-	   so its tip lands inside the first card rather than in the gutter. Layered
-	   over the grid and click-through, so it never intercepts a card. */
-	.morph-hint {
-		position: absolute;
-		left: 0.5rem;
-		top: -34px;
-		z-index: 2;
-		display: flex;
-		align-items: flex-start;
-		gap: 0.125rem;
-		width: fit-content;
-		margin: 0;
-		color: var(--gold);
-		pointer-events: none;
-		transition: opacity 0.4s ease;
-	}
-
-	.morph-hint[data-used] {
-		opacity: 0;
-		pointer-events: none;
-	}
-
-	.morph-hint-text {
-		font-family: var(--font-body);
-		font-size: 0.8125rem;
-		line-height: 1.2;
-		transform: rotate(-2deg);
-	}
-
-	.morph-hint-arrow {
-		width: 56px;
-		height: 72px;
-		flex: none;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.morph-hint {
-			transition: none;
-		}
-	}
-
-	/* Fixed height so the dialog's measured rect is the same whichever card
-	   opened it, and so the row doesn't reflow when the grid goes inert. */
-	.morph-stage {
-		position: relative;
-		height: 320px;
-	}
-
-	.morph-grid {
-		display: grid;
-		grid-template-columns: repeat(2, 1fr);
-		grid-template-rows: repeat(2, 1fr);
-		gap: 0.875rem;
-		height: 100%;
-	}
-
-	/* Opaque background and a real border: the engine lerps background-color,
-	   border and radius, so both ends need something concrete to interpolate.
-	   Only colours transition — never opacity or transform, which the engine
-	   owns during the flight. */
-	.morph-card {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		gap: 0.25rem;
-		padding: 0 1.25rem;
-		text-align: left;
-		cursor: pointer;
-		border: 1px solid var(--card-border);
-		border-radius: 12px;
-		background-color: var(--panel);
-		font-family: inherit;
-		transition:
-			border-color 0.25s ease,
-			background-color 0.25s ease;
-	}
-
-	.morph-card:hover {
-		border-color: var(--gold-faint);
-		background-color: #0a1220;
-	}
-
-	.morph-card:focus-visible {
-		outline: 2px solid var(--gold);
-		outline-offset: 2px;
-	}
-
-	.morph-card-name {
-		font-family: var(--font-mono);
-		font-size: 0.9375rem;
-		color: var(--cream);
-	}
-
-	.morph-card-meta {
-		font-family: var(--font-mono);
-		font-size: 0.6875rem;
-		letter-spacing: 0.04em;
-		color: var(--slate-dim);
-	}
-
-	/* One scrim for both phases of the flight. Opacity is fine here — this is
-	   not a morph element, so the engine never touches it. */
-	.morph-scrim {
-		position: fixed;
-		inset: 0;
-		z-index: 940;
-		background: rgba(2, 6, 15, 0.72);
-		backdrop-filter: blur(2px);
-		opacity: 0;
-		visibility: hidden;
-		transition:
-			opacity 0.3s ease,
-			visibility 0.3s ease;
-	}
-
-	.morph-scrim[visible] {
-		opacity: 1;
-		visibility: visible;
-	}
-
-	/* Closed, the UA keeps this display:none; the engine flips display on to
-	   measure and drives it through the flight, then showModal() promotes it at
-	   the reveal point. inset/margin centring rather than a transform, because
-	   the engine owns transform. max-width/height none keeps the in-flow and
-	   :modal geometry identical. */
-	.morph-dialog {
-		position: fixed;
-		inset: 0;
-		margin: auto;
-		z-index: 950;
-		flex-direction: column;
-		width: min(420px, calc(100vw - 3rem));
-		height: min(380px, calc(100vh - 6rem));
-		max-width: none;
-		max-height: none;
-		padding: 1.5rem 1.625rem 1.375rem;
-		border: 1px solid var(--gold-faint);
-		border-radius: 16px;
-		background-color: #060d18;
-		color: var(--cream);
-		box-shadow: 0 30px 90px rgba(0, 0, 0, 0.7);
-	}
-
-	.morph-dialog[open] {
-		display: flex;
-	}
-
-	/* The page scrim owns the dimming, so the UA backdrop stays out of it. */
-	.morph-dialog::backdrop {
-		background: transparent;
-	}
-
-	.morph-dialog-head {
-		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
-		gap: 1rem;
-	}
-
-	.morph-dialog-tag {
-		font-family: var(--font-mono);
-		font-size: 0.6875rem;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--gold);
-		border: 1px solid var(--gold-faint);
-		border-radius: 999px;
-		padding: 0.25rem 0.625rem;
-	}
-
-	.morph-dialog-close {
-		border: 1px solid var(--hairline-strong);
-		border-radius: 999px;
-		background: transparent;
-		color: var(--cream);
-		font-family: var(--font-body);
-		font-size: 0.75rem;
-		padding: 0.3125rem 0.75rem;
-		cursor: pointer;
-		transition:
-			border-color 0.2s ease,
-			color 0.2s ease;
-	}
-
-	.morph-dialog-close:hover {
-		border-color: var(--gold);
-		color: var(--gold-bright);
-	}
-
-	.morph-dialog-title {
-		margin-top: 1.125rem;
-		font-family: var(--font-display);
-		font-size: 1.75rem;
-		color: var(--cream);
-	}
-
-	.morph-dialog-tagline {
-		margin-top: 0.375rem;
-		font-size: 0.9375rem;
-		font-weight: 600;
-		color: var(--cream);
-	}
-
-	.morph-dialog-body {
-		margin-top: 0.625rem;
-		font-size: 0.875rem;
-		line-height: 1.65;
-		color: var(--slate-dim);
-	}
-
-	.morph-dialog-install {
-		margin-top: auto;
-		width: fit-content;
-		max-width: 100%;
-		overflow-x: auto;
-		border: 1px solid var(--card-border);
-		border-radius: 8px;
-		background: var(--panel);
-		padding: 0.5rem 0.75rem;
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		color: var(--cream);
-		white-space: nowrap;
-	}
-
-	/* Puzzle — code card */
-
-	.code-card {
-		width: 100%;
-		margin: 0;
-		background: var(--panel);
-		border-radius: 10px;
-		padding: 1.25rem 1.375rem;
-		font-family: var(--font-mono);
-		font-size: 0.78125rem;
-		line-height: 1.75;
-		color: var(--cream);
-		overflow-x: auto;
-		tab-size: 2;
-	}
-
-	.c-tag {
-		color: var(--gold);
-	}
-	.c-punc {
-		color: var(--slate-dim);
-	}
-	.c-attr {
-		color: var(--slate);
-	}
-	.c-str,
-	.c-evt,
-	.c-bind,
-	.c-num {
-		color: var(--gold-bright);
-	}
-	.c-kw {
-		color: var(--slate);
-	}
-	.c-fn {
-		color: var(--cream);
-	}
-
-	/* Timeline engine — the ported fireworks demo brings its own CSS.
-	   The mount point drops this card's padding so the demo owns its chrome. */
-
-	.proj-demo-bare {
-		display: block;
-	}
-
-	/* ...but only until the demo is actually there. initFireworks() adds
-	   `.fw-demo`, which paints the panel itself (padding, border, background);
-	   this rule is scoped so it hands that job over rather than fighting
-	   fireworks.css on specificity and winning — which stripped the demo's
-	   chrome entirely. Before the lazy mount lands the empty box stays bare. */
-	.proj-demo-bare:not(.fw-demo) {
-		padding: 0;
-		border: 0;
-		background: none;
-	}
-
-	/* Split text — the replayable lab */
-
-	.st-demo {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.st-stage {
-		min-height: 118px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		text-align: center;
-		font-family: var(--font-display);
-		font-weight: 800;
-		font-size: clamp(1.25rem, 2.8vw, 1.875rem);
-		text-transform: uppercase;
-		line-height: 1.3;
-		letter-spacing: 0.04em;
-		color: var(--cream);
-		--split-text-blur: 8px;
-		--split-text-scale: 0.82;
-	}
-
-	/* Fields caps are shaved by split-text's per-character overflow mask without
-	   this headroom — the same fix the magicspells.io demo carries, and the
-	   reason the stage sets line-height 1.3 rather than something tighter. */
-	.st-stage :global(.split-text-char) {
-		padding-top: 0.24em;
-	}
-
-	.st-controls {
-		margin-top: 1.75rem;
-		padding-top: 1.5rem;
-		border-top: 1px solid var(--hairline);
-	}
-
-	.st-label {
-		font-size: 0.6875rem;
-		font-weight: 600;
-		letter-spacing: 0.28em;
-		text-transform: uppercase;
-		color: var(--slate-dim);
-	}
-
-	.st-effects {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5rem;
-		margin-top: 1rem;
-	}
-
-	.st-chip {
-		border: 1px solid var(--hairline-strong);
-		background: rgba(251, 248, 238, 0.04);
-		border-radius: 999px;
-		padding: 0.375rem 0.75rem;
-		font-family: var(--font-mono);
-		font-size: 0.6875rem;
-		letter-spacing: 0.08em;
-		color: var(--slate);
-		cursor: pointer;
-		transition:
-			border-color 0.2s ease,
-			background-color 0.2s ease,
-			color 0.2s ease;
-	}
-
-	.st-chip:hover {
-		border-color: var(--gold-soft);
-		color: var(--cream);
-	}
-
-	.st-chip[aria-pressed='true'] {
-		border-color: var(--gold);
-		background: rgba(201, 168, 106, 0.15);
-		color: var(--gold-bright);
-	}
-
-	.st-actions {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 0.75rem 1.5rem;
-		margin-top: 1.5rem;
-	}
-
-	.st-replay {
-		border: 1px solid var(--hairline-strong);
-		background: transparent;
-		border-radius: 999px;
-		padding: 0.5rem 1.25rem;
-		font-family: var(--font-body);
-		font-size: 0.75rem;
-		font-weight: 600;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--cream);
-		cursor: pointer;
-		transition:
-			border-color 0.2s ease,
-			color 0.2s ease;
-	}
-
-	.st-replay:hover {
-		border-color: var(--gold);
-		color: var(--gold-bright);
-	}
-
-	.st-code {
-		min-width: 0;
-		font-family: var(--font-mono);
-		font-size: 0.6875rem;
-		letter-spacing: 0.02em;
-		color: var(--slate-dim);
-		word-break: break-all;
-	}
-
-	/* Constellation — node-graph field */
-
-	/* The row is the field's positioning context, and the only thing that puts
-	   the copy and the screenshot in front of it. */
-	.proj-row-constellation {
-		position: relative;
-	}
-
-	.proj-row-constellation > .proj-copy,
-	.proj-row-constellation > .proj-demo {
-		position: relative;
-		z-index: 1;
-	}
-
-	/* Bleeds well past the row on every side so the drift reads as part of the
-	   page rather than a panel that happens to be animated. .section-projects
-	   clips horizontally, so the side bleed can never widen the page. The mask
-	   is a long ellipse fade — by the time the canvas actually ends there is
-	   nothing left to see. */
-	.cf-wrap {
-		position: absolute;
-		inset: -90px -8vw;
-		z-index: 0;
-		pointer-events: none;
-		-webkit-mask-image: radial-gradient(
-			ellipse 62% 58% at 50% 50%,
-			rgba(0, 0, 0, 1) 0%,
-			rgba(0, 0, 0, 0.85) 38%,
-			rgba(0, 0, 0, 0.4) 66%,
-			rgba(0, 0, 0, 0) 100%
-		);
-		mask-image: radial-gradient(
-			ellipse 62% 58% at 50% 50%,
-			rgba(0, 0, 0, 1) 0%,
-			rgba(0, 0, 0, 0.85) 38%,
-			rgba(0, 0, 0, 0.4) 66%,
-			rgba(0, 0, 0, 0) 100%
-		);
-	}
-
-	/* Quieter than the hero's static stars: this is ambiance behind real
-	   content, not the subject. */
-	.cf-wrap canvas {
-		opacity: 0.65;
-	}
-
-	/* Unboxed like the tarot demo — the screenshot carries its own frame, so a
-	   panel around it would only double the chrome and give the field an edge. */
-	.proj-demo-constellation {
-		border: 0;
-		background: none;
-		padding: 0;
-		overflow: visible;
-	}
-
-	/* The app UI is dark, so the hairline is what finds its edge against the
-	   night ground, and the shadow lifts it off the drifting field. Cropped to
-	   the top-left, which is the sidebar-plus-content the app is recognised by. */
-	.cs-shot {
-		display: block;
-		width: 100%;
-		/* At the demo column's width this is just past the image's own cover
-		   height, so the UI is shown whole rather than scaled down inside a
-		   letterbox, and the card stands up to the copy column beside it. */
-		height: 400px;
-		object-fit: cover;
-		object-position: left top;
-		border: 1px solid var(--card-border);
-		border-radius: var(--radius-media);
-		background: var(--panel);
-		box-shadow:
-			0 24px 48px -12px rgba(0, 0, 0, 0.6),
-			0 4px 12px rgba(0, 0, 0, 0.45);
-	}
-
-	@media (max-width: 899px) {
-		.cs-shot {
-			height: 260px;
-		}
-
-		.cf-wrap {
-			inset: -60px -6vw;
-		}
-	}
-
-	#cf-canvas {
-		display: block;
-		width: 100%;
-		height: 100%;
-	}
-
-	/* Chips */
-	/* Conversational lead-in, not an eyebrow: sentence case, no tracking. Sized
-	   as a sub-heading so it introduces the chips rather than captioning them,
-	   with the gap below scaled to match. */
-	.chips-lead {
-		margin: clamp(2.5rem, 5vw, 4rem) 0 1.5rem;
-		text-align: center;
-		font-family: var(--font-body);
-		font-size: clamp(1.3125rem, 2.2vw, 1.5rem);
-		font-weight: 600;
-		line-height: 1.3;
-		color: var(--cream);
-	}
-
-	.chips {
-		display: flex;
-		justify-content: center;
-		gap: 0.75rem;
-		flex-wrap: wrap;
-		list-style: none;
-		margin: 0 0 1.75rem;
-		padding: 0;
-	}
-
-	.chip {
-		display: block;
-		font-size: 0.8125rem;
-		font-weight: 500;
-		color: var(--slate);
-		border: 1px solid rgba(251, 248, 238, 0.15);
-		padding: 0.5625rem 1.125rem;
-		border-radius: 999px;
-		transition:
-			border-color 0.2s ease,
-			color 0.2s ease;
-	}
-
-	.chip:hover,
-	.chip:focus-visible {
-		border-color: var(--gold);
-		color: var(--gold-bright);
-	}
-
-	.ms-outro {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		gap: 1.25rem;
-		padding-block: clamp(3rem, 7vw, 6rem) 0;
-	}
-
-	/* Near section scale, but a step down: the contact heading below is still
-	   the loudest thing on the page. */
-	.ms-outro-title {
-		font-size: clamp(1.75rem, 4vw, 2.5rem);
-		color: var(--cream);
-		text-transform: none;
-		letter-spacing: -0.005em;
-	}
-
-	.ms-outro-copy {
-		max-width: 560px;
-		font-size: 1.125rem;
-		line-height: 1.6;
-		color: var(--slate);
-		text-wrap: pretty;
-	}
-
-	.ms-outro-copy + .ms-outro-copy {
-		margin-top: 0.875rem;
-	}
-
-	.ms-outro-cta {
-		margin-top: 0.5rem;
-	}
-
-	/* ============================================ */
-	/* Contact                                       */
-	/* ============================================ */
-
-	/* The other half of the projects/contact seam trim above. */
-	.section-contact {
-		padding-top: clamp(2.5rem, 5vw, 5rem);
-	}
-
-	.contact-inner {
-		max-width: 720px;
-		margin: 0 auto;
-		display: flex;
-		flex-direction: column;
-		gap: 2.5rem;
-	}
-
-	.portrait {
-		width: 76px;
-		height: 76px;
-		border-radius: 50%;
-		object-fit: cover;
-		border: 2px solid rgba(201, 168, 106, 0.6);
-	}
-
-	.contact-sub {
-		font-size: 1.0625rem;
-		line-height: 1.6;
-		color: var(--slate-dim);
-		max-width: 520px;
-		text-wrap: pretty;
-	}
-
-	.contact-form {
-		display: flex;
-		flex-direction: column;
-		gap: 1.25rem;
-	}
-
-	.field-grid {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 1.25rem;
-	}
-
-	@media (min-width: 640px) {
-		.field-grid {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-	}
-
-	.contact-form :global(input[type='text']),
-	.contact-form :global(input[type='email']),
-	.contact-form :global(textarea) {
-		width: 100%;
-		background: transparent;
-		border: 1px solid var(--hairline-strong);
-		border-radius: var(--radius-input);
-		padding: 1.5rem 1.25rem 0.75rem;
-		font-family: var(--font-body);
-		font-size: 0.9375rem;
-		color: var(--cream);
-		transition:
-			border-color 0.2s ease,
-			box-shadow 0.2s ease;
-	}
-
-	.contact-form :global(textarea) {
-		min-height: 120px;
-		resize: vertical;
-		display: block;
-	}
-
-	.contact-form :global(input[type='text']):focus,
-	.contact-form :global(input[type='email']):focus,
-	.contact-form :global(textarea):focus {
-		outline: none;
-		border-color: var(--gold);
-		box-shadow: 0 0 0 3px rgba(201, 168, 106, 0.18);
-	}
-
-	.field-legend {
-		font-size: 0.6875rem;
-		font-weight: 600;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--slate-dim);
-		margin-bottom: 0.625rem;
-		padding: 0;
-	}
-
-	/* The package's own stylesheet loads after app.css, so the host's width is
-	   re-asserted here where the scoped selector outranks it. */
-	.budget-field :global(dropdown-select) {
-		display: block;
-		width: 100%;
-	}
-
-	/* dropdown-select appends its own caret, so the chevron in the markup would
-	   be a second one. Hide the package's and keep ours, which is tokenized. */
-	.budget-field :global(.dropdown-caret) {
-		display: none;
-	}
-
-	.budget-field :global(dropdown-select-trigger.select-trigger) {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 0.5rem;
-		width: 100%;
-		padding: 1.125rem 1.25rem;
-		background: transparent;
-		border: 1px solid var(--hairline-strong);
-		border-radius: var(--radius-input);
-		color: var(--cream);
-		font-size: 0.9375rem;
-		cursor: pointer;
-		transition: border-color 0.2s ease;
-	}
-
-	.budget-field :global(dropdown-select-trigger.select-trigger:hover) {
-		border-color: var(--gold-soft);
-	}
-
-	.budget-field :global(dropdown-options.select-options) {
-		width: 100%;
-		margin-top: 0.5rem;
-		border-radius: var(--radius-input);
-		overflow: hidden;
-	}
-
-	.budget-field :global(dropdown-option.select-option) {
-		display: block;
-		padding: 0.8125rem 1.25rem;
-		font-size: 0.9375rem;
-		cursor: pointer;
-		transition: background-color 0.2s ease;
-	}
-
-	.services {
-		border: 0;
-		margin: 0;
-		padding: 0;
-		min-width: 0;
-	}
-
-	.check {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		cursor: pointer;
-		font-size: 0.875rem;
-		color: var(--slate);
-		padding: 0.3125rem 0;
-		transition: color 0.2s ease;
-	}
-	.check:hover {
-		color: var(--cream);
-	}
-
-	.check input[type='checkbox'] {
-		appearance: none;
-		flex: 0 0 auto;
-		width: 18px;
-		height: 18px;
-		border: 1px solid var(--hairline-strong);
-		border-radius: 4px;
-		background: transparent;
-		cursor: pointer;
-		display: grid;
-		place-content: center;
-		transition:
-			border-color 0.2s ease,
-			background-color 0.2s ease;
-	}
-
-	.check input[type='checkbox']::after {
-		content: '';
-		width: 9px;
-		height: 9px;
-		border-radius: 1px;
-		transform: scale(0);
-		transition: transform 0.15s ease;
-		background: var(--ground);
-	}
-
-	.check input[type='checkbox']:checked {
-		background: var(--gold);
-		border-color: var(--gold);
-	}
-
-	.check input[type='checkbox']:checked::after {
-		transform: scale(1);
-	}
-
-	.form-actions {
-		display: flex;
-		justify-content: center;
-		margin-top: 0.5rem;
-	}
-
-	#submit-button {
-		font-family: var(--font-body);
-		padding: 1rem 2.5rem;
-	}
-
-	#submit-button:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-
-	.form-note {
-		border-radius: var(--radius-input);
-		padding: 1.125rem 1.25rem;
-		text-align: center;
-		font-size: 0.9375rem;
-		font-weight: 500;
-	}
-
-	.form-note-ok {
-		border: 1px solid var(--ok-border);
-		background: var(--ok-bg);
-		color: var(--cream);
-	}
-
-	.form-note-err {
-		border: 1px solid var(--err-border);
-		background: var(--err-bg);
-		color: var(--cream);
-	}
-
-	/* ============================================ */
-	/* Footer                                        */
-	/* ============================================ */
-
-	.site-footer {
-		padding-block: 1.75rem;
-		border-top: 1px solid var(--hairline);
-		font-size: 0.8125rem;
-		color: var(--slate-dim);
-	}
-
-	.footer-inner {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 1rem;
-		flex-wrap: wrap;
-	}
-
-	.footer-links {
-		display: flex;
-		gap: clamp(1rem, 3vw, 1.75rem);
-		flex-wrap: wrap;
-	}
-
-	.footer-links a {
-		color: var(--slate);
-	}
-	.footer-links a:hover {
-		color: var(--cream);
-	}
-	.footer-links a.footer-gold {
-		color: var(--gold);
-	}
-	.footer-links a.footer-gold:hover {
-		color: var(--gold-bright);
-	}
-
-	/* ============================================ */
-	/* Reduced motion                                */
-	/* ============================================ */
-
-	@media (prefers-reduced-motion: reduce) {
-		.twinkle {
-			animation: none;
-		}
-		.pill:hover {
-			transform: none;
-		}
-		.tl-scroll .tl-pin {
-			position: static;
-			height: auto;
-			overflow: visible;
-		}
-		.tl-scroll .tl-viewport {
-			overflow-x: auto;
-		}
-	}
-</style>
 
 <script>
 	import '@magic-spells/dropdown-select';

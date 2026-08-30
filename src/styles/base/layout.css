@@ -1,0 +1,73 @@
+/* Gutter system: one responsive variable drives the container's side padding
+   AND the Tailwind spacing utilities, so px-gutter on a full-bleed section
+   lines up with the container without restating the breakpoints. */
+:root {
+	--gutter-base: 1.25rem;
+	--gutter-md: 2.5rem;
+	--gutter-lg: 4rem;
+	--spacing-gutter: var(--gutter-base);
+
+	/* app.css's name for the same number. index.astro still reads it in three
+	   places, so it is an alias rather than a second ladder that could drift.
+	   Retire it when those rules move. */
+	--gutter: var(--spacing-gutter);
+}
+
+@media (width >= 768px) {
+	:root {
+		--spacing-gutter: var(--gutter-md);
+	}
+}
+
+@media (width >= 1024px) {
+	:root {
+		--spacing-gutter: var(--gutter-lg);
+	}
+}
+
+/* Register the gutter as a Tailwind spacing token: px-gutter, mx-gutter, gap-gutter.
+   @theme emits into @layer theme, so the unlayered :root steps above out-rank
+   it and the media queries still win. */
+@theme {
+	--spacing-gutter: var(--spacing-gutter);
+}
+
+@theme {
+	--container-max: 1600px;
+	--container-max-wide: 1920px;
+}
+
+/* Our container. Tailwind's stock utility is disabled via
+   `@source not inline("container")` in base.css, so this is the only one.
+   Base loses to the utilities layer, so px-0 or max-w-none still override. */
+@layer base {
+	.container {
+		width: 100%;
+		max-width: var(--container-max);
+		margin-inline: auto;
+		padding-inline: var(--spacing-gutter);
+	}
+
+	/* Same gutters, more room. The projects section pairs a copy column with a
+	   demo panel and needs the extra width on very large displays. */
+	.container-wide {
+		max-width: var(--container-max-wide);
+	}
+}
+
+/* Section titles carry their own type in markup (fs-heading-2 text-cream).
+   What is left is the split-text reach-in, and it has to be UNLAYERED:
+   split-text.min.css declares `split-text { display: inline }` and
+   `split-text .split-text-char { overflow: hidden }` unlayered, and an
+   unlayered rule beats anything in a layer no matter how specific. A `block`
+   utility on the element would silently lose. 0-1-1 and 0-2-0 here, against
+   the package's 0-0-1 and 0-1-1. */
+.section-title split-text {
+	display: block;
+}
+
+/* split-text masks each character, which shaves the tails on p, g and y
+   without a little headroom. Same fix the hero name carries. */
+.section-title .split-text-char {
+	padding-bottom: 0.06em;
+}

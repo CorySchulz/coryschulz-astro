@@ -1,0 +1,246 @@
+/* Chips, the Magic Spells outro, the contact form and the footer. */
+
+.chip {
+	border: 1px solid rgba(251, 248, 238, 0.15);
+	transition:
+		border-color 0.2s ease,
+		color 0.2s ease;
+}
+
+.chip:hover,
+.chip:focus-visible {
+	border-color: var(--gold);
+	color: var(--gold-bright);
+}
+
+/* The other half of the projects/contact seam trim above. */
+.section-contact {
+	padding-top: clamp(2.5rem, 5vw, 5rem);
+}
+
+.portrait {
+	border: 2px solid rgba(201, 168, 106, 0.6);
+}
+
+.contact-form input[type='text'],
+.contact-form input[type='email'],
+.contact-form textarea {
+	width: 100%;
+	background: transparent;
+	border: 1px solid var(--hairline-strong);
+	border-radius: var(--radius-input);
+	padding: 1.5rem 1.25rem 0.75rem;
+	font-family: var(--font-body);
+	font-size: 0.9375rem;
+	color: var(--cream);
+	transition:
+		border-color 0.2s ease,
+		box-shadow 0.2s ease;
+}
+
+.contact-form textarea {
+	min-height: 120px;
+	resize: vertical;
+	display: block;
+}
+
+.contact-form input[type='text']:focus,
+.contact-form input[type='email']:focus,
+.contact-form textarea:focus {
+	outline: none;
+	border-color: var(--gold);
+	box-shadow: 0 0 0 3px rgba(201, 168, 106, 0.18);
+}
+
+.field-legend {
+	font-size: 0.6875rem;
+	font-weight: 600;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--slate-dim);
+	margin-bottom: 0.625rem;
+	padding: 0;
+}
+
+/* The package's own stylesheet loads after app.css, so the host's width is
+   re-asserted here where the scoped selector outranks it. */
+.budget-field dropdown-select {
+	display: block;
+	width: 100%;
+}
+
+/* dropdown-select appends its own caret, so the chevron in the markup would
+   be a second one. Hide the package's and keep ours, which is tokenized. */
+.budget-field .dropdown-caret {
+	display: none;
+}
+
+.budget-field dropdown-select-trigger.select-trigger {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.5rem;
+	width: 100%;
+	padding: 1.125rem 1.25rem;
+	background: transparent;
+	border: 1px solid var(--hairline-strong);
+	border-radius: var(--radius-input);
+	color: var(--cream);
+	font-size: 0.9375rem;
+	cursor: pointer;
+	transition: border-color 0.2s ease;
+}
+
+.budget-field dropdown-select-trigger.select-trigger:hover {
+	border-color: var(--gold-soft);
+}
+
+.budget-field dropdown-options.select-options {
+	width: 100%;
+	margin-top: 0.5rem;
+	border-radius: var(--radius-input);
+	overflow: hidden;
+}
+
+.budget-field dropdown-option.select-option {
+	display: block;
+	padding: 0.8125rem 1.25rem;
+	font-size: 0.9375rem;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.services {
+	border: 0;
+	margin: 0;
+	padding: 0;
+	min-width: 0;
+}
+
+.check {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	cursor: pointer;
+	font-size: 0.875rem;
+	color: var(--slate);
+	padding: 0.3125rem 0;
+	transition: color 0.2s ease;
+}
+.check:hover {
+	color: var(--cream);
+}
+
+.check input[type='checkbox'] {
+	appearance: none;
+	flex: 0 0 auto;
+	width: 18px;
+	height: 18px;
+	border: 1px solid var(--hairline-strong);
+	border-radius: 4px;
+	background: transparent;
+	cursor: pointer;
+	display: grid;
+	place-content: center;
+	transition:
+		border-color 0.2s ease,
+		background-color 0.2s ease;
+}
+
+.check input[type='checkbox']::after {
+	content: '';
+	width: 9px;
+	height: 9px;
+	border-radius: 1px;
+	transform: scale(0);
+	transition: transform 0.15s ease;
+	background: var(--ground);
+}
+
+.check input[type='checkbox']:checked {
+	background: var(--gold);
+	border-color: var(--gold);
+}
+
+.check input[type='checkbox']:checked::after {
+	transform: scale(1);
+}
+
+.form-actions {
+	display: flex;
+	justify-content: center;
+	margin-top: 0.5rem;
+}
+
+#submit-button {
+	font-family: var(--font-body);
+	padding: 1rem 2.5rem;
+}
+
+#submit-button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.form-note {
+	border-radius: var(--radius-input);
+	padding: 1.125rem 1.25rem;
+	text-align: center;
+	font-size: 0.9375rem;
+	font-weight: 500;
+}
+
+.form-note-ok {
+	border: 1px solid var(--ok-border);
+	background: var(--ok-bg);
+	color: var(--cream);
+}
+
+.form-note-err {
+	border: 1px solid var(--err-border);
+	background: var(--err-bg);
+	color: var(--cream);
+}
+
+/* ============================================ */
+/* Footer                                        */
+/* ============================================ */
+
+.site-footer {
+	border-top: 1px solid var(--hairline);
+	color: var(--slate-dim);
+}
+
+.footer-links a {
+	color: var(--slate);
+}
+.footer-links a:hover {
+	color: var(--cream);
+}
+.footer-links a.footer-gold {
+	color: var(--gold);
+}
+.footer-links a.footer-gold:hover {
+	color: var(--gold-bright);
+}
+
+/* ============================================ */
+/* Reduced motion                                */
+/* ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+	.twinkle {
+		animation: none;
+	}
+	.pill:hover {
+		transform: none;
+	}
+	.tl-scroll .tl-pin {
+		position: static;
+		height: auto;
+		overflow: visible;
+	}
+	.tl-scroll .tl-viewport {
+		overflow-x: auto;
+	}
+}

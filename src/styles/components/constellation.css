@@ -1,0 +1,93 @@
+/* Constellation field demo. */
+
+.proj-row-constellation {
+	position: relative;
+}
+
+.proj-row-constellation > .proj-copy,
+.proj-row-constellation > .proj-demo {
+position: relative;
+z-index: 1;
+}
+
+/* Bleeds well past the row on every side so the drift reads as part of the
+page rather than a panel that happens to be animated. .section-projects
+clips horizontally, so the side bleed can never widen the page. The mask
+is a long ellipse fade, by the time the canvas actually ends there is
+nothing left to see. */
+.cf-wrap {
+position: absolute;
+inset: -90px -8vw;
+z-index: 0;
+pointer-events: none;
+-webkit-mask-image: radial-gradient(
+ellipse 62% 58% at 50% 50%,
+rgba(0, 0, 0, 1) 0%,
+rgba(0, 0, 0, 0.85) 38%,
+rgba(0, 0, 0, 0.4) 66%,
+rgba(0, 0, 0, 0) 100%
+);
+mask-image: radial-gradient(
+ellipse 62% 58% at 50% 50%,
+rgba(0, 0, 0, 1) 0%,
+rgba(0, 0, 0, 0.85) 38%,
+rgba(0, 0, 0, 0.4) 66%,
+rgba(0, 0, 0, 0) 100%
+);
+}
+
+/* Quieter than the hero's static stars: this is ambiance behind real
+content, not the subject. */
+.cf-wrap canvas {
+opacity: 0.65;
+}
+
+/* Unboxed like the tarot demo, the screenshot carries its own frame, so a
+panel around it would only double the chrome and give the field an edge. */
+.proj-demo-constellation {
+border: 0;
+background: none;
+padding: 0;
+overflow: visible;
+}
+
+/* The app UI is dark, so the hairline is what finds its edge against the
+night ground, and the shadow lifts it off the drifting field. Cropped to
+the top-left, which is the sidebar-plus-content the app is recognised by. */
+.cs-shot {
+display: block;
+width: 100%;
+/* At the demo column's width this is just past the image's own cover
+height, so the UI is shown whole rather than scaled down inside a
+letterbox, and the card stands up to the copy column beside it. */
+height: 400px;
+object-fit: cover;
+object-position: left top;
+border: 1px solid var(--card-border);
+border-radius: var(--radius-media);
+background: var(--panel);
+box-shadow:
+0 24px 48px -12px rgba(0, 0, 0, 0.6),
+0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+@media (max-width: 899px) {
+.cs-shot {
+	height: 260px;
+}
+
+.cf-wrap {
+inset: -60px -6vw;
+}
+}
+
+#cf-canvas {
+display: block;
+width: 100%;
+height: 100%;
+}
+
+/* Chips */
+/* Conversational lead-in, not an overline header: sentence case, no tracking. Sized
+as a sub-heading so it introduces the chips rather than captioning them,
+with the gap below scaled to match. */

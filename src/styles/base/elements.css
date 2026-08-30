@@ -1,0 +1,76 @@
+/* ==========================================================================
+   ELEMENT DEFAULTS
+
+   The bare-element half of the reset, plus the skip link, which is a
+   page-level accessibility primitive rather than a component and belongs next
+   to the focus ring it shares its job with. h1-h6 are not here: they live in
+   typography.css, inside @layer base, so an fs-heading-* utility can beat
+   them on family, weight and case.
+
+   These are deliberately UNLAYERED, which is how app.css shipped them. Layering
+   `a` or `body` would hand every Tailwind text-* and font-* utility a free win
+   over the house defaults, and nothing in the markup asks for that today.
+   ========================================================================== */
+
+html {
+	background-color: var(--ground);
+	-webkit-text-size-adjust: 100%;
+}
+
+body {
+	margin: 0;
+	min-height: 100%;
+	background-color: var(--ground);
+	color: var(--cream);
+	font-family: var(--font-body);
+	font-weight: 400;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	overflow-x: hidden;
+}
+
+/* No `p { margin: 0 }` here. Tailwind's preflight already zeroes margin on
+   every element inside @layer base, so a house copy would be redundant, and
+   unlayered it silently beat every margin utility on a paragraph. */
+
+a {
+	color: var(--gold);
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+a:hover {
+	color: var(--gold-bright);
+}
+
+::selection {
+	background: var(--gold);
+	color: var(--ground);
+}
+
+/* Visible gold focus ring on every interactive element. :where() so the ring
+   costs zero specificity and any component style can replace it. */
+:where(a, button, input, textarea, select, [tabindex], dropdown-select-trigger, dropdown-option):focus-visible {
+	outline: 2px solid var(--gold-bright);
+	outline-offset: 3px;
+	border-radius: 4px;
+}
+
+/* Parked off-screen rather than display: none, which would take it out of the
+   tab order and defeat the point. Position and offset are inseparable from the
+   :focus state, so neither moves to a markup utility. */
+.skip-link {
+	position: absolute;
+	left: -9999px;
+	top: 0;
+	z-index: 100;
+	background: var(--gold);
+	color: var(--ground);
+	padding: 0.75rem 1.25rem;
+	border-radius: 0 0 8px 0;
+	font-weight: 600;
+}
+
+.skip-link:focus {
+	left: 0;
+}

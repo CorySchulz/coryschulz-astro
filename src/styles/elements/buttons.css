@@ -1,0 +1,73 @@
+/* ==========================================================================
+   BUTTONS
+
+   The pill is the site's only button: the two hero CTAs, the Magic Spells
+   outro link and the contact submit. Four uses, three of them gold.
+
+   Box model stays here rather than moving to markup utilities. A pill's
+   inline-flex row, its gap and its per-variant padding are the component's
+   own geometry, not page layout, and pushing them inline would make every
+   call site restate the button. Same reasoning as magicspells.io's
+   elements/buttons.css.
+
+   Type stays here too: no fs-* covers 600-weight uppercase body at 15px with
+   0.04em tracking, and a twelfth named style for one component is not worth
+   it.
+
+   Plain unlayered rules so `a` and Tailwind's preflight `button` defaults in
+   @layer base lose on color and background without needing !important.
+   ========================================================================== */
+
+/* Shared geometry and type. Each variant below is a complete button, so
+   `pill pill-gold` and a bare `pill-gold` resolve the same. */
+.pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	border-radius: 999px;
+	font-family: var(--font-body);
+	font-size: 0.9375rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	white-space: nowrap;
+	cursor: pointer;
+	transition:
+		background-color 0.25s ease,
+		border-color 0.25s ease,
+		color 0.25s ease,
+		transform 0.25s ease;
+}
+
+/* The primary CTA. */
+.pill-gold {
+	background: var(--gold);
+	color: var(--ground);
+	border: 1px solid var(--gold);
+	padding: 1rem 2.125rem;
+}
+
+.pill-gold:hover {
+	background: var(--gold-bright);
+	border-color: var(--gold-bright);
+	color: var(--ground);
+	transform: translateY(-1px);
+}
+
+/* The secondary CTA. Sentence case and lighter weight so it reads as the
+   quieter of the pair even at the same height. */
+.pill-outline {
+	background: transparent;
+	color: var(--cream);
+	border: 1px solid var(--rule-soft);
+	padding: 0.9375rem 1.75rem;
+	font-weight: 500;
+	text-transform: none;
+	letter-spacing: 0.01em;
+}
+
+.pill-outline:hover {
+	border-color: var(--gold);
+	color: var(--cream);
+	transform: translateY(-1px);
+}

@@ -1,0 +1,138 @@
+/* ==========================================================================
+   HERO
+
+   The first screen: the glow ground, the constellation and its twinkles, and
+   the two type reach-ins the hero name needs. Layout, spacing and colour all
+   live in the markup now (flex column, mb-*, fs-heading-1 text-cream); what is
+   left here is the visual and stateful half plus three deliberate exceptions,
+   noted at each rule.
+
+   Unlayered, like the rest of the house sheets: the split-text reach-ins have
+   to be, and the eyebrow's size override has to beat fs-overline.
+   ========================================================================== */
+
+/* Its own padding ladder rather than py-section: the hero's head is longer
+   than the section head and its tail is shorter, so it opens big and closes
+   into About rather than sitting in an evenly boxed section. Still a clamp,
+   because de-clamping it would move rendered sizes, and this phase preserves
+   them. position: relative is the containing block for .constellation. */
+.hero {
+	position: relative;
+	padding-block: clamp(5rem, 11vw, 11rem) clamp(4rem, 9vw, 10rem);
+	background: var(--ground-glow);
+}
+
+/* Whole rule stays: left: 50% and the translate are one centering technique,
+   and splitting half of it into a markup utility would hide the other half.
+   No z-index. Being absolute is what puts it in the positioned paint layer,
+   and the content above it wins on DOM order alone, so introducing a stacking
+   number here would only be one more thing to keep in sync. */
+.constellation {
+	position: absolute;
+	top: 1.25rem;
+	left: 50%;
+	transform: translateX(-50%);
+	width: min(1200px, 92%);
+	height: auto;
+	opacity: 0.7;
+	pointer-events: none;
+}
+
+/* Five stars share one animation on five different clocks. The negative
+   delays start each mid-cycle so they never blink in unison. */
+.twinkle {
+	animation: twinkle 7s ease-in-out infinite;
+}
+
+.twinkle-b {
+	animation-duration: 9s;
+	animation-delay: -2s;
+}
+
+.twinkle-c {
+	animation-duration: 11s;
+	animation-delay: -5s;
+}
+
+.twinkle-d {
+	animation-duration: 8s;
+	animation-delay: -3.5s;
+}
+
+.twinkle-e {
+	animation-duration: 12s;
+	animation-delay: -1s;
+}
+
+@keyframes twinkle {
+	0%,
+	100% {
+		opacity: 0.15;
+	}
+	50% {
+		opacity: 0.85;
+	}
+}
+
+/* Off the type scale on purpose: a point up from fs-overline's 12px so the
+   one line above the name carries, and two points down under 600px where it
+   wraps. The size drop and the tracking drop are one decision, and 600px is
+   not a house breakpoint, so this stays CSS rather than becoming an inline
+   max-[599px]: variant. */
+.hero-eyebrow {
+	font-size: 0.8125rem;
+}
+
+@media (max-width: 599px) {
+	.hero-eyebrow {
+		font-size: 0.6875rem;
+		letter-spacing: 0.14em;
+	}
+}
+
+/* nowrap and the block below are a pair: the span is a single unbreakable run
+   so the line breaks at the middot and nowhere else, giving two balanced lines
+   instead of three ragged ones. */
+.hero-eyebrow span {
+	white-space: nowrap;
+}
+
+@media (max-width: 599px) {
+	.hero-eyebrow span {
+		display: block;
+	}
+}
+
+/* Same unlayered reach-ins as .section-title in base/layout.css:
+   split-text.min.css declares `split-text { display: inline }` unlayered, and
+   unlayered beats any layer however specific, so a `block` utility would lose.
+   0-1-1 and 0-2-0 here against the package's 0-0-1 and 0-1-1. */
+.hero-name split-text {
+	display: block;
+}
+
+/* split-text masks each character, which shaves the tails on y and z. */
+.hero-name .split-text-char {
+	padding-bottom: 0.04em;
+}
+
+/* Stacks the two words under 600px. Not an inline max-[599px]:block for the
+   same reason as the eyebrow: 600 is not a house breakpoint. */
+@media (max-width: 599px) {
+	.hero-name-part {
+		display: block;
+	}
+}
+
+/* Both CTAs are exactly the same height. Fixing the height and zeroing the
+   block padding does it, and border-box absorbs the outline pill's 1px border
+   rather than adding 2px to its height. 0-2-0, so it beats the variants'
+   padding shorthand in elements/buttons.css at 0-1-0 whatever the order.
+   .hero-actions carries no declarations of its own now: it is the hook this
+   rule needs. */
+.hero-actions .pill {
+	box-sizing: border-box;
+	height: 54px;
+	padding-block: 0;
+	justify-content: center;
+}
