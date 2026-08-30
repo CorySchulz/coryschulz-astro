@@ -20,7 +20,12 @@ select-dropdown {
 	--select-color-border: var(--hairline-strong);
 	--select-color-border-hover: var(--gold-soft);
 	--select-color-border-dark: var(--slate-dim);
-	--select-color-primary: var(--gold);
+	/* The package's own focus ring reads this. It is `select-trigger:focus-visible`
+	   at 0-1-1, so it beats the house ring in base/elements.css, which is
+	   deliberately :where()-wrapped at zero specificity. Pointing the hook at
+	   gold-bright is what actually matches the house ring, rather than trying to
+	   out-specify the package. */
+	--select-color-primary: var(--gold-bright);
 	--select-color-hover: rgba(201, 168, 106, 0.12);
 	--select-color-focus: rgba(201, 168, 106, 0.16);
 	--select-color-selected: rgba(201, 168, 106, 0.16);

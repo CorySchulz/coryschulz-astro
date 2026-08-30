@@ -115,7 +115,6 @@ const chips = [
 	{ repo: 'puzzle-pieces', name: 'Puzzle Pieces' },
 	{ repo: 'pyramid', name: 'Pyramid' },
 	{ repo: 'quantity-input', name: 'Quantity Input' },
-	{ repo: 'quantity-modifier', name: 'Quantity Modifier' },
 	{ repo: 'responsive-video', name: 'Responsive Video' },
 	{ repo: 'reveal', name: 'Reveal' },
 	{ repo: 'scroll-progress', name: 'Scroll Progress' },
@@ -394,8 +393,8 @@ const morphCards = [
 
 				<p class="fs-subheading text-slate text-pretty max-w-[620px]">
 					I&rsquo;m the creator of Magic Spells, an open-source suite of web components, and Tarot, a
-					carousel with real physics. I&rsquo;ve been building for the web for over twenty years. I love working in Figma as
-					much as I do in code, and I care a lot about design systems.
+					carousel with real physics. I&rsquo;ve been building for the web for over twenty years. I enjoy building and working with
+					good design systems, in Figma and in code.
 				</p>
 
 				<p class="fs-subheading text-slate text-pretty max-w-[620px]">
@@ -953,33 +952,49 @@ const morphCards = [
 					</article>
 				</div>
 
-				<p class="mt-section-head mb-lg text-center fs-subheading font-semibold text-cream reveal reveal-fade-up">Plus all of these</p>
-				<!-- Each chip reveals on its own so the set cascades. The step is
-				     batch-relative in @magic-spells/reveal, so the whole group lands in
-				     ~0.65s rather than accumulating a delay per index. Reduced motion is
-				     handled by the package: it shows everything at once. -->
-				<ul class="flex flex-wrap justify-center gap-sm mb-7">
-					{
-						chips.map((c) => (
-							<li class="reveal reveal-fade-up" data-reveal-group="chips:20">
-								<a
-									class="chip block rounded-full px-4.5 py-2 fs-body-sm font-medium text-slate"
-									href={`https://github.com/magic-spells/${c.repo}`}
-									target="_blank"
-									rel="noopener noreferrer">
-									{c.name}
-								</a>
-							</li>
-						))
-					}
-				</ul>
+				<!-- Scrubbed, not triggered. <scroll-progress> runs the block's TOP edge from
+				     the viewport bottom to the viewport top, and the script rescales that so
+				     everything has landed by 60% up. Tracking the top edge rather than the
+				     bottom keeps it height-independent: on mobile the set wraps to twice the
+				     rows, and a bottom-edge anchor would still be blooming after the first
+				     rows had scrolled off. The lede takes the first slice and each chip an
+				     overlapping one after it, reading its own 0..1 off --p, so the bloom
+				     tracks the scroll rather than playing on a timer. Landing the last chip
+				     fires a single random-order highlight pass. Reduced motion shows the set
+				     at once and never pulses. -->
+				<scroll-progress
+					id="chips-progress"
+					playhead-element-start="top"
+					playhead-viewport-start="bottom"
+					playhead-element-end="top"
+					playhead-viewport-end="top">
+					<p
+						class="chip-item chip-lede mt-section-head mb-lg text-center fs-subheading font-semibold text-cream">
+						Plus all of these
+					</p>
+					<ul class="flex flex-wrap justify-center gap-sm mb-7 mx-auto max-w-[800px]">
+						{
+							chips.map((c) => (
+								<li class="chip-item">
+									<a
+										class="chip block rounded-full px-4.5 py-2 fs-body-sm font-medium text-slate"
+										href={`https://github.com/magic-spells/${c.repo}`}
+										target="_blank"
+										rel="noopener noreferrer">
+										{c.name}
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</scroll-progress>
 
 				<!-- Closing beat for the section: answers what the whole suite is, and
 				     hands off to magicspells.io. Boxed so the bottom three sections
 				     read as three, not one continuous run of centred copy. Still
 				     lighter than the contact CTA that follows, which owns the end of
 				     the page. -->
-				<div class="pt-12 lg:pt-24 reveal reveal-fade-up">
+				<div class="pt-12 lg:pt-24 mx-auto max-w-[760px] reveal reveal-zoom-in-up reveal-delay-200 reveal-ease-spring">
 					<div
 						class="flex flex-col items-center text-center gap-5 rounded-[20px] border border-gold-faint bg-panel/60 px-lg py-xl lg:px-xl lg:py-16">
 						<h3 class="fs-heading-3 fs-sentence-case text-cream">What is Magic Spells?</h3>
@@ -1189,6 +1204,8 @@ const morphCards = [
 	// the rows stay a scrubbable strip.
 	import '@magic-spells/scrolling-content';
 	import Reveal from '@magic-spells/reveal';
+	import '@magic-spells/scroll-progress';
+	import { scene } from '@magic-spells/animation-engine';
 	import { timeline, scrollDriver } from '@magic-spells/timeline-engine';
 
 	const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -1292,6 +1309,66 @@ const morphCards = [
 
 	desktop.addEventListener('change', rebuildScrub);
 	reduced.addEventListener('change', rebuildScrub);
+
+	// ---- Chip grid: scrubbed bloom, then one random highlight pass -----------
+	// The raw 0..1 runs the block's top edge from the viewport bottom to the
+	// viewport top; FULL_AT rescales it to finish at 60% up. The lede and every
+	// chip get their own slice, overlapping by design so it blooms as a wave
+	// rather than one at a time. Only the chips pulse — the lede just blooms.
+	const chipTrack = document.getElementById('chips-progress');
+	const chipItems = chipTrack
+		? Array.from(chipTrack.querySelectorAll<HTMLElement>('.chip-item'))
+		: [];
+
+	if (chipTrack && chipItems.length && !reduced.matches) {
+		const FULL_AT = 0.6;
+		const SLICE = 0.45;
+		const last = chipItems.length - 1;
+		const written: number[] = chipItems.map(() => -1);
+
+		const pulseItems = chipItems.filter((el) => !el.classList.contains('chip-lede'));
+		let pulse: { stop: () => void } | null = null;
+		let lit = false;
+
+		const highlight = () => {
+			pulse?.stop();
+			pulse = scene().stagger(
+				pulseItems,
+				{
+					keyframes: {
+						0: { '--lit': '0' },
+						45: { '--lit': '1' },
+						100: { '--lit': '0' },
+					},
+					duration: 620,
+					easing: 'ease-in-out',
+				},
+				{ interval: 26, from: 'random' }
+			);
+			pulse.play();
+		};
+
+		chipTrack.addEventListener('scroll-progress:update', (event) => {
+			const p = Math.min(1, (event as CustomEvent).detail.progress / FULL_AT);
+
+			for (let i = 0; i < chipItems.length; i++) {
+				const start = last ? (i / last) * (1 - SLICE) : 0;
+				const raw = (p - start) / SLICE;
+				const value = Math.round(Math.min(1, Math.max(0, raw)) * 100) / 100;
+				if (value === written[i]) continue;
+				written[i] = value;
+				chipItems[i].style.setProperty('--p', String(value));
+			}
+
+			// Re-arms on the way back up, so scrolling past it twice plays twice.
+			if (p >= 1 && !lit) {
+				lit = true;
+				highlight();
+			} else if (p < 0.9) {
+				lit = false;
+			}
+		});
+	}
 
 	// ---- Split Text lab ------------------------------------------------------
 	// Ported from magicspells.io's SplitTextDemo. The replay contract is exact:

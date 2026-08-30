@@ -506,3 +506,41 @@
 	outline: 2px solid var(--gold);
 	outline-offset: 2px;
 }
+
+/* Margin note for the track, in the same hand as the morph panel's: the arrow
+   leaves the words and curves up onto the strip. Retired for good on the first
+   drag or key press. */
+.fw-demo .fw-drag-hint {
+	display: flex;
+	align-items: flex-end;
+	gap: 0.125rem;
+	width: fit-content;
+	margin: -0.35rem 0 0 3.25rem;
+	color: var(--gold);
+	pointer-events: none;
+	transition: opacity 0.4s ease;
+}
+
+.fw-demo .fw-drag-hint[data-used] {
+	opacity: 0;
+}
+
+.fw-demo .fw-drag-hint-arrow {
+	width: 42px;
+	height: 54px;
+	flex: none;
+}
+
+.fw-demo .fw-drag-hint-text {
+	font-family: var(--font-body);
+	font-size: 0.8125rem;
+	line-height: 1.2;
+	padding-bottom: 0.3rem;
+	transform: rotate(-2deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.fw-demo .fw-drag-hint {
+		transition: none;
+	}
+}

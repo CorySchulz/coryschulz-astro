@@ -583,6 +583,18 @@ export default function initFireworks(root) {
 
 	root.appendChild(panel);
 
+	// A margin note in the same hand as the morph panel's: the track is a
+	// slider, but nothing about a flat strip says "grab me", so the arrow
+	// curves up off the words and lands on it. Retired for good on the first
+	// drag.
+	const dragHint = el('p', 'fw-drag-hint');
+	dragHint.innerHTML =
+		'<svg class="fw-drag-hint-arrow" viewBox="0 0 56 72" fill="none" aria-hidden="true" focusable="false">' +
+		'<path d="M48 66 C 24 58, 8 38, 14 10 M14 10 L23 19 M14 10 L4 17" stroke="currentColor" ' +
+		'stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>' +
+		'<span class="fw-drag-hint-text">drag here to scrub</span>';
+	root.appendChild(dragHint);
+
 	// ------------------------------------------------------- the timeline
 	// Elements are passed directly (never selector strings) — selectors are
 	// resolved once at clip-add time and would collide across instances.
@@ -785,6 +797,7 @@ export default function initFireworks(root) {
 
 	// --- the track --------------------------------------------------------
 	on(scrub, 'pointerdown', (event) => {
+		dragHint.setAttribute('data-used', '');
 		pauseForSeek();
 		// Capture is what guarantees the matching pointerup — and with it
 		// lostpointercapture / pointercancel — comes back to this element even
@@ -819,6 +832,7 @@ export default function initFireworks(root) {
 	// Keyboard path for the role="slider": arrows nudge, page keys jump,
 	// Home/End pin the ends. Shift multiplies an arrow into a page step.
 	on(scrub, 'keydown', (event) => {
+		dragHint.setAttribute('data-used', '');
 		const step = event.shiftKey ? BIG_STEP : STEP;
 		const now = tl.time();
 		let next = null;
