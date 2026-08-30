@@ -2,42 +2,44 @@
 import '../app.css';
 import '../styles/tarot.min.css';
 import '@magic-spells/dropdown-select/css/min';
+import '@magic-spells/reveal/css';
+import '@magic-spells/split-text/css/min';
 ---
 
 <!doctype html>
-<html lang="en" style="background-color: #1a1f2e;">
+<html lang="en" style="background-color: #02060f;">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
-		<meta name="theme-color" content="#1a1f2e" />
+		<meta name="theme-color" content="#02060f" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="canonical" href="https://coryschulz.com" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Cory Schulz - Full Stack Developer & Shopify Expert</title>
+		<title>Cory Schulz - Front-End Engineer, Tech Lead & Shopify Developer</title>
 
 		<!-- Primary Meta Tags -->
-		<meta name="title" content="Cory Schulz - Full Stack Developer & Shopify Expert" />
-		<meta name="description" content="Full Stack Developer with 20 years of experience specializing in custom Shopify themes and e-commerce solutions. Creator of Magic Spells and Tarot carousel. Available for hire." />
-		<meta name="keywords" content="Full Stack Developer, Shopify Developer, Shopify Theme Development, Custom Shopify Themes, E-commerce Developer, Web Developer, Magic Spells, Tarot Carousel" />
+		<meta name="title" content="Cory Schulz - Front-End Engineer, Tech Lead & Shopify Developer" />
+		<meta name="description" content="Front-End Engineer and Tech Lead with 20 years of experience specializing in custom Shopify themes and e-commerce solutions. Creator of Magic Spells and Tarot carousel. Available for hire." />
+		<meta name="keywords" content="Front-End Engineer, Tech Lead, Shopify Developer, Full Stack Developer, Shopify Theme Development, Custom Shopify Themes, E-commerce Developer, Web Developer, Magic Spells, Tarot Carousel" />
 		<meta name="author" content="Cory Schulz" />
 
 		<!-- Open Graph / Facebook -->
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content="https://coryschulz.com" />
 		<meta property="og:site_name" content="Cory Schulz Portfolio" />
-		<meta property="og:title" content="Cory Schulz - Full Stack Developer & Shopify Expert" />
-		<meta property="og:description" content="Full Stack Developer with 20 years of experience specializing in custom Shopify themes and e-commerce solutions. Creator of Magic Spells and Tarot carousel." />
+		<meta property="og:title" content="Cory Schulz - Front-End Engineer, Tech Lead & Shopify Developer" />
+		<meta property="og:description" content="Front-End Engineer and Tech Lead with 20 years of experience specializing in custom Shopify themes and e-commerce solutions. Creator of Magic Spells and Tarot carousel." />
 		<meta property="og:image" content="https://coryschulz.com/og-card.jpg" />
 		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="630" />
-		<meta property="og:image:alt" content="Cory Schulz - Full Stack Developer & Shopify Expert" />
+		<meta property="og:image:alt" content="Cory Schulz - Front-End Engineer, Tech Lead & Shopify Developer" />
 
 		<!-- Twitter -->
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="Cory Schulz - Full Stack Developer & Shopify Expert" />
-		<meta name="twitter:description" content="Full Stack Developer with 20 years of experience specializing in custom Shopify themes and e-commerce solutions. Creator of Magic Spells and Tarot carousel." />
+		<meta name="twitter:title" content="Cory Schulz - Front-End Engineer, Tech Lead & Shopify Developer" />
+		<meta name="twitter:description" content="Front-End Engineer and Tech Lead with 20 years of experience specializing in custom Shopify themes and e-commerce solutions. Creator of Magic Spells and Tarot carousel." />
 		<meta name="twitter:image" content="https://coryschulz.com/og-card.jpg" />
-		<meta name="twitter:image:alt" content="Cory Schulz - Full Stack Developer & Shopify Expert" />
+		<meta name="twitter:image:alt" content="Cory Schulz - Front-End Engineer, Tech Lead & Shopify Developer" />
 
 		<!-- Structured Data (JSON-LD) -->
 		<script type="application/ld+json">
@@ -47,8 +49,8 @@ import '@magic-spells/dropdown-select/css/min';
 			"name": "Cory Schulz",
 			"url": "https://coryschulz.com",
 			"image": "https://coryschulz.com/cory.jpg",
-			"jobTitle": "Full Stack Developer & Shopify Expert",
-			"description": "Full Stack Developer with 20 years of experience specializing in custom Shopify themes and e-commerce solutions. Creator of Magic Spells and Tarot carousel.",
+			"jobTitle": "Front-End Engineer, Tech Lead & Shopify Developer",
+			"description": "Front-End Engineer and Tech Lead with 20 years of experience specializing in custom Shopify themes and e-commerce solutions. Creator of Magic Spells and Tarot carousel.",
 			"knowsAbout": [
 				"Full Stack Development",
 				"Shopify Development",
@@ -82,14 +84,14 @@ import '@magic-spells/dropdown-select/css/min';
 			"@type": "WebSite",
 			"name": "Cory Schulz Portfolio",
 			"url": "https://coryschulz.com",
-			"description": "Portfolio of Cory Schulz - Full Stack Developer specializing in Shopify theme development and custom e-commerce solutions",
+			"description": "Portfolio of Cory Schulz - Front-End Engineer and Tech Lead specializing in Shopify theme development and custom e-commerce solutions",
 			"author": {
 				"@type": "Person",
 				"name": "Cory Schulz"
 			},
 			"potentialAction": {
 				"@type": "SearchAction",
-				"target": "https://coryschulz.com/#contact-section",
+				"target": "https://coryschulz.com/#contact",
 				"query-input": "required name=search_term_string"
 			}
 		}
@@ -100,7 +102,7 @@ import '@magic-spells/dropdown-select/css/min';
 			"@type": "ProfessionalService",
 			"name": "Cory Schulz Web Development",
 			"url": "https://coryschulz.com",
-			"description": "Custom Shopify theme development and full-stack web development services",
+			"description": "Custom Shopify theme development and front-end engineering services",
 			"priceRange": "$10,000 - $100,000+",
 			"areaServed": "Worldwide",
 			"serviceType": [

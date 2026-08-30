@@ -24,3 +24,5 @@ pnpm-debug.log*
 .idea/
 
 .vercel
+# Playwright MCP scratch output
+.playwright-mcp/
