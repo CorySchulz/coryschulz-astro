@@ -13,6 +13,46 @@
 	color: var(--gold-bright);
 }
 
+/* The lede blooms with the set but has no ring to light. */
+.chip-lede::after {
+	display: none;
+}
+
+/* Bloom-in, scrubbed. The script writes each chip's own 0..1 into --p as the
+   list crosses the viewport, so there is no transition here: the scroll IS the
+   timeline. Blur plus a sub-pixel scale is what makes it bloom rather than
+   slide. */
+.chip-item {
+	--p: 0;
+	--lit: 0;
+	position: relative;
+	opacity: var(--p);
+	transform: scale(calc(0.9 + 0.1 * var(--p)));
+	filter: blur(calc((1 - var(--p)) * 5px));
+}
+
+/* The highlight pass rides a separate ring so it never fights .chip's own
+   hover transition — the engine writes --lit every frame, and a transitioned
+   border-color would smear it. */
+.chip-item::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	border-radius: 9999px;
+	border: 1px solid var(--gold);
+	box-shadow: 0 0 calc(var(--lit) * 14px) rgba(201, 168, 106, 0.5);
+	opacity: var(--lit);
+	pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.chip-item {
+		--p: 1;
+		filter: none;
+		transform: none;
+	}
+}
+
 /* The other half of the projects/contact seam trim above. position: relative
    is the containing block for .contact-stars. */
 .section-contact {
