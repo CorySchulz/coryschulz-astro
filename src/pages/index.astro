@@ -339,18 +339,25 @@ const morphCards = [
 		<!-- ============ ABOUT ============ -->
 		<!-- An interstitial beat between the hero and Experience: no big section
 		     title, no top hairline, so it reads as a continuation of the hero
-		     rather than the first headline section. -->
-		<section class="py-section section-about" id="about">
-			<div class="container about-inner reveal reveal-fade-up reveal-delay-500">
+		     rather than the first headline section.
+
+		     No py-section: this beat runs at roughly 60% of the section rhythm and
+		     has no tail at all. The stat band ends it and Experience's own top
+		     padding carries the seam, which keeps the tiles out of a double gap.
+		     Still a clamp, so no rendered size moves. -->
+		<section class="pt-[clamp(2.5rem,4vw,4rem)]" id="about">
+			<div
+				class="container flex flex-col items-center text-center gap-[0.875rem] reveal reveal-fade-up reveal-delay-500"
+			>
 				<p class="fs-overline text-gold mb-[0.375rem]">A Little About Me</p>
 
-				<p class="about-lede">
+				<p class="fs-subheading text-slate text-pretty max-w-[620px]">
 					I&rsquo;m the creator of Magic Spells, an open-source suite of web components, and Tarot, a
 					carousel with real physics. I&rsquo;ve been building for the web for over twenty years. I love working in Figma as
 					much as I do in code, and I care a lot about design systems.
 				</p>
 
-				<p class="about-lede">
+				<p class="fs-subheading text-slate text-pretty max-w-[620px]">
 					I&rsquo;ve also hired and built front-end teams from the ground up. At Pura I hired and
 					trained the team, then led the full rebuild of pura.com. The relaunch doubled the
 					site&rsquo;s conversion rate, and Shopify wrote a
@@ -365,12 +372,15 @@ const morphCards = [
 				<!-- A display band of four tiles, wider than the text column above it.
 				     The numerals are static at their final values — the only motion here
 				     is the tiles' staggered rise, which the reveal group drives. -->
-				<ul class="stat-line">
+				<ul class="stat-line grid grid-cols-4 gap-md w-full max-w-[1080px] mt-[clamp(2.5rem,5vw,3.75rem)]">
 					{
 						heroStats.map((s) => (
-							<li class="stat reveal reveal-fade-up" data-reveal-group="stats:100">
+							<li
+								class="stat flex flex-col items-center justify-center gap-sm px-md py-[clamp(1.75rem,3.2vw,2.5rem)] reveal reveal-fade-up"
+								data-reveal-group="stats:100"
+							>
 								<span class="stat-num">{s.num}</span>
-								<span class="stat-label">{s.label}</span>
+								<span class="stat-label text-slate-dim">{s.label}</span>
 							</li>
 						))
 					}
@@ -1098,113 +1108,6 @@ const morphCards = [
 </Layout>
 
 <style>
-	/* ============================================ */
-	/* About — interstitial beat                     */
-	/* ============================================ */
-
-	.section-about {
-		/* Lighter than the headline sections, and no top hairline: it carries
-		   straight on from the hero. Kept at roughly 60% of py-section's rhythm so
-		   it stays proportional as that scales. No tail of its own — the stat
-		   band ends the section and Experience's own top padding carries the
-		   seam, which keeps the tiles from sitting in a double gap. */
-		padding-block: clamp(2.5rem, 4vw, 4rem) 0;
-		border-top: 0;
-	}
-
-	.about-inner {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		gap: 0.875rem;
-	}
-
-	.about-lede {
-		font-size: clamp(1.1875rem, 2.2vw, 1.375rem);
-		line-height: 1.6;
-		color: var(--slate);
-		max-width: 620px;
-		text-wrap: pretty;
-	}
-
-	.about-link {
-		color: var(--gold);
-		text-decoration: underline;
-		text-decoration-color: rgba(201, 168, 106, 0.4);
-		text-underline-offset: 0.2em;
-		transition: color 0.2s ease;
-	}
-	.about-link:hover {
-		color: var(--gold-bright);
-	}
-
-	/* The stat band: four tiles in the page's established tile language (same
-	   face as .tool-tile), deliberately wider than the 620px text column above
-	   so it reads as a substantial closing beat rather than a caption. */
-	.stat-line {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 1rem;
-		list-style: none;
-		/* Escapes .about-inner's text measure — the band, not the prose, sets
-		   the width here. */
-		width: 100%;
-		max-width: 1080px;
-		margin: clamp(2.5rem, 5vw, 3.75rem) 0 0;
-		padding: 0;
-	}
-
-	.stat {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 0.75rem;
-		padding: clamp(1.75rem, 3.2vw, 2.5rem) 1rem;
-		border-radius: 14px;
-		background: rgba(251, 248, 238, 0.05);
-	}
-
-	.stat-num {
-		font-family: var(--font-display);
-		font-weight: 800;
-		font-size: clamp(2.5rem, 4.5vw, 4rem);
-		line-height: 1;
-		text-align: center;
-		color: var(--gold);
-		font-variant-numeric: lining-nums;
-	}
-
-	.stat-label {
-		font-size: 0.75rem;
-		font-weight: 500;
-		line-height: 1.3;
-		text-transform: uppercase;
-		letter-spacing: 0.14em;
-		text-align: center;
-		text-wrap: balance;
-		color: var(--slate-dim);
-	}
-
-	/* 2x2 on phones, with the tiles kept roomy rather than squeezed. */
-	@media (max-width: 599px) {
-		.stat-line {
-			grid-template-columns: repeat(2, 1fr);
-			gap: 0.75rem;
-		}
-
-		.stat {
-			padding: 1.5rem 0.75rem;
-			gap: 0.625rem;
-		}
-
-		.stat-label {
-			font-size: 0.6875rem;
-			letter-spacing: 0.11em;
-		}
-	}
-
 	/* ============================================ */
 	/* Timeline — desktop scrubbed strip             */
 	/* ============================================ */

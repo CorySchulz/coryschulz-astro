@@ -55,7 +55,8 @@
 	 All unlayered, so they beat the utilities they sit beside where they have to
 	 (the split-text reach-ins, the hero eyebrow's off-scale size). */
 @import "./components/hero.css";
-/* TODO later phases: about, timeline, tools, projects, contact */
+@import "./components/about.css";
+/* TODO later phases: timeline, tools, projects, contact */
 
 /* ============================================
 	 Custom Utilities

@@ -1,0 +1,81 @@
+/* ==========================================================================
+   ABOUT
+
+   The interstitial beat between the hero and Experience, and the stat band
+   that closes it. Layout, spacing and colour live in the markup now; what is
+   left here is the underline treatment on the inline link, the stat tile's
+   face, the two type styles that are off the scale, and the phone layout.
+
+   Unlayered, like the rest of the house sheets. Two rules need it: .about-link
+   has to beat the unlayered `a { text-decoration: none }` in base/elements.css,
+   and the max-width block has to beat the grid, gap and padding utilities the
+   markup carries.
+
+   .section-about and .about-inner are gone. .about-lede is gone too: it is
+   fs-subheading text-slate now, which is a point smaller than the clamp it
+   replaces below 768 and above 1024. Deliberate, so the ledes sit on the same
+   scale as every other deck on the page.
+   ========================================================================== */
+
+/* Only the underline treatment. Colour, hover and the transition already come
+   from the `a` default in base/elements.css, at the same values. */
+.about-link {
+	text-decoration: underline;
+	text-decoration-color: rgba(201, 168, 106, 0.4);
+	text-underline-offset: 0.2em;
+}
+
+/* The stat band's tile face: the same recipe as .tool-tile, one step rounder.
+   .stat-line carries no declarations of its own now, it is the hook the phone
+   layout below needs. */
+.stat {
+	border-radius: 14px;
+	background: rgba(251, 248, 238, 0.05);
+}
+
+/* A one-off, and staying one: a gold numeral on the display face, leading
+   pinned to 1 so the tile height is the numeral plus the label plus the gap,
+   and lining figures so 20+ and 2x line up on the baseline rather than
+   hanging. Nothing else on the page sets type this way. */
+.stat-num {
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-size: clamp(2.5rem, 4.5vw, 4rem);
+	line-height: 1;
+	color: var(--gold);
+	font-variant-numeric: lining-nums;
+}
+
+/* NOT fs-overline, though the size matches. The label is 500 against the
+   overline's 600, tracks 0.14em against 0.22em, and needs line-height 1.3
+   because it wraps to two lines in most tiles where the overline never wraps.
+   Three deviations at once is a different style, not drift off one. */
+.stat-label {
+	font-size: 0.75rem;
+	font-weight: 500;
+	line-height: 1.3;
+	text-transform: uppercase;
+	letter-spacing: 0.14em;
+	text-wrap: balance;
+}
+
+/* 2x2 on phones, with the tiles kept roomy rather than squeezed. Stays CSS
+   rather than becoming inline max-[599px]: variants for the same reason the
+   hero's does: 600 is not a house breakpoint, and the column count, the gaps,
+   the padding and the label's size and tracking are one decision. */
+@media (max-width: 599px) {
+	.stat-line {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.75rem;
+	}
+
+	.stat {
+		padding: 1.5rem 0.75rem;
+		gap: 0.625rem;
+	}
+
+	.stat-label {
+		font-size: 0.6875rem;
+		letter-spacing: 0.11em;
+	}
+}
