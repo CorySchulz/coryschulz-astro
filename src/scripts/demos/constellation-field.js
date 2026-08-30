@@ -52,10 +52,10 @@ const LINK_ALPHA = 0.28;
 
 // Legibility: soft outward steering, never a hard exclusion — lines may still
 // cross the copy faintly, nodes just thin out there.
-const EXCL_W = 0.62; // fraction of stage width
-const EXCL_H = 0.46;
+const EXCL_W = 0.45; // fraction of stage width — roughly the text column
+const EXCL_H = 0.32;
 const EXCL_CY = 0.46; // centered slightly above middle
-const EXCL_PUSH = 26; // px/s²
+const EXCL_PUSH = 14; // px/s² — soft enough that the centre thins, not empties
 const HEADER_BAND = 130; // the floating agency header sits above this
 const HEADER_PUSH = 30;
 
@@ -447,7 +447,7 @@ export default function initConstellationField(canvas, options = {}) {
 			const x = m + Math.random() * (W - m * 2);
 			const y = m + Math.random() * (H - m * 2);
 			if (y - m < headerBand) continue;
-			if (ellipseN(x, y) < 1.25) continue; // clear of the hero copy
+			if (ellipseN(x, y) < 1) continue; // clear of the hero copy
 			if (events.some((ev) => Math.hypot(ev.anchor.x - x, ev.anchor.y - y) < eventGap)) continue;
 			return { x, y };
 		}

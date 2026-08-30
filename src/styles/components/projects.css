@@ -1,0 +1,108 @@
+/* Things I've built. Six alternating feature rows, copy beside a demo panel. */
+
+.section-projects {
+	/* The constellation field bleeds sideways out of its row. Clip, not hidden,
+	which would make this a scroll container. */
+	overflow-x: clip;
+}
+
+.proj-row {
+border-top: 1px solid var(--hairline);
+
+/* Reveal tuning. The package restates these on :root, so setting them on the
+element is the only place nothing outranks them. */
+--reveal-duration: 0.72s;
+--reveal-distance: 34px;
+}
+
+.proj-row:first-child {
+border-top: 0;
+padding-top: 0;
+}
+
+@media (width >= 900px) {
+.proj-row {
+	grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+}
+
+/* Alternate copy-left and demo-left down the column. */
+.proj-row:nth-child(even) .proj-copy {
+order: 2;
+}
+
+/* Cap the copy and centre it so the row reads balanced against the filled
+panel. Auto margins are symmetric, so it works either way round. */
+.proj-copy {
+max-width: 46ch;
+margin-inline: auto;
+}
+}
+
+.proj-pill {
+border: 1px solid var(--gold-faint);
+transition:
+border-color 0.2s ease,
+color 0.2s ease;
+}
+
+.proj-pill:hover {
+border-color: var(--gold);
+color: var(--gold-bright);
+}
+
+/* Product names keep their display casing, only the bloom is added. */
+.proj-title split-text {
+display: block;
+}
+
+.proj-title .split-text-char {
+padding-bottom: 0.06em;
+}
+
+.proj-desc code {
+font-family: var(--font-mono);
+font-size: 0.875em;
+color: var(--slate);
+}
+
+.proj-install {
+border: 1px solid var(--card-border);
+background: var(--panel);
+}
+
+.proj-demo-link {
+border: 1px solid var(--rule-soft);
+transition:
+border-color 0.25s ease,
+color 0.25s ease;
+}
+
+.proj-demo-link:hover {
+border-color: var(--gold);
+color: var(--gold-bright);
+}
+
+.proj-demo {
+border: 1px solid var(--card-border);
+border-radius: var(--radius-card);
+background: var(--card-bg);
+}
+
+/* Bare mount points: the ported demos bring their own chrome. */
+
+.proj-demo-bare {
+display: block;
+}
+
+/* ...but only until the demo is actually there. initFireworks() adds
+`.fw-demo`, which paints the panel itself (padding, border, background);
+this rule is scoped so it hands that job over rather than fighting
+fireworks.css on specificity and winning, which stripped the demo's
+chrome entirely. Before the lazy mount lands the empty box stays bare. */
+.proj-demo-bare:not(.fw-demo) {
+padding: 0;
+border: 0;
+background: none;
+}
+
+/* Split text, the replayable lab */

@@ -1,0 +1,27 @@
+/* The --spacing-* keys spacing.css registers also shadow Tailwind's container
+   scale for sizing utilities: max-w-md would resolve to --spacing-md (1rem)
+   instead of 28rem, silently collapsing anything written against the stock
+   scale. Nothing in the markup uses max-w-* today, so this is insurance for
+   the components that come next, not a fix.
+
+   Tailwind folds an @utility override into the same rule with the spacing var
+   last, so these have to be plain unlayered rules to out-cascade the utilities
+   layer. Padding, margin and gap keep the t-shirt scale. */
+.max-w-2xs {
+	max-width: 16rem;
+}
+.max-w-xs {
+	max-width: 20rem;
+}
+.max-w-sm {
+	max-width: 24rem;
+}
+.max-w-md {
+	max-width: 28rem;
+}
+.max-w-lg {
+	max-width: 32rem;
+}
+.max-w-xl {
+	max-width: 36rem;
+}

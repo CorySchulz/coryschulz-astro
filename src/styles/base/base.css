@@ -1,0 +1,123 @@
+@import "tailwindcss" source(none);
+
+/* Explicit source paths. Astro's auto-detection would also crawl dist/, and a
+   scan of the build output feeds its own classes back in on the next build. */
+@source "../../**/*.astro";
+@source "../../**/*.{js,ts}";
+
+/* Never emit Tailwind's stock breakpoint-stepped .container. Ours, in
+   layout.css, is the only one. */
+@source not inline("container");
+
+@theme {
+	/* Locks the stock container ladder at 1280px. Carried over from app.css. */
+	--breakpoint-2xl: 1280px;
+}
+
+/* ==========================================================================
+   NIGHT GALLERY PALETTE
+
+   The same colors the LEGACY TOKENS block below declares as plain :root custom
+   properties, promoted to Tailwind color tokens so bg-night, text-cream,
+   text-gold, border-hairline and friends exist as utilities.
+
+   This is an addition, not a replacement: the --ground / --cream / --gold
+   properties survive untouched below, because ~190 var(--*) references across
+   the components read them. Nothing here renames anything there.
+
+   Naming follows magicspells.io where the value matches, so #02060f is
+   --color-night in both repos rather than "ground" here and "night" there.
+   ========================================================================== */
+@theme {
+	/* Ground and surfaces */
+	--color-night: #02060f;
+	--color-panel: #0a1220;
+	--color-card: rgba(251, 248, 238, 0.02);
+
+	/* Type */
+	--color-cream: #fbf8ee;
+	--color-slate: #b9c0cc;
+	--color-slate-dim: #8b93a3;
+
+	/* Accent */
+	--color-gold: #c9a86a;
+	--color-gold-bright: #dfc084;
+	--color-gold-soft: rgba(201, 168, 106, 0.5);
+	--color-gold-faint: rgba(201, 168, 106, 0.18);
+
+	/* Lines. Cream at low alpha rather than a grey, so rules pick up the warm
+	   cast of the page instead of reading blue against the night ground. */
+	--color-hairline: rgba(251, 248, 238, 0.08);
+	--color-hairline-strong: rgba(251, 248, 238, 0.18);
+	--color-card-border: rgba(251, 248, 238, 0.12);
+	--color-rule-soft: rgba(251, 248, 238, 0.25);
+	--color-rule-tick: rgba(251, 248, 238, 0.35);
+
+	/* Form status */
+	--color-ok-border: rgba(120, 200, 150, 0.4);
+	--color-ok-bg: rgba(120, 200, 150, 0.12);
+	--color-err-border: rgba(220, 120, 120, 0.4);
+	--color-err-bg: rgba(220, 120, 120, 0.12);
+}
+
+/* ==========================================================================
+   LEGACY TOKENS
+
+   The @theme block above is the Tailwind-facing half of the palette. This is
+   the other half: the plain custom properties ~190 var(--*) references in
+   index.astro read. Moved verbatim from app.css, values untouched.
+
+   Two groups did NOT come along, because a single source already owns them:
+   the --font-* families live in typography.css's @theme, and --gutter is now
+   an alias over the responsive gutter ladder in layout.css.
+
+   Unlayered on purpose, so these out-rank the @theme re-exports above and
+   anything a package sheet drops on :root, which is where the reveal
+   defaults at the bottom matter.
+   ========================================================================== */
+:root {
+	/* ground & glow */
+	--ground: #02060f;
+	--ground-glow: radial-gradient(
+		ellipse 900px 520px at 50% -80px,
+		#0b1626 0%,
+		var(--ground) 62%
+	);
+	--panel: #0a1220;
+	--card-bg: rgba(251, 248, 238, 0.02);
+
+	/* type */
+	--cream: #fbf8ee;
+	--slate: #b9c0cc;
+	--slate-dim: #8b93a3;
+
+	/* accent */
+	--gold: #c9a86a;
+	--gold-bright: #dfc084;
+	--gold-soft: rgba(201, 168, 106, 0.5);
+	--gold-faint: rgba(201, 168, 106, 0.18);
+
+	/* lines */
+	--hairline: rgba(251, 248, 238, 0.08);
+	--hairline-strong: rgba(251, 248, 238, 0.18);
+	--card-border: rgba(251, 248, 238, 0.12);
+	--rule-soft: rgba(251, 248, 238, 0.25);
+	--rule-tick: rgba(251, 248, 238, 0.35);
+
+	/* status */
+	--ok-border: rgba(120, 200, 150, 0.4);
+	--ok-bg: rgba(120, 200, 150, 0.12);
+	--err-border: rgba(220, 120, 120, 0.4);
+	--err-bg: rgba(220, 120, 120, 0.12);
+
+	/* rhythm */
+	--radius-card: 14px;
+	--radius-input: 10px;
+	--radius-media: 8px;
+
+	/* reveal defaults. @magic-spells/reveal re-declares both on :root and
+	   loads after us, so these are the fallback, not the live value: .proj-row
+	   sets them on itself where it wants ours. */
+	--reveal-duration: 0.8s;
+	--reveal-distance: 28px;
+}

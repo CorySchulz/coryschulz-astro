@@ -1,9 +1,7 @@
 ---
-import '../app.css';
-import '../styles/tarot.min.css';
-import '@magic-spells/dropdown-select/css/min';
-import '@magic-spells/reveal/css';
-import '@magic-spells/split-text/css/min';
+// Single entry point. It pulls in Tailwind, the house styles and every package
+// sheet, in an order styles.css documents and depends on.
+import '../styles/styles.css';
 ---
 
 <!doctype html>
@@ -14,11 +12,18 @@ import '@magic-spells/split-text/css/min';
 		<meta name="theme-color" content="#02060f" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="canonical" href="https://coryschulz.com" />
+
+		<!-- Fonts are only discovered after the CSS parses, so preload them here.
+		     crossorigin is required even same-origin or the fetch happens twice. -->
+		<link rel="preload" as="font" type="font/woff2" href="/fieldsdisplay-extrabold.woff2" crossorigin />
+		<link rel="preload" as="font" type="font/woff2" href="/Metropolis-Regular.woff2" crossorigin />
+		<link rel="preload" as="font" type="font/woff2" href="/Metropolis-Medium.woff2" crossorigin />
+		<link rel="preload" as="font" type="font/woff2" href="/Metropolis-SemiBold.woff2" crossorigin />
 		<meta name="generator" content={Astro.generator} />
-		<title>Cory Schulz - Front-End Engineer, Tech Lead & Shopify Developer</title>
+		<title>Cory Schulz - Senior Front-End Engineer & Tech Lead</title>
 
 		<!-- Primary Meta Tags -->
-		<meta name="title" content="Cory Schulz - Front-End Engineer, Tech Lead & Shopify Developer" />
+		<meta name="title" content="Cory Schulz - Senior Front-End Engineer & Tech Lead" />
 		<meta name="description" content="Front-End Engineer and Tech Lead with 20 years of experience specializing in custom Shopify themes and e-commerce solutions. Creator of Magic Spells and Tarot carousel. Available for hire." />
 		<meta name="keywords" content="Front-End Engineer, Tech Lead, Shopify Developer, Full Stack Developer, Shopify Theme Development, Custom Shopify Themes, E-commerce Developer, Web Developer, Magic Spells, Tarot Carousel" />
 		<meta name="author" content="Cory Schulz" />
@@ -27,19 +32,19 @@ import '@magic-spells/split-text/css/min';
 		<meta property="og:type" content="website" />
 		<meta property="og:url" content="https://coryschulz.com" />
 		<meta property="og:site_name" content="Cory Schulz Portfolio" />
-		<meta property="og:title" content="Cory Schulz - Front-End Engineer, Tech Lead & Shopify Developer" />
+		<meta property="og:title" content="Cory Schulz - Senior Front-End Engineer & Tech Lead" />
 		<meta property="og:description" content="Front-End Engineer and Tech Lead with 20 years of experience specializing in custom Shopify themes and e-commerce solutions. Creator of Magic Spells and Tarot carousel." />
 		<meta property="og:image" content="https://coryschulz.com/og-card.jpg" />
 		<meta property="og:image:width" content="1200" />
 		<meta property="og:image:height" content="630" />
-		<meta property="og:image:alt" content="Cory Schulz - Front-End Engineer, Tech Lead & Shopify Developer" />
+		<meta property="og:image:alt" content="Cory Schulz - Senior Front-End Engineer & Tech Lead" />
 
 		<!-- Twitter -->
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="Cory Schulz - Front-End Engineer, Tech Lead & Shopify Developer" />
+		<meta name="twitter:title" content="Cory Schulz - Senior Front-End Engineer & Tech Lead" />
 		<meta name="twitter:description" content="Front-End Engineer and Tech Lead with 20 years of experience specializing in custom Shopify themes and e-commerce solutions. Creator of Magic Spells and Tarot carousel." />
 		<meta name="twitter:image" content="https://coryschulz.com/og-card.jpg" />
-		<meta name="twitter:image:alt" content="Cory Schulz - Front-End Engineer, Tech Lead & Shopify Developer" />
+		<meta name="twitter:image:alt" content="Cory Schulz - Senior Front-End Engineer & Tech Lead" />
 
 		<!-- Structured Data (JSON-LD) -->
 		<script type="application/ld+json">
@@ -49,7 +54,7 @@ import '@magic-spells/split-text/css/min';
 			"name": "Cory Schulz",
 			"url": "https://coryschulz.com",
 			"image": "https://coryschulz.com/cory.jpg",
-			"jobTitle": "Front-End Engineer, Tech Lead & Shopify Developer",
+			"jobTitle": "Senior Front-End Engineer & Tech Lead",
 			"description": "Front-End Engineer and Tech Lead with 20 years of experience specializing in custom Shopify themes and e-commerce solutions. Creator of Magic Spells and Tarot carousel.",
 			"knowsAbout": [
 				"Full Stack Development",

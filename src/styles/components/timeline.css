@@ -1,0 +1,316 @@
+/* Timeline. Kept as CSS rather than utilities: the strip's geometry is
+   measured by timeline-engine at runtime, and 419/768 are not house
+   breakpoints.
+
+   Scoped under .section-timeline because fireworks.css has its own .tl-ledger-row
+   inside .fw-demo. Astro's scope attribute used to keep these apart, and the
+   demo builds its rows at runtime so it never carried one. */
+
+/* ============================================ */
+/* Desktop scrubbed strip                       */
+/* ============================================ */
+
+.tl-scroll {
+	position: relative;
+}
+
+.tl-pin {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.tl-viewport {
+	/* Edge to edge: the strip is deliberately outside .container and takes
+	   the full viewport width, so cards run off the screen edge rather than
+	   stopping at a gutter line. The side breathing room lives on the track
+	   below (.tl-strip padding-inline), which the travel math picks up
+	   because scrollWidth includes it. */
+	width: 100%;
+	overflow-x: auto;
+	overflow-y: hidden;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: thin;
+	scrollbar-color: var(--hairline-strong) transparent;
+	padding-bottom: 1rem;
+}
+
+.tl-strip {
+	/* One source of truth for the strip's vertical metrics, so the gold
+	   hairline lands on the exact centre of the star nodes. */
+	--tl-media-h: 190px;
+	--tl-stack-gap: 0.75rem;
+	--tl-node-size: 18px;
+	--tl-node-margin: 2px;
+
+	position: relative;
+	display: flex;
+	gap: 3rem;
+	width: max-content;
+	/* The track carries the side spacing, not the viewport, which keeps the
+	   viewport full-bleed while the first and last cards still clear the
+	   screen edge. scrollWidth counts this padding, so the scrub travels
+	   the whole track. */
+	padding-inline: var(--gutter);
+}
+
+/* Very wide displays: the whole strip fits, so there is no travel and no
+   pin (see buildScrub). Without this it would sit flush-left with dead
+   space to the right; margin auto on a max-content block centres it. */
+.tl-scroll.tl-fits .tl-strip {
+	margin-inline: auto;
+}
+
+.tl-rule {
+	position: absolute;
+	/* media + stack gap + node's top margin + half the node = node centre.
+	   translateY(-50%) then centres the rule's own thickness on that line,
+	   so it stays exact whatever the rule's height is. */
+	top: calc(
+		var(--tl-media-h) + var(--tl-stack-gap) + var(--tl-node-margin) +
+			var(--tl-node-size) / 2
+	);
+	transform: translateY(-50%);
+	left: 0;
+	right: 0;
+	height: 1px;
+	background: linear-gradient(
+		90deg,
+		rgba(201, 168, 106, 0) 0%,
+		var(--gold-soft) 6%,
+		var(--gold-soft) 94%,
+		rgba(201, 168, 106, 0) 100%
+	);
+}
+
+.tl-stop {
+	position: relative;
+	flex: 0 0 340px;
+	width: 340px;
+	display: flex;
+	flex-direction: column;
+	gap: var(--tl-stack-gap);
+	scroll-snap-align: center;
+}
+
+.tl-media {
+	width: 100%;
+	height: var(--tl-media-h);
+	object-fit: cover;
+	border-radius: var(--radius-media);
+	border: 1px solid var(--card-border);
+	background: var(--panel);
+}
+
+.tl-media-mark {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-color: rgba(201, 168, 106, 0.4);
+	background: linear-gradient(160deg, #0b1626 0%, var(--ground) 100%);
+	/* The wordmark is inlined SVG painted with currentColor: cream reads
+	   cleaner than gold against this card's dark blue gradient. */
+	color: var(--cream);
+}
+
+/* Curated brand card: a flat brand colour behind a centred wordmark, the
+   same read as the Milwaukee and Casamigos screenshots next to it. The
+   colour comes from the stop's own data, so only the layout lives here. */
+.tl-media-brand {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem;
+	border-color: var(--card-border);
+}
+
+/* The wordmark is a very wide lockup (~7:1), so it is sized off the card's
+   width and left with generous vertical whitespace. */
+.tl-brand-logo {
+	width: 68%;
+	height: auto;
+	display: block;
+}
+
+.ms-logo {
+	width: 170px;
+	height: auto;
+	display: block;
+}
+
+.ms-logo-sm {
+	width: 100px;
+}
+
+.tl-node {
+	margin: var(--tl-node-margin) auto;
+	display: block;
+	width: var(--tl-node-size);
+	height: var(--tl-node-size);
+}
+
+.tl-text {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3125rem;
+	text-align: center;
+}
+
+.tl-year {
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-size: 1.25rem;
+	color: var(--gold);
+}
+
+.tl-company {
+	font-family: var(--font-body);
+	font-size: 1.125rem;
+	font-weight: 600;
+	text-transform: none;
+	letter-spacing: 0;
+	line-height: 1.3;
+	color: var(--cream);
+}
+
+/* Quiet metadata line between the company and what the work was. */
+.tl-role {
+	font-size: 0.6875rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	line-height: 1.35;
+	color: var(--slate-dim);
+}
+
+.tl-desc {
+	font-size: 0.8125rem;
+	line-height: 1.5;
+	color: var(--slate-dim);
+	text-wrap: pretty;
+}
+
+/* Pinned scrub mode, enabled by JS */
+.tl-scroll.is-scrubbed .tl-pin {
+	position: sticky;
+	top: 0;
+	height: 100vh;
+	height: 100svh;
+	overflow: hidden;
+}
+
+.tl-scroll.is-scrubbed .tl-viewport {
+	overflow: hidden;
+	scroll-snap-type: none;
+	padding-bottom: 0;
+}
+
+.tl-scroll.is-scrubbed .tl-strip {
+	will-change: transform;
+}
+
+/* ============================================ */
+/* Mobile ledger rows                            */
+/* ============================================ */
+
+.tl-ledger {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border-top: 1px solid var(--hairline);
+}
+
+.tl-ledger-row {
+	display: grid;
+	grid-template-columns: auto 1fr 104px;
+	align-items: center;
+	column-gap: 1.125rem;
+	row-gap: 0.75rem;
+	padding: 1.375rem 0;
+	border-bottom: 1px solid var(--hairline);
+}
+.tl-row-year {
+	font-family: var(--font-display);
+	font-weight: 800;
+	font-size: clamp(2.75rem, 12vw, 3.375rem);
+	line-height: 0.9;
+	color: var(--gold);
+	font-variant-numeric: lining-nums;
+}
+
+.tl-row-body {
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.tl-row-company {
+	font-family: var(--font-body);
+	font-size: 1.125rem;
+	font-weight: 600;
+	text-transform: none;
+	letter-spacing: 0;
+	line-height: 1.3;
+	color: var(--cream);
+}
+
+/* Same quiet metadata treatment the strip uses, one step smaller. */
+.tl-row-role {
+	font-size: 0.6875rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	line-height: 1.35;
+	color: var(--slate-dim);
+}
+
+.tl-row-desc {
+	font-size: 0.8125rem;
+	line-height: 1.5;
+	color: var(--slate-dim);
+	text-wrap: pretty;
+}
+
+.tl-row-thumb {
+	width: 116px;
+	/* Every timeline shot is 920x500, so the thumb keeps that ratio and the
+	   screenshot shows whole instead of cropping to a short band. */
+	aspect-ratio: 920 / 500;
+	height: auto;
+	object-fit: cover;
+	border-radius: 6px;
+	border: 1px solid var(--card-border);
+	background: var(--panel);
+}
+
+/* At the narrowest sizes the thumb drops below the text instead of shrinking */
+@media (max-width: 419px) {
+	.tl-ledger-row {
+		grid-template-columns: auto 1fr;
+	}
+	.tl-row-thumb {
+		grid-column: 2;
+		width: 100%;
+	}
+	/* The card is full-width here, so the mark sizes off it the way the brand
+	   wordmarks do rather than holding its narrow-card pixel width. */
+	.ms-logo-sm {
+		width: 50%;
+	}
+}
+
+/* Below 768px the horizontal strip is replaced by the ledger rows. */
+.tl-viewport {
+	display: none;
+}
+
+@media (min-width: 768px) {
+	.tl-viewport {
+		display: block;
+	}
+	.tl-ledger-wrap {
+		display: none;
+	}
+	.section-timeline {
+		padding-bottom: clamp(2rem, 4vw, 3rem);
+	}
+}

@@ -1,0 +1,62 @@
+/* ==========================================================================
+   FLOATING LABEL INPUTS
+
+   The label is a sibling that follows the control, so the raised state is
+   driven purely by :focus and :not(:placeholder-shown) with the adjacent
+   combinator. That is why every field needs a placeholder attribute and why
+   the placeholder itself is painted transparent: it exists only to make
+   :placeholder-shown a reliable "is empty" test.
+
+   Box, border and radius belong to the form that hosts the field, currently
+   index.astro's .contact-form.
+   ========================================================================== */
+
+.input-field {
+	position: relative;
+	width: 100%;
+}
+
+.input-field input::placeholder,
+.input-field textarea::placeholder {
+	color: transparent;
+}
+
+.floating-label {
+	position: absolute;
+	pointer-events: none;
+	font-size: 0.9375rem;
+	left: 1.25rem;
+	padding: 0px;
+	background: transparent;
+	color: var(--slate-dim);
+	top: 50%;
+	transition: all 150ms ease-out;
+	transform: translateY(-50%);
+	border-radius: 4px;
+}
+
+.input-field input:focus + .floating-label,
+.input-field input:not(:placeholder-shown) + .floating-label,
+.input-field textarea:focus + .floating-label,
+.input-field textarea:not(:placeholder-shown) + .floating-label {
+	top: 0.5rem;
+	font-size: 0.6875rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	transform: translateY(0%);
+	color: var(--gold);
+	background: transparent;
+}
+
+/* A textarea has no vertical centre to sit on, so its resting label pins to
+   the first line instead of translating off the midpoint. */
+.input-field textarea + .floating-label {
+	top: 1.15rem;
+	transform: translateY(0%);
+}
+
+.input-field textarea:focus + .floating-label,
+.input-field textarea:not(:placeholder-shown) + .floating-label {
+	top: 0.5rem;
+	transform: translateY(0%);
+}

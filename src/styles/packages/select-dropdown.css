@@ -1,0 +1,57 @@
+/* ==========================================================================
+   SELECT DROPDOWN, night palette
+
+   Most of the skin is done through the package's own --select-* API, set on
+   the host so it beats the package's :root defaults, whatever the load order.
+   Every option state (hover, focus, selected) reads one of those vars, so the
+   backgrounds below need no rules of their own.
+
+   The !important declarations are the exception, and they are not decoration.
+   The package sheet loads AFTER this file (see styles.css) and re-declares
+   these same bare element selectors at the same specificity, so it would win
+   on source order alone. Each one is a property with no --select-* hook: the
+   host's 300px width, bottom margin and system font stack, and the panel's
+   face. Same reason contact.css re-asserts the trigger from its scoped block.
+   ========================================================================== */
+
+select-dropdown {
+	--select-color-text: var(--cream);
+	--select-color-background: transparent;
+	--select-color-border: var(--hairline-strong);
+	--select-color-border-hover: var(--gold-soft);
+	--select-color-border-dark: var(--slate-dim);
+	--select-color-primary: var(--gold);
+	--select-color-hover: rgba(201, 168, 106, 0.12);
+	--select-color-focus: rgba(201, 168, 106, 0.16);
+	--select-color-selected: rgba(201, 168, 106, 0.16);
+	--select-color-label: var(--slate-dim);
+
+	width: 100% !important;
+	margin-bottom: 0 !important;
+	font-family: var(--font-body) !important;
+}
+
+/* The package's own overflow-y: auto is what rounds the option list against
+   this radius, and it is load-bearing on short viewports: the component
+   clamps the panel's max-height and expects it to scroll. Left alone. */
+select-panel {
+	background-color: var(--panel) !important;
+	border: 1px solid var(--card-border) !important;
+	border-radius: var(--radius-input) !important;
+	box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55) !important;
+}
+
+select-option {
+	color: var(--cream);
+}
+
+/* The package's own :focus rule sets background and outline but no ring, so
+   this lands beside it rather than against it. */
+select-option:focus {
+	box-shadow: inset 0 0 0 2px var(--gold-soft);
+}
+
+select-option[aria-selected="true"] {
+	color: var(--gold-bright);
+	font-weight: 600 !important;
+}
