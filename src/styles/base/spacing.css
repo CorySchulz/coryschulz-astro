@@ -34,6 +34,16 @@
 	   than a second ladder, so the two can never drift. */
 	--section-padding: 5rem;
 	--section-padding-tail: calc(var(--section-padding) * 1.1);
+
+	/* The gap under a section head, from clamp(2.5rem, 5vw, 4rem): 2.5rem is
+	   the floor and still what renders at 768, 4rem is the ceiling and lands at
+	   1280. Sampled the same way as the section ladder above.
+
+	   NOT derived from --section-padding even though half of it hits 2.5rem and
+	   4rem exactly at the ends. In the 768 band half would be 3rem where the
+	   clamp is still pinned to its floor, 8px too much, so the two get their own
+	   ladders rather than one that is right twice and wrong in between. */
+	--section-head-margin: 2.5rem;
 }
 
 @media (width >= 768px) {
@@ -42,9 +52,13 @@
 	}
 }
 
+/* No 768 step for --section-head-margin: the clamp it replaces is still on its
+   floor there, so the base value is the 768 value. */
+
 @media (width >= 1024px) {
 	:root {
 		--section-padding: 8rem;
+		--section-head-margin: 4rem;
 	}
 }
 
@@ -74,4 +88,12 @@
 @utility py-section {
 	padding-top: var(--section-padding);
 	padding-bottom: var(--section-padding-tail);
+}
+
+/* The gap between a section head (overline, title, deck) and the content it
+   introduces. Hand-written for the same reason: registering
+   --spacing-section-head would generate p-, m-, gap- and inset- variants of a
+   number that only ever means this one distance. */
+@utility mb-section-head {
+	margin-bottom: var(--section-head-margin);
 }

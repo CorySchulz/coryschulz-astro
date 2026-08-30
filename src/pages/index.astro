@@ -269,7 +269,9 @@ const morphCards = [
 
 	<main id="top">
 		<!-- ============ HERO ============ -->
-		<section class="py-section hero">
+		<!-- No py-section here: .hero rides a padding ladder of its own, so the
+		     utility would only be overridden. -->
+		<section class="hero">
 			<!-- Decorative and deliberately full-bleed: it sits outside the
 			     container so it keeps sizing off the section, not the text column. -->
 			<svg class="constellation" viewBox="0 0 1200 360" aria-hidden="true" focusable="false">
@@ -285,20 +287,23 @@ const morphCards = [
 				<circle class="twinkle twinkle-e" cx="1040" cy="310" r="1.3" fill="var(--cream)" opacity="0.4"></circle>
 				</svg>
 
-			<div class="container hero-inner">
+			<!-- Every block below is `relative` on purpose: the constellation above
+			     is absolutely positioned, so only a positioned sibling later in the
+			     DOM paints over it. -->
+			<div class="container flex flex-col items-center text-center">
 				<!-- leading-normal because this one wraps to two lines on phones,
 				     where fs-overline's line-height: 1 would close them up. -->
-				<p class="hero-eyebrow fs-overline text-gold leading-normal">
+				<p class="hero-eyebrow fs-overline text-gold leading-normal text-balance relative mb-[1.75rem]">
 					<span>Senior Front-End Engineer &middot; Tech Lead</span>
 				</p>
 
-				<h1 class="hero-name">
+				<h1 class="hero-name fs-heading-1 text-cream relative mb-[2.25rem]">
 					<split-text split="chars" trigger="load" stagger="34" duration="900"
 						><span class="hero-name-part">Cory</span> <span class="hero-name-part">Schulz</span></split-text
 					>
 				</h1>
 
-				<p class="hero-thesis">
+				<p class="fs-subheading text-slate text-pretty relative max-w-[620px] mb-[2.75rem]">
 					<split-text
 						effect="bloom"
 						split="words"
@@ -310,7 +315,7 @@ const morphCards = [
 						amazing things.</split-text
 					>
 				</p>
-				<div class="hero-actions">
+				<div class="hero-actions relative flex flex-wrap items-center justify-center gap-[1.25rem]">
 					<a class="pill pill-gold" href="#contact" data-scroll-to-contact>Send a Message</a>
 					<a
 						class="pill pill-outline"
@@ -381,7 +386,7 @@ const morphCards = [
 				<div class="tl-pin">
 					<div class="container">
 						<div
-							class="flex flex-col items-center gap-md text-center mb-[clamp(2.5rem,5vw,4rem)] reveal reveal-fade-up">
+							class="flex flex-col items-center gap-md text-center mb-section-head reveal reveal-fade-up">
 							<p class="fs-overline text-gold">2013&ndash;Today</p>
 							<h2 class="section-title fs-heading-2 text-cream text-balance">
 								<split-text effect="rise" split="chars" stagger="26" duration="820"
@@ -493,7 +498,7 @@ const morphCards = [
 		<section class="py-section section-tools" id="tools">
 			<div class="container">
 				<div
-					class="flex flex-col items-center gap-md text-center mb-[clamp(2.5rem,5vw,4rem)] reveal reveal-fade-up">
+					class="flex flex-col items-center gap-md text-center mb-section-head reveal reveal-fade-up">
 					<p class="fs-overline text-gold">Everyday Stack</p>
 					<h2 class="section-title fs-heading-2 text-cream text-balance">
 						<split-text effect="rise" split="chars" stagger="26" duration="820">Tools I use</split-text>
@@ -541,7 +546,7 @@ const morphCards = [
 		<section class="py-section section-projects" id="projects">
 			<div class="container container-wide">
 				<div
-					class="flex flex-col items-center gap-md text-center mb-[clamp(2.5rem,5vw,4rem)] reveal reveal-fade-up">
+					class="flex flex-col items-center gap-md text-center mb-section-head reveal reveal-fade-up">
 					<p class="fs-overline text-gold">Free &amp; Open Source</p>
 					<h2 class="section-title fs-heading-2 text-cream text-balance">
 						<split-text effect="rise" split="chars" stagger="26" duration="820"
@@ -961,7 +966,7 @@ const morphCards = [
 			<div class="container">
 				<div class="contact-inner">
 					<div
-						class="flex flex-col items-center gap-md text-center mb-[clamp(2.5rem,5vw,4rem)] reveal reveal-fade-up">
+						class="flex flex-col items-center gap-md text-center mb-section-head reveal reveal-fade-up">
 						<img class="portrait" src="/cory.jpg" alt="Cory Schulz" width="76" height="76" loading="lazy" />
 						<h2 class="section-title fs-heading-2 text-cream text-balance">
 							<split-text effect="rise" split="chars" stagger="26" duration="820"
@@ -1094,126 +1099,6 @@ const morphCards = [
 
 <style>
 	/* ============================================ */
-	/* Hero                                          */
-	/* ============================================ */
-
-	/* First section on the page, so it opens tighter than py-section. */
-	.hero {
-		position: relative;
-		padding-block: clamp(5rem, 11vw, 11rem) clamp(4rem, 9vw, 10rem);
-		border-top: 0;
-		background: var(--ground-glow);
-	}
-
-	.hero-inner {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-	}
-
-	.constellation {
-		position: absolute;
-		top: 1.25rem;
-		left: 50%;
-		transform: translateX(-50%);
-		width: min(1200px, 92%);
-		height: auto;
-		opacity: 0.7;
-		pointer-events: none;
-	}
-
-	.twinkle {
-		animation: twinkle 7s ease-in-out infinite;
-	}
-	.twinkle-b {
-		animation-duration: 9s;
-		animation-delay: -2s;
-	}
-	.twinkle-c {
-		animation-duration: 11s;
-		animation-delay: -5s;
-	}
-	.twinkle-d {
-		animation-duration: 8s;
-		animation-delay: -3.5s;
-	}
-	.twinkle-e {
-		animation-duration: 12s;
-		animation-delay: -1s;
-	}
-
-	@keyframes twinkle {
-		0%,
-		100% {
-			opacity: 0.15;
-		}
-		50% {
-			opacity: 0.85;
-		}
-	}
-
-	.hero-eyebrow {
-		position: relative;
-		font-size: 0.8125rem;
-		margin-bottom: 1.75rem;
-		text-wrap: balance;
-	}
-
-	.hero-eyebrow span {
-		white-space: nowrap;
-	}
-
-	@media (max-width: 599px) {
-		.hero-eyebrow {
-			font-size: 0.6875rem;
-			letter-spacing: 0.14em;
-		}
-		/* Break into two balanced lines rather than three ragged ones */
-		.hero-eyebrow span {
-			display: block;
-		}
-	}
-
-	/* The one mixed-case display line on the page. */
-	.hero-name {
-		position: relative;
-		font-size: clamp(3.25rem, 10.5vw, 8rem);
-		color: var(--cream);
-		margin-bottom: 2.25rem;
-		text-transform: none;
-		/* Roomy enough that the descenders on "y" and "z" clear the
-		   split-text char masks while the reveal is still running. */
-		line-height: 1.14;
-		letter-spacing: -0.005em;
-	}
-
-	.hero-name split-text {
-		display: block;
-	}
-
-	@media (max-width: 599px) {
-		.hero-name-part {
-			display: block;
-		}
-	}
-
-	.hero-name :global(.split-text-char) {
-		padding-bottom: 0.04em;
-	}
-
-	.hero-thesis {
-		position: relative;
-		font-size: clamp(1.0625rem, 2.2vw, 1.3125rem);
-		font-weight: 400;
-		line-height: 1.6;
-		color: var(--slate);
-		max-width: 620px;
-		margin-bottom: 2.75rem;
-		text-wrap: pretty;
-	}
-
-	/* ============================================ */
 	/* About — interstitial beat                     */
 	/* ============================================ */
 
@@ -1318,24 +1203,6 @@ const morphCards = [
 			font-size: 0.6875rem;
 			letter-spacing: 0.11em;
 		}
-	}
-
-	.hero-actions {
-		position: relative;
-		display: flex;
-		gap: 1.25rem;
-		align-items: center;
-		flex-wrap: wrap;
-		justify-content: center;
-	}
-
-	/* Both CTAs are exactly the same height — the outline pill's 1px border
-	   is absorbed by border-box rather than adding 2px to its height. */
-	.hero-actions .pill {
-		box-sizing: border-box;
-		height: 54px;
-		padding-block: 0;
-		justify-content: center;
 	}
 
 	/* ============================================ */

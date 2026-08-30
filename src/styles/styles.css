@@ -51,7 +51,11 @@
 /* ============================================
 	 Components
 	 ============================================ */
-/* TODO phase 4: the page sections lifted out of index.astro's style block */
+/* The page sections, lifted out of index.astro's style block one at a time.
+	 All unlayered, so they beat the utilities they sit beside where they have to
+	 (the split-text reach-ins, the hero eyebrow's off-scale size). */
+@import "./components/hero.css";
+/* TODO later phases: about, timeline, tools, projects, contact */
 
 /* ============================================
 	 Custom Utilities
