@@ -78,7 +78,7 @@ const heroStats = [
 	{ num: '20+', label: 'years full-stack' },
 	{ num: '11', label: 'years Shopify' },
 	{ num: '5', label: 'years design' },
-	{ num: '2', label: 'years AI' },
+	{ num: '4', label: 'years AI' },
 ];
 
 const splitEffects = [
@@ -336,6 +336,28 @@ const morphCards = [
 						</svg>
 					</a>
 				</div>
+
+				<!-- A display band of four tiles, featured in the hero rather than
+				     closing About: these are the numbers the page is selling, so they
+				     sit above the fold under the CTAs. Wider than the text column, and
+				     `relative` like every other block here so it paints over the
+				     constellation. The numerals are static at their final values, the
+				     only motion is the tiles' staggered rise off the reveal group,
+				     delayed so the band lands after the hero copy has settled. -->
+				<ul
+					class="stat-line relative grid grid-cols-4 gap-md w-full max-w-[1080px] mt-[clamp(3rem,6vw,4.5rem)] reveal reveal-fade-up reveal-delay-500">
+					{
+						heroStats.map((s) => (
+							<li
+								class="stat flex flex-col items-center justify-center gap-sm px-md py-[clamp(1.75rem,3.2vw,2.5rem)] reveal reveal-fade-up"
+								data-reveal-group="stats:100"
+							>
+								<span class="stat-num">{s.num}</span>
+								<span class="stat-label text-slate-dim">{s.label}</span>
+							</li>
+						))
+					}
+				</ul>
 			</div>
 		</section>
 
@@ -344,10 +366,9 @@ const morphCards = [
 		     title, no top hairline, so it reads as a continuation of the hero
 		     rather than the first headline section.
 
-		     No py-section: this beat runs at roughly 60% of the section rhythm and
-		     has no tail at all. The stat band ends it and Experience's own top
-		     padding carries the seam, which keeps the tiles out of a double gap.
-		     Still a clamp, so no rendered size moves. -->
+		     No py-section: this beat runs at roughly 60% of the section rhythm.
+		     The case study card ends it now that the stat band has moved up to the
+		     hero, and Experience's own top padding carries the seam. -->
 		<section class="section-about" id="about">
 			<div
 				class="container flex flex-col items-center text-center gap-[0.875rem] reveal reveal-fade-up reveal-delay-500"
@@ -394,22 +415,6 @@ const morphCards = [
 					</span>
 				</a>
 
-				<!-- A display band of four tiles, wider than the text column above it.
-				     The numerals are static at their final values — the only motion here
-				     is the tiles' staggered rise, which the reveal group drives. -->
-				<ul class="stat-line grid grid-cols-4 gap-md w-full max-w-[1080px] mt-[clamp(2.5rem,5vw,3.75rem)]">
-					{
-						heroStats.map((s) => (
-							<li
-								class="stat flex flex-col items-center justify-center gap-sm px-md py-[clamp(1.75rem,3.2vw,2.5rem)] reveal reveal-fade-up"
-								data-reveal-group="stats:100"
-							>
-								<span class="stat-num">{s.num}</span>
-								<span class="stat-label text-slate-dim">{s.label}</span>
-							</li>
-						))
-					}
-				</ul>
 			</div>
 		</section>
 

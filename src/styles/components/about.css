@@ -2,9 +2,12 @@
    ABOUT
 
    The interstitial beat between the hero and Experience, the case study card,
-   and the stat band that closes it. Layout, spacing and colour live in the
-   markup now; what is left here is the card's hover state, the stat tile's
-   face, the two type styles that are off the scale, and the phone layout.
+   and the stat band. The band itself now sits in the hero, under the CTAs, but
+   its tile face and phone layout stay here: it is the same component, and this
+   is where the rest of the beat it grew out of lives. Layout, spacing and
+   colour live in the markup now; what is left here is the card's hover state,
+   the stat tile's face, the two type styles that are off the scale, and the
+   phone layout.
 
    Unlayered, like the rest of the house sheets. The max-width block needs it,
    to beat the grid, gap and padding utilities the markup carries.
