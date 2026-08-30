@@ -1,0 +1,37 @@
+/* Syntax-highlighted code card. */
+
+	.code-card {
+	width: 100%;
+	margin: 0;
+	background: var(--panel);
+	border-radius: 10px;
+	padding: 1.25rem 1.375rem;
+	font-family: var(--font-mono);
+	font-size: 0.78125rem;
+	line-height: 1.75;
+	color: var(--cream);
+	overflow-x: auto;
+	tab-size: 2;
+}
+
+.c-tag {
+	color: var(--gold);
+}
+.c-punc {
+	color: var(--slate-dim);
+}
+.c-attr {
+	color: var(--slate);
+}
+.c-str,
+.c-evt,
+.c-bind,
+.c-num {
+	color: var(--gold-bright);
+}
+.c-kw {
+	color: var(--slate);
+}
+.c-fn {
+	color: var(--cream);
+}

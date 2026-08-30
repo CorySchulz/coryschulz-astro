@@ -19,6 +19,7 @@
 	 ============================================ */
 @import "./elements/buttons.css";
 @import "./elements/input-fields.css";
+@import "./elements/code.css";
 /* TODO later phases: links.css, panels.css */
 
 /* ============================================
@@ -59,7 +60,8 @@
 @import "./components/timeline.css";
 @import "./components/tools.css";
 @import "./components/projects.css";
-/* TODO later phases: tools, projects, contact */
+@import "./components/morph.css";
+/* TODO later phases: contact, footer */
 
 /* ============================================
 	 Custom Utilities
