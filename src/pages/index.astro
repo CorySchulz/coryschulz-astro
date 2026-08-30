@@ -912,17 +912,17 @@ const morphCards = [
 					</article>
 				</div>
 
-				<p class="chips-lead reveal reveal-fade-up">Plus all of these</p>
+				<p class="mt-section-head mb-lg text-center fs-subheading font-semibold text-cream reveal reveal-fade-up">Plus all of these</p>
 				<!-- Each chip reveals on its own so the set cascades. The step is
 				     batch-relative in @magic-spells/reveal, so the whole group lands in
 				     ~0.65s rather than accumulating a delay per index. Reduced motion is
 				     handled by the package: it shows everything at once. -->
-				<ul class="chips">
+				<ul class="flex flex-wrap justify-center gap-sm mb-7">
 					{
 						chips.map((c) => (
 							<li class="reveal reveal-fade-up" data-reveal-group="chips:20">
 								<a
-									class="chip"
+									class="chip block rounded-full px-4.5 py-2 fs-body-sm font-medium text-slate"
 									href={`https://github.com/magic-spells/${c.repo}`}
 									target="_blank"
 									rel="noopener noreferrer">
@@ -936,13 +936,13 @@ const morphCards = [
 				<!-- Closing beat for the section: answers what the whole suite is, and
 				     hands off to magicspells.io. Deliberately lighter than the contact
 				     CTA that follows, which still owns the end of the page. -->
-				<div class="ms-outro reveal reveal-fade-up">
-					<h3 class="ms-outro-title">What is Magic Spells?</h3>
-					<p class="ms-outro-copy">
+				<div class="flex flex-col items-center text-center gap-5 pt-16 reveal reveal-fade-up">
+					<h3 class="fs-heading-3 fs-sentence-case text-cream">What is Magic Spells?</h3>
+					<p class="ms-outro-copy fs-body-lg text-slate text-pretty max-w-[560px]">
 						The world is changing fast. With tools like AI you can design, prototype, and build in
 						hours what used to take weeks, and more of the web is starting to feel like magic.
 					</p>
-					<p class="ms-outro-copy">
+					<p class="ms-outro-copy fs-body-lg text-slate text-pretty max-w-[560px]">
 						Magic Spells is named for that brain-freeze moment when something just works, feels
 						beautiful, and you want to know how it was done. Frameworks, interface systems, motion
 						engines, and developer tools built to chase that feeling. All free and open source.
@@ -985,16 +985,16 @@ const morphCards = [
 		<!-- ============ CONTACT ============ -->
 		<section class="py-section section-contact" id="contact">
 			<div class="container">
-				<div class="contact-inner">
+				<div class="flex flex-col gap-10 max-w-[720px] mx-auto">
 					<div
 						class="flex flex-col items-center gap-md text-center mb-section-head reveal reveal-fade-up">
-						<img class="portrait" src="/cory.jpg" alt="Cory Schulz" width="76" height="76" loading="lazy" />
+						<img class="portrait size-19 rounded-full object-cover" src="/cory.jpg" alt="Cory Schulz" width="76" height="76" loading="lazy" />
 						<h2 class="section-title fs-heading-2 text-cream text-balance">
 							<split-text effect="rise" split="chars" stagger="26" duration="820"
 								>Have a project in mind?</split-text
 							>
 						</h2>
-						<p class="contact-sub">
+						<p class="fs-body-lg text-slate-dim text-pretty max-w-[520px]">
 							Tell me what you&rsquo;re building. If it sounds like a good fit, I&rsquo;ll get back to you as
 							soon as I can.
 						</p>
@@ -1010,7 +1010,7 @@ const morphCards = [
 						<p>Oops! Something went wrong. Please try again.</p>
 					</div>
 
-					<form id="contact-form" class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+					<form id="contact-form" class="contact-form flex flex-col gap-5" action="https://api.web3forms.com/submit" method="POST">
 						<!-- Hidden fields -->
 						<input type="hidden" name="access_key" value="585a106a-78ff-4313-b4c9-459b73515114" />
 						<input type="hidden" name="subject" value="New Business Inquiry from Cory Schulz Portfolio" />
@@ -1019,7 +1019,7 @@ const morphCards = [
 						<!-- Honeypot Spam Protection (hidden from humans, visible to bots) -->
 						<input type="checkbox" name="botcheck" class="botcheck" style="display: none;" />
 
-						<div class="field-grid">
+						<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
 							<div class="input-field">
 								<input id="name" name="name" type="text" required placeholder="Your name" />
 								<label for="name" class="floating-label">Name</label>
@@ -1030,7 +1030,7 @@ const morphCards = [
 							</div>
 						</div>
 
-						<div class="field-grid">
+						<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
 							<div class="input-field">
 								<input id="company" name="company" type="text" required placeholder="Company name" />
 								<label for="company" class="floating-label">Company</label>
@@ -1041,7 +1041,7 @@ const morphCards = [
 							</div>
 						</div>
 
-						<div class="field-grid">
+						<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
 							<div class="budget-field">
 								<p class="field-legend">Budget</p>
 								<dropdown-select>
@@ -1104,10 +1104,10 @@ const morphCards = [
 	</main>
 
 	<!-- ============ FOOTER ============ -->
-	<footer class="site-footer">
-		<div class="container footer-inner">
+	<footer class="site-footer py-8 fs-body-sm">
+		<div class="container flex flex-wrap items-center justify-between gap-md">
 			<p>&copy; 2026 Cory Schulz</p>
-			<nav class="footer-links" aria-label="Elsewhere">
+			<nav class="footer-links flex flex-wrap gap-5" aria-label="Elsewhere">
 				<a href="mailto:coryschulz@gmail.com">coryschulz@gmail.com</a>
 				<a href="https://www.linkedin.com/in/cory-schulz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
 				<a class="footer-gold" href="https://magicspells.io" target="_blank" rel="noopener noreferrer"
@@ -1118,378 +1118,6 @@ const morphCards = [
 	</footer>
 </Layout>
 
-<style>
-	/* ============================================ */
-	/* Tools — counter-scrolling marquees             */
-
-	/* The marquee rows need room on both sides of them: this is the seam
-	   between the timeline and Things I've Built, and both neighbours are dense. */
-	/* Things I've built — five feature rows          */
-	/* ============================================ */
-
-	.chips-lead {
-		margin: clamp(2.5rem, 5vw, 4rem) 0 1.5rem;
-		text-align: center;
-		font-family: var(--font-body);
-		font-size: clamp(1.3125rem, 2.2vw, 1.5rem);
-		font-weight: 600;
-		line-height: 1.3;
-		color: var(--cream);
-	}
-
-	.chips {
-		display: flex;
-		justify-content: center;
-		gap: 0.75rem;
-		flex-wrap: wrap;
-		list-style: none;
-		margin: 0 0 1.75rem;
-		padding: 0;
-	}
-
-	.chip {
-		display: block;
-		font-size: 0.8125rem;
-		font-weight: 500;
-		color: var(--slate);
-		border: 1px solid rgba(251, 248, 238, 0.15);
-		padding: 0.5625rem 1.125rem;
-		border-radius: 999px;
-		transition:
-			border-color 0.2s ease,
-			color 0.2s ease;
-	}
-
-	.chip:hover,
-	.chip:focus-visible {
-		border-color: var(--gold);
-		color: var(--gold-bright);
-	}
-
-	.ms-outro {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		text-align: center;
-		gap: 1.25rem;
-		padding-block: clamp(3rem, 7vw, 6rem) 0;
-	}
-
-	/* Near section scale, but a step down: the contact heading below is still
-	   the loudest thing on the page. */
-	.ms-outro-title {
-		font-size: clamp(1.75rem, 4vw, 2.5rem);
-		color: var(--cream);
-		text-transform: none;
-		letter-spacing: -0.005em;
-	}
-
-	.ms-outro-copy {
-		max-width: 560px;
-		font-size: 1.125rem;
-		line-height: 1.6;
-		color: var(--slate);
-		text-wrap: pretty;
-	}
-
-	.ms-outro-copy + .ms-outro-copy {
-		margin-top: 0.875rem;
-	}
-
-	.ms-outro-cta {
-		margin-top: 0.5rem;
-	}
-
-	/* ============================================ */
-	/* Contact                                       */
-	/* ============================================ */
-
-	/* The other half of the projects/contact seam trim above. */
-	.section-contact {
-		padding-top: clamp(2.5rem, 5vw, 5rem);
-	}
-
-	.contact-inner {
-		max-width: 720px;
-		margin: 0 auto;
-		display: flex;
-		flex-direction: column;
-		gap: 2.5rem;
-	}
-
-	.portrait {
-		width: 76px;
-		height: 76px;
-		border-radius: 50%;
-		object-fit: cover;
-		border: 2px solid rgba(201, 168, 106, 0.6);
-	}
-
-	.contact-sub {
-		font-size: 1.0625rem;
-		line-height: 1.6;
-		color: var(--slate-dim);
-		max-width: 520px;
-		text-wrap: pretty;
-	}
-
-	.contact-form {
-		display: flex;
-		flex-direction: column;
-		gap: 1.25rem;
-	}
-
-	.field-grid {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 1.25rem;
-	}
-
-	@media (min-width: 640px) {
-		.field-grid {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-	}
-
-	.contact-form :global(input[type='text']),
-	.contact-form :global(input[type='email']),
-	.contact-form :global(textarea) {
-		width: 100%;
-		background: transparent;
-		border: 1px solid var(--hairline-strong);
-		border-radius: var(--radius-input);
-		padding: 1.5rem 1.25rem 0.75rem;
-		font-family: var(--font-body);
-		font-size: 0.9375rem;
-		color: var(--cream);
-		transition:
-			border-color 0.2s ease,
-			box-shadow 0.2s ease;
-	}
-
-	.contact-form :global(textarea) {
-		min-height: 120px;
-		resize: vertical;
-		display: block;
-	}
-
-	.contact-form :global(input[type='text']):focus,
-	.contact-form :global(input[type='email']):focus,
-	.contact-form :global(textarea):focus {
-		outline: none;
-		border-color: var(--gold);
-		box-shadow: 0 0 0 3px rgba(201, 168, 106, 0.18);
-	}
-
-	.field-legend {
-		font-size: 0.6875rem;
-		font-weight: 600;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--slate-dim);
-		margin-bottom: 0.625rem;
-		padding: 0;
-	}
-
-	/* The package's own stylesheet loads after app.css, so the host's width is
-	   re-asserted here where the scoped selector outranks it. */
-	.budget-field :global(dropdown-select) {
-		display: block;
-		width: 100%;
-	}
-
-	/* dropdown-select appends its own caret, so the chevron in the markup would
-	   be a second one. Hide the package's and keep ours, which is tokenized. */
-	.budget-field :global(.dropdown-caret) {
-		display: none;
-	}
-
-	.budget-field :global(dropdown-select-trigger.select-trigger) {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 0.5rem;
-		width: 100%;
-		padding: 1.125rem 1.25rem;
-		background: transparent;
-		border: 1px solid var(--hairline-strong);
-		border-radius: var(--radius-input);
-		color: var(--cream);
-		font-size: 0.9375rem;
-		cursor: pointer;
-		transition: border-color 0.2s ease;
-	}
-
-	.budget-field :global(dropdown-select-trigger.select-trigger:hover) {
-		border-color: var(--gold-soft);
-	}
-
-	.budget-field :global(dropdown-options.select-options) {
-		width: 100%;
-		margin-top: 0.5rem;
-		border-radius: var(--radius-input);
-		overflow: hidden;
-	}
-
-	.budget-field :global(dropdown-option.select-option) {
-		display: block;
-		padding: 0.8125rem 1.25rem;
-		font-size: 0.9375rem;
-		cursor: pointer;
-		transition: background-color 0.2s ease;
-	}
-
-	.services {
-		border: 0;
-		margin: 0;
-		padding: 0;
-		min-width: 0;
-	}
-
-	.check {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		cursor: pointer;
-		font-size: 0.875rem;
-		color: var(--slate);
-		padding: 0.3125rem 0;
-		transition: color 0.2s ease;
-	}
-	.check:hover {
-		color: var(--cream);
-	}
-
-	.check input[type='checkbox'] {
-		appearance: none;
-		flex: 0 0 auto;
-		width: 18px;
-		height: 18px;
-		border: 1px solid var(--hairline-strong);
-		border-radius: 4px;
-		background: transparent;
-		cursor: pointer;
-		display: grid;
-		place-content: center;
-		transition:
-			border-color 0.2s ease,
-			background-color 0.2s ease;
-	}
-
-	.check input[type='checkbox']::after {
-		content: '';
-		width: 9px;
-		height: 9px;
-		border-radius: 1px;
-		transform: scale(0);
-		transition: transform 0.15s ease;
-		background: var(--ground);
-	}
-
-	.check input[type='checkbox']:checked {
-		background: var(--gold);
-		border-color: var(--gold);
-	}
-
-	.check input[type='checkbox']:checked::after {
-		transform: scale(1);
-	}
-
-	.form-actions {
-		display: flex;
-		justify-content: center;
-		margin-top: 0.5rem;
-	}
-
-	#submit-button {
-		font-family: var(--font-body);
-		padding: 1rem 2.5rem;
-	}
-
-	#submit-button:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-
-	.form-note {
-		border-radius: var(--radius-input);
-		padding: 1.125rem 1.25rem;
-		text-align: center;
-		font-size: 0.9375rem;
-		font-weight: 500;
-	}
-
-	.form-note-ok {
-		border: 1px solid var(--ok-border);
-		background: var(--ok-bg);
-		color: var(--cream);
-	}
-
-	.form-note-err {
-		border: 1px solid var(--err-border);
-		background: var(--err-bg);
-		color: var(--cream);
-	}
-
-	/* ============================================ */
-	/* Footer                                        */
-	/* ============================================ */
-
-	.site-footer {
-		padding-block: 1.75rem;
-		border-top: 1px solid var(--hairline);
-		font-size: 0.8125rem;
-		color: var(--slate-dim);
-	}
-
-	.footer-inner {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 1rem;
-		flex-wrap: wrap;
-	}
-
-	.footer-links {
-		display: flex;
-		gap: clamp(1rem, 3vw, 1.75rem);
-		flex-wrap: wrap;
-	}
-
-	.footer-links a {
-		color: var(--slate);
-	}
-	.footer-links a:hover {
-		color: var(--cream);
-	}
-	.footer-links a.footer-gold {
-		color: var(--gold);
-	}
-	.footer-links a.footer-gold:hover {
-		color: var(--gold-bright);
-	}
-
-	/* ============================================ */
-	/* Reduced motion                                */
-	/* ============================================ */
-
-	@media (prefers-reduced-motion: reduce) {
-		.twinkle {
-			animation: none;
-		}
-		.pill:hover {
-			transform: none;
-		}
-		.tl-scroll .tl-pin {
-			position: static;
-			height: auto;
-			overflow: visible;
-		}
-		.tl-scroll .tl-viewport {
-			overflow-x: auto;
-		}
-	}
-</style>
 
 <script>
 	import '@magic-spells/dropdown-select';
