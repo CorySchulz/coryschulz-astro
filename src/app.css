@@ -111,6 +111,14 @@
   max-width: 1600px;
 }
 
+/* Wide modifier — same gutters, more room. Used by the projects section, whose
+   feature rows pair a copy column with a demo panel and read better with the
+   extra width on very large displays. Declared after .container so it wins on
+   source order at equal specificity. */
+.container-wide {
+  max-width: 1920px;
+}
+
 @media (width >= 768px) {
   :root {
     --gutter: 2.5rem;

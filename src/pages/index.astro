@@ -45,11 +45,30 @@ const stops = [
 	{
 		year: '2025',
 		shortYear: "'25",
-		company: 'Avex',
-		desc: 'Tech Lead — lead developer for Homage',
-		img: '/homage.png',
-		alt: 'Homage',
+		company: 'Elva',
+		desc: 'Front-end development — Dashing Diva',
+		img: '/dashing-diva.png',
+		alt: 'Dashing Diva',
 	},
+	{
+		year: '2026',
+		shortYear: "'26",
+		company: 'Avex',
+		desc: 'Tech Lead — sole front-end developer for Cherokee Uniforms',
+		img: null,
+		// Brand card rather than a site screenshot: the wordmark, recoloured
+		// white, centred on Cherokee's brand blue.
+		logo: '/cherokee-logo.svg',
+		logoBg: '#000193',
+		alt: 'Cherokee Uniforms',
+	},
+];
+
+const heroStats = [
+	{ num: '20+', label: 'years full-stack' },
+	{ num: '11', label: 'years Shopify' },
+	{ num: '5', label: 'years design' },
+	{ num: '2', label: 'years AI' },
 ];
 
 const splitEffects = [
@@ -65,12 +84,16 @@ const splitEffects = [
 
 const chips = ['Animation Engine', 'Reveal', 'Scroll Trigger', 'Scroll Progress', 'Dropdown Select'];
 
+// Ordered so neighbours contrast in the peacock spread — the two dark cards
+// never sit next to each other.
 const tarotSlides = [
 	{ img: '/dashing-diva.png', alt: 'Dashing Diva' },
-	{ img: '/ritual.png', alt: 'Ritual Hockey' },
+	{ img: '/homage.png', alt: 'Homage' },
 	{ img: '/braxley.jpg', alt: 'Braxley Bands' },
 	{ img: '/rosita.jpg', alt: 'Rosita' },
+	{ img: '/kohls.jpg', alt: "Kohl's" },
 	{ img: '/casamigos.jpg', alt: 'Casamigos' },
+	{ img: '/ritual.png', alt: 'Ritual Hockey' },
 ];
 
 // Magic Spells wordmark, inlined from the magicspells.io Logo component so
@@ -85,7 +108,9 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 
 	<main id="top">
 		<!-- ============ HERO ============ -->
-		<section class="hero">
+		<section class="section hero">
+			<!-- Decorative and deliberately full-bleed: it sits outside the
+			     container so it keeps sizing off the section, not the text column. -->
 			<svg class="constellation" viewBox="0 0 1200 360" aria-hidden="true" focusable="false">
 				<circle class="twinkle twinkle-a" cx="80" cy="60" r="1.6" fill="var(--gold)"></circle>
 				<circle cx="220" cy="180" r="1.1" fill="var(--cream)" opacity="0.5"></circle>
@@ -99,41 +124,72 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 				<circle class="twinkle twinkle-e" cx="1040" cy="310" r="1.3" fill="var(--cream)" opacity="0.4"></circle>
 				</svg>
 
-			<p class="eyebrow hero-eyebrow">
-				<span>Front-End Engineer &middot; Tech Lead</span><span class="eyebrow-sep"> &middot; </span><span>Shopify Developer</span>
-			</p>
+			<div class="container hero-inner">
+				<p class="eyebrow hero-eyebrow">
+					<span>Front-End Engineer &middot; Tech Lead</span><span class="eyebrow-sep"> &middot; </span><span>Shopify Developer</span>
+				</p>
 
-			<h1 class="hero-name">
-				<split-text split="chars" trigger="load" stagger="34" duration="900"
-					><span class="hero-name-part">Cory</span> <span class="hero-name-part">Schulz</span></split-text
-				>
-			</h1>
+				<h1 class="hero-name">
+					<split-text split="chars" trigger="load" stagger="34" duration="900"
+						><span class="hero-name-part">Cory</span> <span class="hero-name-part">Schulz</span></split-text
+					>
+				</h1>
 
-			<p class="hero-thesis">
-				I love to design beautiful experiences and build tools that help other people create more amazing
-				things.
-			</p>
-			<p class="hero-sub">
-				Creator of Magic Spells and the Tarot carousel &middot; twenty years of building for the web
-			</p>
+				<p class="hero-thesis">
+					I love to design beautiful experiences and build tools that help other people create more amazing
+					things.
+				</p>
+				<div class="hero-actions">
+					<a class="pill pill-gold" href="#contact" data-scroll-to-contact>Send a Message</a>
+					<a
+						class="pill pill-outline"
+						href="https://www.linkedin.com/in/cory-schulz/"
+						target="_blank"
+						rel="noopener noreferrer">
+						LinkedIn
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+							<path
+								d="M7 17 L17 7 M9 7 L17 7 L17 15"
+								stroke="var(--gold)"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"></path>
+						</svg>
+					</a>
+				</div>
+			</div>
+		</section>
 
-			<div class="hero-actions">
-				<a class="pill pill-gold" href="#contact" data-scroll-to-contact>Send a Message</a>
-				<a
-					class="pill pill-outline"
-					href="https://www.linkedin.com/in/cory-schulz/"
-					target="_blank"
-					rel="noopener noreferrer">
-					LinkedIn
-					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-						<path
-							d="M7 17 L17 7 M9 7 L17 7 L17 15"
-							stroke="var(--gold)"
-							stroke-width="2"
-							stroke-linecap="round"
-							stroke-linejoin="round"></path>
-					</svg>
-				</a>
+		<!-- ============ ABOUT ============ -->
+		<!-- An interstitial beat between the hero and Experience: no big section
+		     title, no top hairline, so it reads as a continuation of the hero
+		     rather than the first headline section. -->
+		<section class="section section-about" id="about">
+			<div class="container about-inner reveal reveal-fade-up">
+				<p class="eyebrow">A Little About Me</p>
+
+				<p class="about-lede">
+					I&rsquo;m the creator of Magic Spells, an open-source suite of web components, and Tarot, a
+					carousel with real physics. I&rsquo;ve been building for the web for twenty years, and I care
+					a lot about design systems &mdash; I love working in Figma as much as in code.
+				</p>
+
+				<p class="about-lede">
+					I&rsquo;ve also hired and built front-end teams from the ground up &mdash; at Pura I hired and
+					trained the team, then led the full rebuild of pura.com.
+				</p>
+
+				<!-- A quiet credits line, not cards: no boxes, no borders. -->
+				<ul class="stat-line">
+					{
+						heroStats.map((s) => (
+							<li class="stat">
+								<span class="stat-num">{s.num}</span>
+								<span class="stat-label">{s.label}</span>
+							</li>
+						))
+					}
+				</ul>
 			</div>
 		</section>
 
@@ -143,13 +199,19 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 			     the pinned area so it stays with the strip while it scrubs. -->
 			<div class="tl-scroll" id="tl-scroll">
 				<div class="tl-pin">
-					<div class="section-head reveal reveal-fade-up">
-						<p class="eyebrow">2013 &mdash; Today</p>
-						<h2 class="section-title">Experience</h2>
-						<p class="section-intro">
-							From a Fortune-500 rewrite to founding an open-source component library.
-						</p>
+					<div class="container">
+						<div class="section-head reveal reveal-fade-up">
+							<p class="eyebrow">2013 &mdash; Today</p>
+							<h2 class="section-title">Experience</h2>
+							<p class="section-intro">
+								From a Fortune-500 rewrite to founding an open-source component library.
+							</p>
+						</div>
 					</div>
+					<!-- The strip is deliberately NOT in the container: it is full-bleed
+					     to the section gutters so the scrub keeps the widest possible
+					     runway. .tl-viewport takes its gutters as margins (not padding)
+					     because the scrub measures travel from its clientWidth. -->
 					<div class="tl-viewport" id="tl-viewport">
 						<div class="tl-strip" id="tl-strip">
 							<div class="tl-rule" aria-hidden="true"></div>
@@ -158,6 +220,16 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 									<article class="tl-stop">
 										{s.img ? (
 											<img class="tl-media" src={s.img} alt={s.alt} loading="lazy" decoding="async" />
+										) : s.logo ? (
+											<div class="tl-media tl-media-brand" style={`background:${s.logoBg}`}>
+												<img
+													class="tl-brand-logo"
+													src={s.logo}
+													alt={s.alt}
+													loading="lazy"
+													decoding="async"
+												/>
+											</div>
 										) : (
 											<div class="tl-media tl-media-mark">
 												<svg
@@ -186,109 +258,132 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 			</div>
 
 			<!-- Mobile: ledger rows -->
-			<ol class="tl-ledger">
-				{
-					stops.map((s) => (
-						<li class="tl-row reveal reveal-fade-up" data-reveal-group="ledger:70">
-							<p class="tl-row-year">{s.shortYear}</p>
-							<div class="tl-row-body">
-								<h3 class="tl-row-company">{s.company}</h3>
-								<p class="tl-row-desc">{s.desc}</p>
-							</div>
-							{s.img ? (
-								<img class="tl-row-thumb" src={s.img} alt={s.alt} loading="lazy" decoding="async" />
-							) : (
-								<div class="tl-row-thumb tl-media-mark">
-									<svg
-										class="ms-logo ms-logo-sm"
-										viewBox="0 0 1193 238"
-										role="img"
-										aria-label="Magic Spells">
-										<path d={MS_LOGO} fill="currentColor" />
-									</svg>
+			<div class="container tl-ledger-wrap">
+				<ol class="tl-ledger">
+					{
+						stops.map((s) => (
+							<li class="tl-row reveal reveal-fade-up" data-reveal-group="ledger:70">
+								<p class="tl-row-year">{s.shortYear}</p>
+								<div class="tl-row-body">
+									<h3 class="tl-row-company">{s.company}</h3>
+									<p class="tl-row-desc">{s.desc}</p>
 								</div>
-							)}
-						</li>
-					))
-				}
-			</ol>
+								{s.img ? (
+									<img class="tl-row-thumb" src={s.img} alt={s.alt} loading="lazy" decoding="async" />
+								) : s.logo ? (
+									<div class="tl-row-thumb tl-media-brand" style={`background:${s.logoBg}`}>
+										<img
+											class="tl-brand-logo"
+											src={s.logo}
+											alt={s.alt}
+											loading="lazy"
+											decoding="async"
+										/>
+									</div>
+								) : (
+									<div class="tl-row-thumb tl-media-mark">
+										<svg
+											class="ms-logo ms-logo-sm"
+											viewBox="0 0 1193 238"
+											role="img"
+											aria-label="Magic Spells">
+											<path d={MS_LOGO} fill="currentColor" />
+										</svg>
+									</div>
+								)}
+							</li>
+						))
+					}
+				</ol>
+			</div>
 		</section>
 
 		<!-- ============ THINGS I'VE BUILT ============ -->
 		<section class="section section-projects" id="projects">
-			<div class="section-head reveal reveal-fade-up">
-				<p class="eyebrow">Free &amp; Open Source</p>
-				<h2 class="section-title">Things I&rsquo;ve Built</h2>
-			</div>
+			<div class="container container-wide">
+				<div class="section-head reveal reveal-fade-up">
+					<p class="eyebrow">Free &amp; Open Source</p>
+					<h2 class="section-title">Things I&rsquo;ve Built</h2>
+				</div>
 
-			<div class="proj-rows">
-				<!-- ---------- TAROT ---------- -->
-				<article class="proj-row reveal reveal-fade-up">
-					<div class="proj-copy">
-						<a class="proj-pill" href="https://magicspells.io" target="_blank" rel="noopener noreferrer"
-							>magicspells.io/tarot</a
-						>
-						<h3 class="proj-title">Tarot</h3>
-						<p class="proj-tagline">A carousel with real physics.</p>
-						<p class="proj-desc">
-							Springy, scrubbable, and fun to flick. Throw it hard and it carries the momentum; catch
-							it mid-flight and it settles from wherever you let go. Five effects and counting.
-						</p>
-						<p class="proj-note">Free to use &mdash; find it at magicspells.io</p>
-					</div>
-					<div class="proj-demo proj-demo-tarot">
-						<tarot-carousel>
-							<script type="application/json" data-tarot-options>
-								{
-									"effect": "butterfly",
-									"goToSelectedSlide": true,
-									"initialIndex": 2,
-									"loop": true,
-									"gap": 12,
-									"paddingLeft": "24%",
-									"paddingRight": "24%",
-									"slidesPerView": 1,
-									"navigation": {
-										"showButtons": false,
-										"showPagination": true,
-										"paginationPosition": "bottom",
-										"buttonsPosition": "bottom"
+				<div class="proj-rows">
+					<!-- ---------- TAROT ---------- -->
+					<article class="proj-row reveal reveal-fade-up">
+						<div class="proj-copy">
+							<a class="proj-pill" href="https://magicspells.io" target="_blank" rel="noopener noreferrer"
+								>magicspells.io/tarot</a
+							>
+							<h3 class="proj-title">Tarot</h3>
+							<p class="proj-tagline">A carousel with real physics.</p>
+							<p class="proj-desc">
+								A springy, scrubbable carousel with real physics in a 25kb core &mdash; two built-in
+								effects, sixteen premium effects, and five optional plugins.
+							</p>
+							<p class="proj-note">Free to use &mdash; find it at magicspells.io</p>
+						</div>
+						<div class="proj-demo proj-demo-tarot">
+							<tarot-carousel>
+								<script type="application/json" data-tarot-options>
+									{
+										"effect": "peacock",
+										"goToSelectedSlide": true,
+										"initialIndex": 2,
+										"loop": true,
+										"gap": 20,
+										"paddingLeft": "0%",
+										"paddingRight": "0%",
+										"slidesPerView": 1,
+										"navigation": {
+											"showButtons": true,
+											"smartButtons": true,
+											"showPagination": true,
+											"paginationPosition": "bottom",
+											"buttonsPosition": "bottom"
+										},
+										"breakpoints": {
+											"768": {
+												"paddingLeft": "10%",
+												"paddingRight": "10%"
+											}
+										}
 									}
-								}
-							</script>
-							<tarot-viewport>
-								{
-									tarotSlides.map((s) => (
-										<tarot-slide class="tarot-mini-slide">
-											<img src={s.img} alt={s.alt} loading="lazy" decoding="async" />
-										</tarot-slide>
-									))
-								}
-							</tarot-viewport>
-						</tarot-carousel>
-					</div>
-				</article>
+								</script>
+								<tarot-viewport>
+									{
+										tarotSlides.map((s) => (
+											<tarot-slide class="tarot-mini-slide">
+												{/* w-tarot-slide pins the content to --tarot-slide-width so peacock
+												    can animate the slide open around it without squashing the card. */}
+												<div class="w-tarot-slide tarot-mini-inner">
+													<img src={s.img} alt={s.alt} loading="lazy" decoding="async" />
+												</div>
+											</tarot-slide>
+										))
+									}
+								</tarot-viewport>
+							</tarot-carousel>
+						</div>
+					</article>
 
-				<!-- ---------- PUZZLE ---------- -->
-				<article class="proj-row reveal reveal-fade-up">
-					<div class="proj-copy">
-						<a
-							class="proj-pill"
-							href="https://github.com/magic-spells/puzzle"
-							target="_blank"
-							rel="noopener noreferrer">@magic-spells/puzzle</a
-						>
-						<h3 class="proj-title">Puzzle</h3>
-						<p class="proj-tagline">A framework of single-file views.</p>
-						<p class="proj-desc">
-							Markup, state, and handlers live together in one <code>.pzl</code> file. Bindings are
-							plain braces, events are plain attributes, and every view is a real custom element &mdash;
-							so there is no compiler dialect to learn before you can read the page.
-						</p>
-						<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/puzzle</p>
-					</div>
-					<div class="proj-demo">
-						<pre class="code-card"><code><span class="c-punc">&lt;</span><span class="c-tag">puzzle-view</span><span class="c-punc">&gt;</span>
+					<!-- ---------- PUZZLE ---------- -->
+					<article class="proj-row reveal reveal-fade-up">
+						<div class="proj-copy">
+							<a
+								class="proj-pill"
+								href="https://github.com/magic-spells/puzzle"
+								target="_blank"
+								rel="noopener noreferrer">@magic-spells/puzzle</a
+							>
+							<h3 class="proj-title">Puzzle</h3>
+							<p class="proj-tagline">Built to compete with React, Vue, and Svelte.</p>
+							<p class="proj-desc">
+								A front-end web app framework &mdash; single-file <code>.pzl</code> components, reactive
+								data, and a Go + esbuild compiler. It builds magicspells.io.
+							</p>
+							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/puzzle</p>
+						</div>
+						<div class="proj-demo">
+							<pre class="code-card"><code><span class="c-punc">&lt;</span><span class="c-tag">puzzle-view</span><span class="c-punc">&gt;</span>
   <span class="c-punc">&lt;</span><span class="c-tag">button</span> <span class="c-attr">class</span>=<span class="c-str">"counter"</span> <span class="c-evt">@click</span>=<span class="c-bind">&#123; increment &#125;</span><span class="c-punc">&gt;</span>
     Clicked <span class="c-bind">&#123; count &#125;</span> times
   <span class="c-punc">&lt;/</span><span class="c-tag">button</span><span class="c-punc">&gt;</span>
@@ -302,251 +397,256 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
     &#125;,
   &#125;;
 <span class="c-punc">&lt;/</span><span class="c-tag">script</span><span class="c-punc">&gt;</span></code></pre>
-					</div>
-				</article>
+						</div>
+					</article>
 
-				<!-- ---------- TIMELINE ENGINE ---------- -->
-				<article class="proj-row reveal reveal-fade-up">
-					<div class="proj-copy">
-						<a
-							class="proj-pill"
-							href="https://github.com/magic-spells/timeline-engine"
-							target="_blank"
-							rel="noopener noreferrer">@magic-spells/timeline-engine</a
-						>
-						<h3 class="proj-title">Timeline Engine</h3>
-						<p class="proj-tagline">Choreography you can scrub.</p>
-						<p class="proj-desc">
-							A timeline is an object, not a fire-and-forget animation. Build it out of percent-keyed
-							tweens, then seek it, scrub it, play it backwards, or hand the playhead to the scroll
-							position. Every frame is deterministic &mdash; the same time always renders the same
-							picture, however you got there.
-						</p>
-						<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/timeline-engine</p>
-					</div>
-					<div class="proj-demo proj-demo-bare" id="fireworks-mount"></div>
-				</article>
+					<!-- ---------- TIMELINE ENGINE ---------- -->
+					<article class="proj-row reveal reveal-fade-up">
+						<div class="proj-copy">
+							<a
+								class="proj-pill"
+								href="https://github.com/magic-spells/timeline-engine"
+								target="_blank"
+								rel="noopener noreferrer">@magic-spells/timeline-engine</a
+							>
+							<h3 class="proj-title">Timeline Engine</h3>
+							<p class="proj-tagline">Choreography you can scrub.</p>
+							<p class="proj-desc">
+								A timeline is an object, not a fire-and-forget animation. Build it out of percent-keyed
+								tweens, then seek it, scrub it, play it backwards, or hand the playhead to the scroll
+								position. Every frame is deterministic &mdash; the same time always renders the same
+								picture, however you got there.
+							</p>
+							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/timeline-engine</p>
+						</div>
+						<div class="proj-demo proj-demo-bare" id="fireworks-mount"></div>
+					</article>
 
-				<!-- ---------- SPLIT TEXT ---------- -->
-				<article class="proj-row reveal reveal-fade-up">
-					<div class="proj-copy">
-						<a
-							class="proj-pill"
-							href="https://github.com/magic-spells/split-text"
-							target="_blank"
-							rel="noopener noreferrer">@magic-spells/split-text</a
-						>
-						<h3 class="proj-title">Split Text</h3>
-						<p class="proj-tagline">Text that makes an entrance.</p>
-						<p class="proj-desc">
-							A web component that splits a line into words, characters, or measured lines and animates
-							each unit on a CSS-driven stagger. Eight built-in effects, no dependencies, and no
-							framework to adopt &mdash; drop the tag around your copy and it reveals itself when it
-							scrolls into view.
-						</p>
-						<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/split-text</p>
-					</div>
-					<div class="proj-demo proj-demo-split">
-						<div class="st-demo">
-							<p class="st-stage" id="st-stage"><split-text
-									id="st-specimen"
-									effect="rise"
-									split="chars"
-									trigger="manual"
-									duration="850"
-									stagger="26">Text that makes an entrance</split-text></p>
+					<!-- ---------- SPLIT TEXT ---------- -->
+					<article class="proj-row reveal reveal-fade-up">
+						<div class="proj-copy">
+							<a
+								class="proj-pill"
+								href="https://github.com/magic-spells/split-text"
+								target="_blank"
+								rel="noopener noreferrer">@magic-spells/split-text</a
+							>
+							<h3 class="proj-title">Split Text</h3>
+							<p class="proj-tagline">Text that makes an entrance.</p>
+							<p class="proj-desc">
+								A web component that splits a line into words, characters, or measured lines and animates
+								each unit on a CSS-driven stagger. Eight built-in effects, no dependencies, and no
+								framework to adopt &mdash; drop the tag around your copy and it reveals itself when it
+								scrolls into view.
+							</p>
+							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/split-text</p>
+						</div>
+						<div class="proj-demo proj-demo-split">
+							<div class="st-demo">
+								<p class="st-stage" id="st-stage"><split-text
+										id="st-specimen"
+										effect="rise"
+										split="chars"
+										trigger="manual"
+										duration="850"
+										stagger="26">Text that makes an entrance</split-text></p>
 
-							<div class="st-controls">
-								<p class="st-label">Effect</p>
-								<div class="st-effects" id="st-effects" role="group" aria-label="Reveal effect">
-									{
-										splitEffects.map((e, i) => (
-											<button
-												type="button"
-												class="st-chip"
-												data-effect={e}
-												aria-pressed={i === 0 ? 'true' : 'false'}>
-												{e}
-											</button>
-										))
-									}
-								</div>
-								<div class="st-actions">
-									<button type="button" class="st-replay" id="st-replay">Replay</button>
-									<code class="st-code" id="st-code"
-										>&lt;split-text effect="rise" split="chars"&gt;</code
-									>
+								<div class="st-controls">
+									<p class="st-label">Effect</p>
+									<div class="st-effects" id="st-effects" role="group" aria-label="Reveal effect">
+										{
+											splitEffects.map((e, i) => (
+												<button
+													type="button"
+													class="st-chip"
+													data-effect={e}
+													aria-pressed={i === 0 ? 'true' : 'false'}>
+													{e}
+												</button>
+											))
+										}
+									</div>
+									<div class="st-actions">
+										<button type="button" class="st-replay" id="st-replay">Replay</button>
+										<code class="st-code" id="st-code"
+											>&lt;split-text effect="rise" split="chars"&gt;</code
+										>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</article>
+					</article>
 
-				<!-- ---------- CONSTELLATION ---------- -->
-				<article class="proj-row reveal reveal-fade-up">
-					<div class="proj-copy">
-						<a
-							class="proj-pill"
-							href="https://github.com/magic-spells/constellation"
-							target="_blank"
-							rel="noopener noreferrer">@magic-spells/constellation</a
-						>
-						<h3 class="proj-title">Constellation</h3>
-						<p class="proj-tagline">Plan a project as a connected graph.</p>
-						<p class="proj-desc">
-							Typed, connected markdown cards in your repo &mdash; agents read them before they change
-							code, update them after, and understanding compounds instead of evaporating at session
-							end.
-						</p>
-						<p class="proj-install">
-							<span class="dollar">$</span> npm i -g @magic-spells/constellation
-						</p>
-					</div>
-					<div class="proj-demo">
-						<div class="cf-wrap">
-							<canvas id="cf-canvas" aria-hidden="true"></canvas>
+					<!-- ---------- CONSTELLATION ---------- -->
+					<article class="proj-row reveal reveal-fade-up">
+						<div class="proj-copy">
+							<a
+								class="proj-pill"
+								href="https://github.com/magic-spells/constellation"
+								target="_blank"
+								rel="noopener noreferrer">@magic-spells/constellation</a
+							>
+							<h3 class="proj-title">Constellation</h3>
+							<p class="proj-tagline">Long-term memory for AI agents.</p>
+							<p class="proj-desc">
+								Plan your project as a connected graph of typed cards &mdash; pages, endpoints, tables,
+								flows. Agents read and update the graph as they work, so plans and context survive from
+								session to session instead of starting over every conversation.
+							</p>
+							<p class="proj-install">
+								<span class="dollar">$</span> npm i -g @magic-spells/constellation
+							</p>
 						</div>
-					</div>
-				</article>
+						<div class="proj-demo">
+							<div class="cf-wrap">
+								<canvas id="cf-canvas" aria-hidden="true"></canvas>
+							</div>
+						</div>
+					</article>
+				</div>
+
+				<ul class="chips reveal reveal-fade-up">
+					{chips.map((c) => <li class="chip">{c}</li>)}
+				</ul>
+
+				<p class="built-footnote reveal reveal-fade-up">
+					All free and open source at <a
+						href="https://magicspells.io"
+						target="_blank"
+						rel="noopener noreferrer">magicspells.io</a
+					>
+				</p>
 			</div>
-
-			<ul class="chips reveal reveal-fade-up">
-				{chips.map((c) => <li class="chip">{c}</li>)}
-			</ul>
-
-			<p class="built-footnote reveal reveal-fade-up">
-				All free and open source at <a
-					href="https://magicspells.io"
-					target="_blank"
-					rel="noopener noreferrer">magicspells.io</a
-				>
-			</p>
 		</section>
 
 		<!-- ============ CONTACT ============ -->
 		<section class="section section-contact" id="contact">
-			<div class="contact-inner">
-				<div class="section-head reveal reveal-fade-up">
-					<img class="portrait" src="/cory.jpg" alt="Cory Schulz" width="76" height="76" loading="lazy" />
-					<h2 class="section-title">Have a Project in Mind?</h2>
-					<p class="contact-sub">
-						Tell me what you&rsquo;re building. If it sounds like a good fit, I&rsquo;ll get back to you as
-						soon as I can.
-					</p>
+			<div class="container">
+				<div class="contact-inner">
+					<div class="section-head reveal reveal-fade-up">
+						<img class="portrait" src="/cory.jpg" alt="Cory Schulz" width="76" height="76" loading="lazy" />
+						<h2 class="section-title">Have a Project in Mind?</h2>
+						<p class="contact-sub">
+							Tell me what you&rsquo;re building. If it sounds like a good fit, I&rsquo;ll get back to you as
+							soon as I can.
+						</p>
+					</div>
+
+					<!-- Success Message -->
+					<div id="success-message" class="form-note form-note-ok" hidden>
+						<p>Thanks for reaching out! I&rsquo;ll get back to you soon.</p>
+					</div>
+
+					<!-- Error Message -->
+					<div id="error-message" class="form-note form-note-err" hidden>
+						<p>Oops! Something went wrong. Please try again.</p>
+					</div>
+
+					<form id="contact-form" class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+						<!-- Hidden fields -->
+						<input type="hidden" name="access_key" value="585a106a-78ff-4313-b4c9-459b73515114" />
+						<input type="hidden" name="subject" value="New Business Inquiry from Cory Schulz Portfolio" />
+						<input type="hidden" name="from_name" value="Cory Schulz Portfolio" />
+
+						<!-- Honeypot Spam Protection (hidden from humans, visible to bots) -->
+						<input type="checkbox" name="botcheck" class="botcheck" style="display: none;" />
+
+						<div class="field-grid">
+							<div class="input-field">
+								<input id="name" name="name" type="text" required placeholder="Your name" />
+								<label for="name" class="floating-label">Name</label>
+							</div>
+							<div class="input-field">
+								<input id="email" name="email" type="email" required placeholder="Your email" />
+								<label for="email" class="floating-label">Email</label>
+							</div>
+						</div>
+
+						<div class="field-grid">
+							<div class="input-field">
+								<input id="company" name="company" type="text" required placeholder="Company name" />
+								<label for="company" class="floating-label">Company</label>
+							</div>
+							<div class="input-field">
+								<input id="website" name="website" type="text" required placeholder="Your website" />
+								<label for="website" class="floating-label">Website</label>
+							</div>
+						</div>
+
+						<div class="field-grid">
+							<div class="budget-field">
+								<p class="field-legend">Budget</p>
+								<dropdown-select>
+									<dropdown-select-trigger class="select-trigger">
+										<span class="dropdown-label">$10,000 - $20,000</span>
+										<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+											<path
+												d="M2 4 L6 8 L10 4"
+												stroke="var(--slate-dim)"
+												stroke-width="1.5"
+												stroke-linecap="round"
+												stroke-linejoin="round"></path>
+										</svg>
+									</dropdown-select-trigger>
+
+									<input type="hidden" class="dropdown-hidden-input" name="budget" value="$10,000 - $20,000" required />
+
+									<dropdown-options class="select-options">
+										<dropdown-option value="$10,000 - $20,000" class="select-option">$10,000 - $20,000</dropdown-option>
+										<dropdown-option value="$20,000 - $40,000" class="select-option">$20,000 - $40,000</dropdown-option>
+										<dropdown-option value="$40,000 - $60,000" class="select-option">$40,000 - $60,000</dropdown-option>
+										<dropdown-option value="$60,000 - $100,000" class="select-option">$60,000 - $100,000</dropdown-option>
+										<dropdown-option value="$100,000+" class="select-option">$100,000+</dropdown-option>
+									</dropdown-options>
+								</dropdown-select>
+							</div>
+
+							<fieldset class="services">
+								<legend class="field-legend">What services do you need?</legend>
+								<label class="check">
+									<input type="checkbox" name="services" value="Custom Shopify Theme Development" />
+									<span>Custom Shopify Theme Development</span>
+								</label>
+								<label class="check">
+									<input type="checkbox" name="services" value="Shopify Site Design" />
+									<span>Shopify Site Design</span>
+								</label>
+							</fieldset>
+						</div>
+
+						<div class="input-field">
+							<textarea
+								id="project-description"
+								name="project-description"
+								rows="4"
+								required
+								placeholder="Tell me about your project"></textarea>
+							<label for="project-description" class="floating-label">Tell me about your project</label>
+						</div>
+
+						<div class="form-actions">
+							<button id="submit-button" type="submit" class="pill pill-gold">
+								<span id="button-text">Send Message</span>
+							</button>
+						</div>
+					</form>
 				</div>
-
-				<!-- Success Message -->
-				<div id="success-message" class="form-note form-note-ok" hidden>
-					<p>Thanks for reaching out! I&rsquo;ll get back to you soon.</p>
-				</div>
-
-				<!-- Error Message -->
-				<div id="error-message" class="form-note form-note-err" hidden>
-					<p>Oops! Something went wrong. Please try again.</p>
-				</div>
-
-				<form id="contact-form" class="contact-form" action="https://api.web3forms.com/submit" method="POST">
-					<!-- Hidden fields -->
-					<input type="hidden" name="access_key" value="585a106a-78ff-4313-b4c9-459b73515114" />
-					<input type="hidden" name="subject" value="New Business Inquiry from Cory Schulz Portfolio" />
-					<input type="hidden" name="from_name" value="Cory Schulz Portfolio" />
-
-					<!-- Honeypot Spam Protection (hidden from humans, visible to bots) -->
-					<input type="checkbox" name="botcheck" class="botcheck" style="display: none;" />
-
-					<div class="field-grid">
-						<div class="input-field">
-							<input id="name" name="name" type="text" required placeholder="Your name" />
-							<label for="name" class="floating-label">Name</label>
-						</div>
-						<div class="input-field">
-							<input id="email" name="email" type="email" required placeholder="Your email" />
-							<label for="email" class="floating-label">Email</label>
-						</div>
-					</div>
-
-					<div class="field-grid">
-						<div class="input-field">
-							<input id="company" name="company" type="text" required placeholder="Company name" />
-							<label for="company" class="floating-label">Company</label>
-						</div>
-						<div class="input-field">
-							<input id="website" name="website" type="text" required placeholder="Your website" />
-							<label for="website" class="floating-label">Website</label>
-						</div>
-					</div>
-
-					<div class="field-grid">
-						<div class="budget-field">
-							<p class="field-legend">Budget</p>
-							<dropdown-select>
-								<dropdown-select-trigger class="select-trigger">
-									<span class="dropdown-label">$10,000 - $20,000</span>
-									<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-										<path
-											d="M2 4 L6 8 L10 4"
-											stroke="var(--slate-dim)"
-											stroke-width="1.5"
-											stroke-linecap="round"
-											stroke-linejoin="round"></path>
-									</svg>
-								</dropdown-select-trigger>
-
-								<input type="hidden" class="dropdown-hidden-input" name="budget" value="$10,000 - $20,000" required />
-
-								<dropdown-options class="select-options">
-									<dropdown-option value="$10,000 - $20,000" class="select-option">$10,000 - $20,000</dropdown-option>
-									<dropdown-option value="$20,000 - $40,000" class="select-option">$20,000 - $40,000</dropdown-option>
-									<dropdown-option value="$40,000 - $60,000" class="select-option">$40,000 - $60,000</dropdown-option>
-									<dropdown-option value="$60,000 - $100,000" class="select-option">$60,000 - $100,000</dropdown-option>
-									<dropdown-option value="$100,000+" class="select-option">$100,000+</dropdown-option>
-								</dropdown-options>
-							</dropdown-select>
-						</div>
-
-						<fieldset class="services">
-							<legend class="field-legend">What services do you need?</legend>
-							<label class="check">
-								<input type="checkbox" name="services" value="Custom Shopify Theme Development" />
-								<span>Custom Shopify Theme Development</span>
-							</label>
-							<label class="check">
-								<input type="checkbox" name="services" value="Shopify Site Design" />
-								<span>Shopify Site Design</span>
-							</label>
-						</fieldset>
-					</div>
-
-					<div class="input-field">
-						<textarea
-							id="project-description"
-							name="project-description"
-							rows="4"
-							required
-							placeholder="Tell me about your project"></textarea>
-						<label for="project-description" class="floating-label">Tell me about your project</label>
-					</div>
-
-					<div class="form-actions">
-						<button id="submit-button" type="submit" class="pill pill-gold">
-							<span id="button-text">Send Message</span>
-						</button>
-					</div>
-				</form>
 			</div>
 		</section>
 	</main>
 
 	<!-- ============ FOOTER ============ -->
 	<footer class="site-footer">
-		<p>&copy; 2026 Cory Schulz</p>
-		<nav class="footer-links" aria-label="Elsewhere">
-			<a href="mailto:coryschulz@gmail.com">coryschulz@gmail.com</a>
-			<a href="https://www.linkedin.com/in/cory-schulz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-			<a class="footer-gold" href="https://magicspells.io" target="_blank" rel="noopener noreferrer"
-				>magicspells.io</a
-			>
-		</nav>
+		<div class="container footer-inner">
+			<p>&copy; 2026 Cory Schulz</p>
+			<nav class="footer-links" aria-label="Elsewhere">
+				<a href="mailto:coryschulz@gmail.com">coryschulz@gmail.com</a>
+				<a href="https://www.linkedin.com/in/cory-schulz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+				<a class="footer-gold" href="https://magicspells.io" target="_blank" rel="noopener noreferrer"
+					>magicspells.io</a
+				>
+			</nav>
+		</div>
 	</footer>
 </Layout>
 
@@ -625,8 +725,11 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 		transform: translateY(-1px);
 	}
 
+	/* Sections own the vertical rhythm and the hairline that separates them.
+	   Horizontal gutters and the max width belong to the .container inside
+	   (global, in app.css) so nothing double-pads. */
 	.section {
-		padding: clamp(3.5rem, 7vw, 5rem) var(--gutter) clamp(4rem, 8vw, 5.625rem);
+		padding-block: clamp(5rem, 10vw, 8.5rem) clamp(5.5rem, 11vw, 9.5rem);
 		border-top: 1px solid var(--hairline);
 	}
 
@@ -657,14 +760,19 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 	/* Hero                                          */
 	/* ============================================ */
 
+	/* First section on the page, so it drops .section's top hairline. */
 	.hero {
 		position: relative;
+		padding-block: clamp(5rem, 11vw, 9rem) clamp(4rem, 8vw, 6.875rem);
+		border-top: 0;
+		background: var(--ground-glow);
+	}
+
+	.hero-inner {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
-		padding: clamp(5rem, 11vw, 9rem) var(--gutter) clamp(4rem, 8vw, 6.875rem);
-		background: var(--ground-glow);
 	}
 
 	.constellation {
@@ -771,18 +879,86 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 		line-height: 1.6;
 		color: var(--slate);
 		max-width: 620px;
-		margin-bottom: 1rem;
+		margin-bottom: 2.75rem;
 		text-wrap: pretty;
 	}
 
-	.hero-sub {
-		position: relative;
-		font-size: 0.9375rem;
+	/* ============================================ */
+	/* About — interstitial beat                     */
+	/* ============================================ */
+
+	.section-about {
+		/* Lighter than the headline sections, and no top hairline: it carries
+		   straight on from the hero. Kept at roughly 60% of .section's rhythm so
+		   it stays proportional as that scales. */
+		padding-block: clamp(3rem, 6vw, 5rem);
+		border-top: 0;
+	}
+
+	.about-inner {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: 0.875rem;
+	}
+
+	.about-lede {
+		font-size: clamp(1.1875rem, 2.2vw, 1.375rem);
+		line-height: 1.6;
+		color: var(--slate);
+		max-width: 620px;
+		text-wrap: pretty;
+	}
+
+	.about-inner .eyebrow {
+		margin-bottom: 0.375rem;
+	}
+
+	/* Credits line: a typographic row, deliberately no cards or borders, and
+	   sized to stay subordinate to the paragraphs above it. */
+	.stat-line {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: baseline;
+		gap: 0.5rem 1.75rem;
+		list-style: none;
+		margin: 0.75rem 0 0;
+		padding: 0;
+		font-size: 0.875rem;
+	}
+
+	.stat {
+		display: flex;
+		align-items: baseline;
+		gap: 0.4375rem;
+		white-space: nowrap;
+	}
+
+	.stat-num {
+		font-family: var(--font-display);
+		font-weight: 800;
+		/* Relative to the row's own 14px, so the pair scales together. */
+		font-size: 1.1em;
+		line-height: 1;
+		color: var(--gold);
+		font-variant-numeric: lining-nums;
+	}
+
+	.stat-label {
 		font-weight: 500;
 		color: var(--slate-dim);
-		margin-bottom: 2.75rem;
-		max-width: 520px;
-		text-wrap: pretty;
+	}
+
+	/* Deterministic 2x2 on phones rather than whatever the line-breaks give. */
+	@media (max-width: 599px) {
+		.stat-line {
+			display: grid;
+			grid-template-columns: repeat(2, auto);
+			justify-content: center;
+			gap: 0.625rem 1.5rem;
+		}
 	}
 
 	.hero-actions {
@@ -818,6 +994,11 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 	}
 
 	.tl-viewport {
+		/* Edge to edge: the strip is deliberately outside .container and takes
+		   the full viewport width, so cards run off the screen edge rather than
+		   stopping at a gutter line. The side breathing room lives on the track
+		   below (.tl-strip padding-inline), which the travel math picks up
+		   because scrollWidth includes it. */
 		width: 100%;
 		overflow-x: auto;
 		overflow-y: hidden;
@@ -839,7 +1020,18 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 		display: flex;
 		gap: 3rem;
 		width: max-content;
-		padding-inline: 2px;
+		/* The track carries the side spacing, not the viewport — that keeps the
+		   viewport full-bleed while the first and last cards still clear the
+		   screen edge. scrollWidth counts this padding, so the scrub travels
+		   the whole track. */
+		padding-inline: var(--gutter);
+	}
+
+	/* Very wide displays: the whole strip fits, so there is no travel and no
+	   pin (see buildScrub). Without this it would sit flush-left with dead
+	   space to the right; margin auto on a max-content block centres it. */
+	.tl-scroll.tl-fits .tl-strip {
+		margin-inline: auto;
 	}
 
 	.tl-rule {
@@ -888,7 +1080,28 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 		justify-content: center;
 		border-color: rgba(201, 168, 106, 0.4);
 		background: linear-gradient(160deg, #0b1626 0%, var(--ground) 100%);
-		color: var(--gold);
+		/* The wordmark is inlined SVG painted with currentColor — cream reads
+		   cleaner than gold against this card's dark blue gradient. */
+		color: var(--cream);
+	}
+
+	/* Curated brand card: a flat brand colour behind a centred wordmark, the
+	   same read as the Milwaukee and Casamigos screenshots next to it. The
+	   colour comes from the stop's own data, so only the layout lives here. */
+	.tl-media-brand {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1rem;
+		border-color: var(--card-border);
+	}
+
+	/* The wordmark is a very wide lockup (~7:1), so it is sized off the card's
+	   width and left with generous vertical whitespace. */
+	.tl-brand-logo {
+		width: 68%;
+		height: auto;
+		display: block;
 	}
 
 	.ms-logo {
@@ -1042,7 +1255,7 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 		.tl-viewport {
 			display: block;
 		}
-		.tl-ledger {
+		.tl-ledger-wrap {
 			display: none;
 		}
 		.section-timeline {
@@ -1064,7 +1277,7 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 		grid-template-columns: 1fr;
 		gap: 2rem;
 		align-items: center;
-		padding-block: clamp(2.5rem, 5vw, 4rem);
+		padding-block: clamp(3rem, 6vw, 5rem);
 		border-top: 1px solid var(--hairline);
 	}
 
@@ -1081,6 +1294,14 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 		/* Alternate copy-left / demo-left down the column */
 		.proj-row:nth-child(even) .proj-copy {
 			order: 2;
+		}
+		/* Cap the copy block and centre it in its column so the row reads
+		   balanced against the filled demo panel instead of hugging the inner
+		   edge. Auto margins are symmetric, so it works either way round.
+		   The text itself stays left-aligned inside the block. */
+		.proj-copy {
+			max-width: 46ch;
+			margin-inline: auto;
 		}
 	}
 
@@ -1178,27 +1399,164 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 		min-width: 0;
 	}
 
-	/* The carousel sets its own height, so this panel hugs it rather than
-	   leaving dead space under the pagination. */
+	/* No panel chrome at all: the carousel breaks out and fills the demo side
+	   of the row. The slides' own shadows give them definition against the
+	   night ground, so a border and a background would only box them in.
+	   padding-bottom reserves the strip the pagination is lifted into. */
 	.proj-demo-tarot {
+		position: relative;
 		display: block;
-		padding-inline: 0;
+		border: 0;
+		background: none;
+		/* Top padding gives the card shadows headroom; the bottom strip is
+		   where the pagination is lifted to. */
+		padding: 0.75rem 0 2.5rem;
 		min-height: 0;
+		/* The carousel's own clipping is off below so the shadows survive, which
+		   leaves its off-screen slides free to widen the page. This is the box
+		   that catches them — the visible slides sit ~80px inside it, so their
+		   shadows are never touched. */
+		overflow: hidden;
 	}
 
+	/* Pagination out of flow, so tarot-carousel's box collapses to exactly the
+	   viewport's slide area. That is what makes the buttons below centre on the
+	   slides rather than on the slides-plus-dots stack. */
+	.proj-demo-tarot :global(.tarot-dots-container) {
+		position: absolute;
+		top: 100%;
+		left: 0;
+		right: 0;
+		/* auto inline margins keep the fit-content dots centred under the card */
+		margin: 0.75rem auto 0;
+	}
+
+	/* The carousel's own chrome clips at the viewport edge, which would cut the
+	   card shadows off. The slides sit well inside the panel and .proj-demo
+	   still clips at its rounded border, so letting these overflow is safe. */
+	.proj-demo-tarot tarot-carousel,
+	.proj-demo-tarot tarot-viewport {
+		overflow: visible;
+	}
+
+	/* Peacock animates the slide element's own width, so the slide is the
+	   visible card — it carries the corners and the shadow — while the fixed
+	   geometry lives on the inner wrapper it reveals. */
 	.proj-demo-tarot tarot-slide.tarot-mini-slide {
 		display: block;
-		aspect-ratio: 4 / 3;
 		border-radius: var(--radius-media);
 		overflow: hidden;
-		border: 1px solid var(--card-border);
+		/* Two layers: a soft ambient throw plus a tight contact shadow, so the
+		   card still separates from the night ground. */
+		box-shadow:
+			0 24px 48px -12px rgba(0, 0, 0, 0.55),
+			0 4px 12px rgba(0, 0, 0, 0.4);
+	}
+
+	/* The card is a brand lockup (920x500): the frame matches that aspect and
+	   the image is contained, never cropped — a logo card that loses its edges
+	   looks broken. .w-tarot-slide holds the width; this centres it so the
+	   slide can open and close around a card that never moves or resizes. */
+	.proj-demo-tarot .tarot-mini-inner {
+		position: relative;
+		left: 50%;
+		transform: translateX(-50%);
+		aspect-ratio: 920 / 500;
+		overflow: hidden;
 		background: var(--panel);
 	}
 
-	.proj-demo-tarot tarot-slide.tarot-mini-slide img {
+	/* Prev/next: circular icon buttons that ride over the slide area, hidden
+	   until the carousel is hovered. The package builds these at runtime, so
+	   they carry no scope attribute — hence :global(). */
+	.proj-demo-tarot :global(.tarot-button) {
+		/* Anchored to the viewport's slide area: tarot-carousel is the
+		   positioning context and, with the dots lifted out of flow above, its
+		   box is exactly tarot-viewport's box — so 50% is the slides' centre
+		   line and the dots below are excluded from the maths. */
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		z-index: 2;
+		width: 44px;
+		height: 44px;
+		padding: 0;
+		display: none;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		border: 1px solid var(--hairline-strong);
+		background: rgba(2, 6, 15, 0.72);
+		backdrop-filter: blur(6px);
+		color: var(--cream);
+		opacity: 0;
+		transition:
+			opacity 0.25s ease,
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	/* Symmetric inset from the viewport's own edges. */
+	.proj-demo-tarot :global(.tarot-prev) {
+		left: 12px;
+	}
+
+	.proj-demo-tarot :global(.tarot-next) {
+		right: 12px;
+	}
+
+	.proj-demo-tarot :global(.tarot-button svg) {
+		width: 22px;
+		height: 22px;
+	}
+
+	.proj-demo-tarot :global(.tarot-button:hover) {
+		border-color: var(--gold);
+		color: var(--gold-bright);
+	}
+
+	/* Pointer devices only — a touch screen has no hover to reveal them, so it
+	   stays on pagination. Keyboard focus reveals them too, so they are never
+	   reachable-but-invisible. */
+	@media (hover: hover) and (min-width: 900px) {
+		.proj-demo-tarot :global(.tarot-button) {
+			display: flex;
+		}
+
+		.proj-demo-tarot:hover :global(.tarot-button),
+		.proj-demo-tarot :global(.tarot-button:focus-visible) {
+			opacity: 1;
+		}
+	}
+
+	/* Everything but the fully-in-view card sits behind a soft blur, so the
+	   fan reads as depth rather than five competing logos. Gated on
+	   tarot-carousel:defined: if the component never upgrades, the slides stay
+	   sharp instead of permanently blurred. The blur lives on the inner
+	   wrapper, so the slide's overflow clips it to the rounded corners and the
+	   slide's own box-shadow is left alone. */
+	.proj-demo-tarot tarot-carousel:defined :global(tarot-slide.tarot-mini-slide .tarot-mini-inner) {
+		filter: blur(8px);
+		transition: filter 0.45s ease;
+	}
+
+	.proj-demo-tarot
+		tarot-carousel:defined
+		:global(tarot-slide.tarot-mini-slide.tarot-fully-visible .tarot-mini-inner) {
+		filter: none;
+	}
+
+	/* tarot.min.css's peacock rule pushes slide images around with
+	   position/left/transform and crops them with object-fit: cover — the
+	   inner wrapper already handles placement, so undo all of that here. */
+	.proj-demo-tarot .tarot-mini-inner img {
+		position: static;
+		left: auto;
+		transform: none;
 		width: 100%;
+		max-width: 100%;
 		height: 100%;
-		object-fit: cover;
+		object-fit: contain;
 		display: block;
 	}
 
@@ -1654,15 +2012,18 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 	/* ============================================ */
 
 	.site-footer {
+		padding-block: 1.75rem;
+		border-top: 1px solid var(--hairline);
+		font-size: 0.8125rem;
+		color: var(--slate-dim);
+	}
+
+	.footer-inner {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		gap: 1rem;
 		flex-wrap: wrap;
-		padding: 1.75rem var(--gutter);
-		border-top: 1px solid var(--hairline);
-		font-size: 0.8125rem;
-		color: var(--slate-dim);
 	}
 
 	.footer-links {
@@ -1728,13 +2089,28 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 
 	function buildScrub() {
 		if (!scrollEl || !stripEl || !viewportEl) return;
-		if (!desktop.matches || reduced.matches) return;
+		if (!desktop.matches) {
+			scrollEl.classList.remove('tl-fits');
+			return;
+		}
 
-		// Pin first, then measure the real travel distance.
-		scrollEl.classList.add('is-scrubbed');
+		// Pin first, then measure the real travel distance — pinning collapses
+		// the section's height, which can take the page scrollbar with it and
+		// change how much room the viewport actually has.
+		const canPin = !reduced.matches;
+		if (canPin) scrollEl.classList.add('is-scrubbed');
+		// scrollWidth is the full track including its own padding-inline, so the
+		// last card clears the right edge by the same gutter the first one has.
 		const travel = Math.round(stripEl.scrollWidth - viewportEl.clientWidth);
 
-		if (travel <= 0) {
+		// Wide enough that the whole strip fits: nothing to travel, so no pin
+		// and no transform — the page just scrolls through. .tl-fits centres
+		// the strip so it doesn't sit flush-left with dead space beside it.
+		// The resize handler re-runs this in both directions, so shrinking the
+		// window re-engages the scrub and widening it releases again.
+		scrollEl.classList.toggle('tl-fits', travel <= 0);
+
+		if (travel <= 0 || !canPin) {
 			scrollEl.classList.remove('is-scrubbed');
 			return;
 		}
