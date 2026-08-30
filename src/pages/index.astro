@@ -2223,6 +2223,21 @@ const morphCards = [
 		transition: filter 0.45s ease;
 	}
 
+	/* Graduated focus, deepest at the edges of the fan: the neighbours right
+	   next to the active card stay near sharp, and the outermost cards carry
+	   the strongest soft-focus push. */
+	.proj-demo-tarot
+		tarot-carousel:defined
+		:global(tarot-slide.tarot-mini-slide.tarot-mostly-visible .tarot-mini-inner) {
+		filter: blur(1.25px);
+	}
+
+	.proj-demo-tarot
+		tarot-carousel:defined
+		:global(tarot-slide.tarot-mini-slide.tarot-partially-visible .tarot-mini-inner) {
+		filter: blur(3px);
+	}
+
 	.proj-demo-tarot
 		tarot-carousel:defined
 		:global(tarot-slide.tarot-mini-slide.tarot-fully-visible .tarot-mini-inner) {
