@@ -1832,6 +1832,10 @@ const morphCards = [
 	   widening the page. */
 	.section-projects {
 		overflow-x: clip;
+		/* The ms-outro closes this section with its own headroom, so the stock
+		   section tail would double up against contact's top padding. Trimmed on
+		   both sides of that seam. */
+		padding-bottom: clamp(3rem, 6vw, 6rem);
 	}
 
 	.proj-rows {
@@ -2817,6 +2821,11 @@ const morphCards = [
 	/* ============================================ */
 	/* Contact                                       */
 	/* ============================================ */
+
+	/* The other half of the projects/contact seam trim above. */
+	.section-contact {
+		padding-top: clamp(2.5rem, 5vw, 5rem);
+	}
 
 	.contact-inner {
 		max-width: 720px;
