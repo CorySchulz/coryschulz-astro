@@ -192,13 +192,6 @@ a:hover {
   border-radius: 4px;
 }
 
-/* Legacy utility retained for non-index pages */
-.bg-noise {
-  background-image: url(/bg-noise.png);
-  background-repeat: repeat;
-  background-size: 50px 50px;
-}
-
 /* ============================================ */
 /* Floating Label Form Inputs                    */
 /* ============================================ */
