@@ -52,6 +52,17 @@ const stops = [
 	},
 ];
 
+const splitEffects = [
+	'rise',
+	'drop',
+	'slide-right',
+	'slide-left',
+	'bloom',
+	'spin-x',
+	'spin-y',
+	'magnetic',
+];
+
 const chips = ['Animation Engine', 'Reveal', 'Scroll Trigger', 'Scroll Progress', 'Dropdown Select'];
 
 const tarotSlides = [
@@ -204,16 +215,28 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 		</section>
 
 		<!-- ============ THINGS I'VE BUILT ============ -->
-		<section class="section" id="projects">
+		<section class="section section-projects" id="projects">
 			<div class="section-head reveal reveal-fade-up">
 				<p class="eyebrow">Free &amp; Open Source</p>
 				<h2 class="section-title">Things I&rsquo;ve Built</h2>
 			</div>
 
-			<div class="built-grid">
-				<!-- TAROT -->
-				<article class="built-card reveal reveal-fade-up" data-reveal-group="built:110">
-					<div class="built-media built-media-tarot">
+			<div class="proj-rows">
+				<!-- ---------- TAROT ---------- -->
+				<article class="proj-row reveal reveal-fade-up">
+					<div class="proj-copy">
+						<a class="proj-pill" href="https://magicspells.io" target="_blank" rel="noopener noreferrer"
+							>magicspells.io/tarot</a
+						>
+						<h3 class="proj-title">Tarot</h3>
+						<p class="proj-tagline">A carousel with real physics.</p>
+						<p class="proj-desc">
+							Springy, scrubbable, and fun to flick. Throw it hard and it carries the momentum; catch
+							it mid-flight and it settles from wherever you let go. Five effects and counting.
+						</p>
+						<p class="proj-note">Free to use &mdash; find it at magicspells.io</p>
+					</div>
+					<div class="proj-demo proj-demo-tarot">
 						<tarot-carousel>
 							<script type="application/json" data-tarot-options>
 								{
@@ -221,9 +244,9 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 									"goToSelectedSlide": true,
 									"initialIndex": 2,
 									"loop": true,
-									"gap": 10,
-									"paddingLeft": "22%",
-									"paddingRight": "22%",
+									"gap": 12,
+									"paddingLeft": "24%",
+									"paddingRight": "24%",
 									"slidesPerView": 1,
 									"navigation": {
 										"showButtons": false,
@@ -244,54 +267,146 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 							</tarot-viewport>
 						</tarot-carousel>
 					</div>
-					<h3 class="built-title">Tarot</h3>
-					<p class="built-desc">
-						A carousel with real physics &mdash; springy, scrubbable, and fun to flick. Five effects and
-						counting.
-					</p>
 				</article>
 
-				<!-- TIMELINE ENGINE -->
-				<article class="built-card reveal reveal-fade-up" data-reveal-group="built:110">
-					<div class="built-media">
-						<svg class="ruler" width="220" height="110" viewBox="0 0 220 110" aria-hidden="true">
-							<line x1="10" y1="55" x2="210" y2="55" stroke="var(--rule-soft)" stroke-width="1"></line>
-							<line x1="10" y1="47" x2="10" y2="63" stroke="var(--rule-tick)" stroke-width="1"></line>
-							<line x1="60" y1="49" x2="60" y2="61" stroke="var(--rule-tick)" stroke-width="1"></line>
-							<line x1="110" y1="47" x2="110" y2="63" stroke="var(--rule-tick)" stroke-width="1"></line>
-							<line x1="160" y1="49" x2="160" y2="61" stroke="var(--rule-tick)" stroke-width="1"></line>
-							<line x1="210" y1="47" x2="210" y2="63" stroke="var(--rule-tick)" stroke-width="1"></line>
-							<path d="M60 55 L66 49 L72 55 L66 61 Z" fill="var(--gold)"></path>
-							<path d="M132 55 L138 49 L144 55 L138 61 Z" fill="var(--gold)"></path>
-							<path d="M176 55 L182 49 L188 55 L182 61 Z" fill="var(--gold-soft)"></path>
-							<g class="playhead">
-								<line x1="10" y1="20" x2="10" y2="90" stroke="var(--gold-bright)" stroke-width="2"></line>
-								<circle cx="10" cy="20" r="4" fill="var(--gold-bright)"></circle>
-							</g>
-						</svg>
-					</div>
-					<h3 class="built-title">Timeline Engine</h3>
-					<p class="built-desc">
-						Scrubbable keyframe timelines &mdash; play them with a clock, or drive them with scroll.
-					</p>
-				</article>
-
-				<!-- SPLIT TEXT -->
-				<article class="built-card reveal reveal-fade-up" data-reveal-group="built:110">
-					<div class="built-media built-media-rises">
-						<split-text
-							class="rises"
-							split="chars"
-							effect="rise"
-							stagger="90"
-							duration="900"
-							offset="10%">Rises</split-text
+				<!-- ---------- PUZZLE ---------- -->
+				<article class="proj-row reveal reveal-fade-up">
+					<div class="proj-copy">
+						<a
+							class="proj-pill"
+							href="https://github.com/magic-spells/puzzle"
+							target="_blank"
+							rel="noopener noreferrer">@magic-spells/puzzle</a
 						>
+						<h3 class="proj-title">Puzzle</h3>
+						<p class="proj-tagline">A framework of single-file views.</p>
+						<p class="proj-desc">
+							Markup, state, and handlers live together in one <code>.pzl</code> file. Bindings are
+							plain braces, events are plain attributes, and every view is a real custom element &mdash;
+							so there is no compiler dialect to learn before you can read the page.
+						</p>
+						<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/puzzle</p>
 					</div>
-					<h3 class="built-title">Split Text</h3>
-					<p class="built-desc">
-						Text that rises into place &mdash; by word, character, or line. No dependencies.
-					</p>
+					<div class="proj-demo">
+						<pre class="code-card"><code><span class="c-punc">&lt;</span><span class="c-tag">puzzle-view</span><span class="c-punc">&gt;</span>
+  <span class="c-punc">&lt;</span><span class="c-tag">button</span> <span class="c-attr">class</span>=<span class="c-str">"counter"</span> <span class="c-evt">@click</span>=<span class="c-bind">&#123; increment &#125;</span><span class="c-punc">&gt;</span>
+    Clicked <span class="c-bind">&#123; count &#125;</span> times
+  <span class="c-punc">&lt;/</span><span class="c-tag">button</span><span class="c-punc">&gt;</span>
+<span class="c-punc">&lt;/</span><span class="c-tag">puzzle-view</span><span class="c-punc">&gt;</span>
+
+<span class="c-punc">&lt;</span><span class="c-tag">script</span><span class="c-punc">&gt;</span>
+  <span class="c-kw">export default</span> &#123;
+    <span class="c-fn">data</span>: () <span class="c-kw">=&gt;</span> (&#123; <span class="c-attr">count</span>: <span class="c-num">0</span> &#125;),
+    <span class="c-fn">increment</span>() &#123;
+      <span class="c-kw">this</span>.<span class="c-fn">setData</span>(&#123; <span class="c-attr">count</span>: <span class="c-kw">this</span>.<span class="c-fn">getData</span>().count + <span class="c-num">1</span> &#125;);
+    &#125;,
+  &#125;;
+<span class="c-punc">&lt;/</span><span class="c-tag">script</span><span class="c-punc">&gt;</span></code></pre>
+					</div>
+				</article>
+
+				<!-- ---------- TIMELINE ENGINE ---------- -->
+				<article class="proj-row reveal reveal-fade-up">
+					<div class="proj-copy">
+						<a
+							class="proj-pill"
+							href="https://github.com/magic-spells/timeline-engine"
+							target="_blank"
+							rel="noopener noreferrer">@magic-spells/timeline-engine</a
+						>
+						<h3 class="proj-title">Timeline Engine</h3>
+						<p class="proj-tagline">Choreography you can scrub.</p>
+						<p class="proj-desc">
+							A timeline is an object, not a fire-and-forget animation. Build it out of percent-keyed
+							tweens, then seek it, scrub it, play it backwards, or hand the playhead to the scroll
+							position. Every frame is deterministic &mdash; the same time always renders the same
+							picture, however you got there.
+						</p>
+						<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/timeline-engine</p>
+					</div>
+					<div class="proj-demo proj-demo-bare" id="fireworks-mount"></div>
+				</article>
+
+				<!-- ---------- SPLIT TEXT ---------- -->
+				<article class="proj-row reveal reveal-fade-up">
+					<div class="proj-copy">
+						<a
+							class="proj-pill"
+							href="https://github.com/magic-spells/split-text"
+							target="_blank"
+							rel="noopener noreferrer">@magic-spells/split-text</a
+						>
+						<h3 class="proj-title">Split Text</h3>
+						<p class="proj-tagline">Text that makes an entrance.</p>
+						<p class="proj-desc">
+							A web component that splits a line into words, characters, or measured lines and animates
+							each unit on a CSS-driven stagger. Eight built-in effects, no dependencies, and no
+							framework to adopt &mdash; drop the tag around your copy and it reveals itself when it
+							scrolls into view.
+						</p>
+						<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/split-text</p>
+					</div>
+					<div class="proj-demo proj-demo-split">
+						<div class="st-demo">
+							<p class="st-stage" id="st-stage"><split-text
+									id="st-specimen"
+									effect="rise"
+									split="chars"
+									trigger="manual"
+									duration="850"
+									stagger="26">Text that makes an entrance</split-text></p>
+
+							<div class="st-controls">
+								<p class="st-label">Effect</p>
+								<div class="st-effects" id="st-effects" role="group" aria-label="Reveal effect">
+									{
+										splitEffects.map((e, i) => (
+											<button
+												type="button"
+												class="st-chip"
+												data-effect={e}
+												aria-pressed={i === 0 ? 'true' : 'false'}>
+												{e}
+											</button>
+										))
+									}
+								</div>
+								<div class="st-actions">
+									<button type="button" class="st-replay" id="st-replay">Replay</button>
+									<code class="st-code" id="st-code"
+										>&lt;split-text effect="rise" split="chars"&gt;</code
+									>
+								</div>
+							</div>
+						</div>
+					</div>
+				</article>
+
+				<!-- ---------- CONSTELLATION ---------- -->
+				<article class="proj-row reveal reveal-fade-up">
+					<div class="proj-copy">
+						<a
+							class="proj-pill"
+							href="https://github.com/magic-spells/constellation"
+							target="_blank"
+							rel="noopener noreferrer">@magic-spells/constellation</a
+						>
+						<h3 class="proj-title">Constellation</h3>
+						<p class="proj-tagline">Plan a project as a connected graph.</p>
+						<p class="proj-desc">
+							Typed, connected markdown cards in your repo &mdash; agents read them before they change
+							code, update them after, and understanding compounds instead of evaporating at session
+							end.
+						</p>
+						<p class="proj-install">
+							<span class="dollar">$</span> npm i -g @magic-spells/constellation
+						</p>
+					</div>
+					<div class="proj-demo">
+						<div class="cf-wrap">
+							<canvas id="cf-canvas" aria-hidden="true"></canvas>
+						</div>
+					</div>
 				</article>
 			</div>
 
@@ -936,61 +1051,139 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 	}
 
 	/* ============================================ */
-	/* Things I've built                             */
+	/* Things I've built — five feature rows          */
 	/* ============================================ */
 
-	.built-grid {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 1.5rem;
-		margin-bottom: 1.5rem;
+	.proj-rows {
+		display: flex;
+		flex-direction: column;
 	}
 
-	@media (min-width: 700px) {
-		.built-grid {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
+	.proj-row {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 2rem;
+		align-items: center;
+		padding-block: clamp(2.5rem, 5vw, 4rem);
+		border-top: 1px solid var(--hairline);
+	}
+
+	.proj-row:first-child {
+		border-top: 0;
+		padding-top: 0;
+	}
+
+	@media (min-width: 900px) {
+		.proj-row {
+			grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+			gap: clamp(2.5rem, 5vw, 4.5rem);
+		}
+		/* Alternate copy-left / demo-left down the column */
+		.proj-row:nth-child(even) .proj-copy {
+			order: 2;
 		}
 	}
 
-	.built-card {
-		border: 1px solid var(--card-border);
-		border-radius: var(--radius-card);
-		padding: 2.25rem 2rem;
+	.proj-copy {
 		display: flex;
 		flex-direction: column;
-		gap: 1.125rem;
-		background: var(--card-bg);
+		align-items: flex-start;
+		gap: 0.875rem;
+		min-width: 0;
 	}
 
-	.built-media {
-		height: 200px;
+	.proj-pill {
+		display: inline-block;
+		border: 1px solid var(--gold-faint);
+		border-radius: 999px;
+		padding: 0.4375rem 0.875rem;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--gold);
+		transition:
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.proj-pill:hover {
+		border-color: var(--gold);
+		color: var(--gold-bright);
+	}
+
+	.proj-title {
+		font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+		color: var(--cream);
+	}
+
+	.proj-tagline {
+		font-size: clamp(1.0625rem, 2vw, 1.1875rem);
+		font-weight: 600;
+		color: var(--cream);
+		text-wrap: balance;
+	}
+
+	.proj-desc {
+		font-size: 0.9375rem;
+		line-height: 1.65;
+		color: var(--slate-dim);
+		text-wrap: pretty;
+		max-width: 46ch;
+	}
+
+	.proj-desc code {
+		font-family: var(--font-mono);
+		font-size: 0.875em;
+		color: var(--slate);
+	}
+
+	.proj-install {
+		margin-top: 0.375rem;
+		border: 1px solid var(--card-border);
+		border-radius: 10px;
+		background: var(--panel);
+		padding: 0.75rem 1.125rem;
+		font-family: var(--font-mono);
+		font-size: 0.8125rem;
+		color: var(--cream);
+		max-width: 100%;
+		overflow-x: auto;
+		white-space: nowrap;
+	}
+
+	.proj-install .dollar {
+		color: var(--gold);
+		margin-right: 0.375rem;
+	}
+
+	.proj-note {
+		margin-top: 0.375rem;
+		font-size: 0.8125rem;
+		color: var(--slate-dim);
+	}
+
+	/* Demo panels ------------------------------------------------ */
+
+	.proj-demo {
+		border: 1px solid var(--card-border);
+		border-radius: var(--radius-card);
+		background: var(--card-bg);
+		padding: 1.75rem;
+		min-height: 300px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
+		min-width: 0;
 	}
 
-	/* Full-bleed to the card edges so the butterfly effect's neighbouring
-	   slides are visible instead of being clipped by the card padding. */
-	.built-media-tarot {
+	.proj-demo-tarot {
 		display: block;
-		margin-inline: -2rem;
+		padding-inline: 0;
 	}
 
-	.built-title {
-		font-size: 1.625rem;
-		color: var(--cream);
-	}
-
-	.built-desc {
-		font-size: 0.9375rem;
-		line-height: 1.6;
-		color: var(--slate-dim);
-		text-wrap: pretty;
-	}
-
-	/* Tarot mini carousel */
-	.built-media-tarot tarot-slide.tarot-mini-slide {
+	.proj-demo-tarot tarot-slide.tarot-mini-slide {
 		display: block;
 		aspect-ratio: 4 / 3;
 		border-radius: var(--radius-media);
@@ -999,48 +1192,194 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 		background: var(--panel);
 	}
 
-	.built-media-tarot tarot-slide.tarot-mini-slide img {
+	.proj-demo-tarot tarot-slide.tarot-mini-slide img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		display: block;
 	}
 
-	/* Timeline-engine ruler playhead */
-	.playhead {
-		animation: sweep 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+	/* Puzzle — code card */
+
+	.code-card {
+		width: 100%;
+		margin: 0;
+		background: var(--panel);
+		border-radius: 10px;
+		padding: 1.25rem 1.375rem;
+		font-family: var(--font-mono);
+		font-size: 0.78125rem;
+		line-height: 1.75;
+		color: var(--cream);
+		overflow-x: auto;
+		tab-size: 2;
 	}
 
-	@keyframes sweep {
-		0% {
-			transform: translateX(0);
-		}
-		45% {
-			transform: translateX(200px);
-		}
-		55% {
-			transform: translateX(200px);
-		}
-		100% {
-			transform: translateX(0);
-		}
+	.c-tag {
+		color: var(--gold);
+	}
+	.c-punc {
+		color: var(--slate-dim);
+	}
+	.c-attr {
+		color: var(--slate);
+	}
+	.c-str,
+	.c-evt,
+	.c-bind,
+	.c-num {
+		color: var(--gold-bright);
+	}
+	.c-kw {
+		color: var(--slate);
+	}
+	.c-fn {
+		color: var(--cream);
 	}
 
-	/* Split-text "RISES" */
-	.built-media-rises {
-		align-items: flex-end;
-		padding-bottom: 1.5rem;
+	/* Timeline engine — the ported fireworks demo brings its own CSS.
+	   The mount point drops this card's padding so the demo owns its chrome. */
+
+	.proj-demo-bare {
+		padding: 0;
+		border: 0;
+		background: none;
+		display: block;
 	}
 
-	.rises {
+	/* Split text — the replayable lab */
+
+	.st-demo {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.st-stage {
+		min-height: 118px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
 		font-family: var(--font-display);
 		font-weight: 800;
-		font-size: 2.75rem;
-		line-height: 1;
-		letter-spacing: 0.06em;
+		font-size: clamp(1.25rem, 2.8vw, 1.875rem);
+		text-transform: uppercase;
+		line-height: 1.3;
+		letter-spacing: 0.04em;
+		color: var(--cream);
+		--split-text-blur: 8px;
+		--split-text-scale: 0.82;
+	}
+
+	/* Fields caps are shaved by split-text's per-character overflow mask without
+	   this headroom — the same fix the magicspells.io demo carries, and the
+	   reason the stage sets line-height 1.3 rather than something tighter. */
+	.st-stage :global(.split-text-char) {
+		padding-top: 0.24em;
+	}
+
+	.st-controls {
+		margin-top: 1.75rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--hairline);
+	}
+
+	.st-label {
+		font-size: 0.6875rem;
+		font-weight: 600;
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--slate-dim);
+	}
+
+	.st-effects {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-top: 1rem;
+	}
+
+	.st-chip {
+		border: 1px solid var(--hairline-strong);
+		background: rgba(251, 248, 238, 0.04);
+		border-radius: 999px;
+		padding: 0.375rem 0.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.08em;
+		color: var(--slate);
+		cursor: pointer;
+		transition:
+			border-color 0.2s ease,
+			background-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.st-chip:hover {
+		border-color: var(--gold-soft);
+		color: var(--cream);
+	}
+
+	.st-chip[aria-pressed='true'] {
+		border-color: var(--gold);
+		background: rgba(201, 168, 106, 0.15);
+		color: var(--gold-bright);
+	}
+
+	.st-actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem 1.5rem;
+		margin-top: 1.5rem;
+	}
+
+	.st-replay {
+		border: 1px solid var(--hairline-strong);
+		background: transparent;
+		border-radius: 999px;
+		padding: 0.5rem 1.25rem;
+		font-family: var(--font-body);
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		color: var(--cream);
-		--split-text-distance: 100%;
+		cursor: pointer;
+		transition:
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.st-replay:hover {
+		border-color: var(--gold);
+		color: var(--gold-bright);
+	}
+
+	.st-code {
+		min-width: 0;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.02em;
+		color: var(--slate-dim);
+		word-break: break-all;
+	}
+
+	/* Constellation — node-graph field */
+
+	.cf-wrap {
+		width: 100%;
+		height: 290px;
+		border-radius: 10px;
+		overflow: hidden;
+		background: var(--panel);
+	}
+
+	#cf-canvas {
+		display: block;
+		width: 100%;
+		height: 100%;
 	}
 
 	/* Chips */
@@ -1050,7 +1389,7 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 		gap: 0.75rem;
 		flex-wrap: wrap;
 		list-style: none;
-		margin: 0 0 1.75rem;
+		margin: clamp(2.5rem, 5vw, 4rem) 0 1.75rem;
 		padding: 0;
 	}
 
@@ -1157,6 +1496,19 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 		color: var(--slate-dim);
 		margin-bottom: 0.625rem;
 		padding: 0;
+	}
+
+	/* The package's own stylesheet loads after app.css, so the host's width is
+	   re-asserted here where the scoped selector outranks it. */
+	.budget-field :global(dropdown-select) {
+		display: block;
+		width: 100%;
+	}
+
+	/* dropdown-select appends its own caret, so the chevron in the markup would
+	   be a second one. Hide the package's and keep ours, which is tokenized. */
+	.budget-field :global(.dropdown-caret) {
+		display: none;
 	}
 
 	.budget-field :global(dropdown-select-trigger.select-trigger) {
@@ -1326,8 +1678,7 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 	/* ============================================ */
 
 	@media (prefers-reduced-motion: reduce) {
-		.twinkle,
-		.playhead {
+		.twinkle {
 			animation: none;
 		}
 		.pill:hover {
@@ -1436,6 +1787,108 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 
 	desktop.addEventListener('change', rebuildScrub);
 	reduced.addEventListener('change', rebuildScrub);
+
+	// ---- Split Text lab ------------------------------------------------------
+	// Ported from magicspells.io's SplitTextDemo. The replay contract is exact:
+	// `effect` is read once inside connectedCallback while the element is
+	// uninitialised, so it MUST be written before split(). split() rebuilds
+	// brand-new spans (so no rAF is needed to restart the animation) and
+	// reveal() then sets data-state="revealing".
+	const specimen = document.getElementById('st-specimen');
+	const stStage = document.getElementById('st-stage');
+	const stEffects = document.getElementById('st-effects');
+	const stReplay = document.getElementById('st-replay');
+	const stCode = document.getElementById('st-code');
+
+	if (specimen && stStage && stEffects && stReplay && stCode) {
+		const SPLIT_MODE = 'chars';
+		const markupFor = (effect) => `<split-text effect="${effect}" split="${SPLIT_MODE}">`;
+		let current = 'rise';
+
+		const play = (effect) => {
+			const next = effect || current;
+			specimen.setAttribute('effect', next);
+			// Under reduced motion split-text marks itself revealed and never
+			// splits, so the line stays plain readable text. The attribute is
+			// still written above, which keeps the code line honest.
+			if (reduced.matches) return;
+			if (typeof specimen.split !== 'function' || typeof specimen.reveal !== 'function') return;
+			specimen.split();
+			specimen.reveal();
+		};
+
+		stEffects.addEventListener('click', (e) => {
+			const button = (e.target as HTMLElement).closest('.st-chip') as HTMLElement | null;
+			if (!button) return;
+			const effect = button.dataset.effect;
+			if (!effect) return;
+			current = effect;
+			stEffects.querySelectorAll('.st-chip').forEach((b) => {
+				b.setAttribute('aria-pressed', b === button ? 'true' : 'false');
+			});
+			stCode.textContent = markupFor(effect);
+			play(effect);
+		});
+
+		stReplay.addEventListener('click', () => play());
+
+		// First run fires when the specimen scrolls into view, so the visitor
+		// sees the reveal rather than arriving after it. trigger="manual" means
+		// the element does no observing of its own.
+		if (reduced.matches || typeof IntersectionObserver === 'undefined') {
+			play();
+		} else {
+			const io = new IntersectionObserver(
+				(entries) => {
+					for (const entry of entries) {
+						if (!entry.isIntersecting) continue;
+						io.disconnect();
+						play();
+						break;
+					}
+				},
+				{ threshold: 0.5 }
+			);
+			io.observe(stStage);
+		}
+	}
+
+	// ---- Ported demos: fireworks (timeline-engine) and the constellation field
+	// Both are heavy and only matter once they are near the viewport, so they
+	// are code-split and mounted lazily.
+	const mountWhenNear = (el: Element | null, load: () => Promise<() => void>) => {
+		if (!el) return;
+		if (typeof IntersectionObserver === 'undefined') {
+			load().then((run) => run());
+			return;
+		}
+		const io = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (!entry.isIntersecting) continue;
+					io.disconnect();
+					load().then((run) => run());
+					break;
+				}
+			},
+			{ rootMargin: '200px' }
+		);
+		io.observe(el);
+	};
+
+	const fireworksMount = document.getElementById('fireworks-mount');
+	mountWhenNear(fireworksMount, async () => {
+		const { default: initFireworks } = await import('../scripts/demos/fireworks.js');
+		return () => initFireworks(fireworksMount);
+	});
+
+	const cfCanvas = document.getElementById('cf-canvas');
+	mountWhenNear(cfCanvas, async () => {
+		const { default: initConstellationField } = await import(
+			'../scripts/demos/constellation-field.js'
+		);
+		return () => initConstellationField(cfCanvas);
+	});
 </script>
 
 <script is:inline>

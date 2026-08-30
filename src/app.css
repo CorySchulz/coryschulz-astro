@@ -89,6 +89,8 @@
   /* type families */
   --font-display: "Fields", "Georgia", serif;
   --font-body: "Metropolis", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
 
   /* rhythm */
   --gutter: 1.25rem;

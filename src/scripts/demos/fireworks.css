@@ -1,0 +1,500 @@
+/* ==========================================================================
+   fireworks — styles for the timeline-engine demo built by ./fireworks.js
+   ==========================================================================
+
+   Ported from a Tailwind v4 component: every utility that was in the template
+   is a real rule here, so the module needs no framework. Everything is scoped
+   under `.fw-demo`, which initFireworks() adds to the root it is given.
+
+   Chrome (panel, ruler, playhead, labels, borders) reads the site's tokens —
+   --cream, --gold, --panel, --ground, --hairline*, --card-border. The SKY is
+   deliberately not tokenised: its gradient and the firework hues are the
+   demo's own palette and stay exactly as authored.
+
+   One number owns the lane offset: the row labels and the two absolutely
+   positioned overlays (playhead, scrub surface) all read --tl-gutter, so they
+   can never fall out of alignment. On phones the lane names eat a third of the
+   panel for 10px text and the clip bars are what the demo is actually showing,
+   so the gutter drops to zero — the overlays offset from the same var and
+   re-align with no second breakpoint to keep in sync.
+   ========================================================================== */
+
+.fw-demo {
+	--tl-gutter: 0rem;
+	--fw-mono: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+
+	width: 100%;
+	padding: 1.25rem;
+	border: 1px solid var(--card-border, rgba(251, 248, 238, 0.12));
+	border-radius: 1rem;
+	background: color-mix(in srgb, var(--cream) 3%, transparent);
+	font-family: var(--font-body, system-ui, sans-serif);
+}
+
+.fw-demo,
+.fw-demo *,
+.fw-demo *::before,
+.fw-demo *::after {
+	box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+	.fw-demo {
+		--tl-gutter: 4.25rem;
+		padding: 1.75rem;
+	}
+}
+
+/* --- the sky ------------------------------------------------------------ */
+
+.fw-demo .fw-sky {
+	position: relative;
+	height: 250px;
+	overflow: hidden;
+	border: 1px solid var(--hairline, rgba(251, 248, 238, 0.08));
+	border-radius: 0.75rem;
+	touch-action: pan-y;
+	background:
+		radial-gradient(
+			ellipse at 50% 114%,
+			color-mix(in srgb, var(--gold) 8%, transparent),
+			transparent 54%
+		),
+		linear-gradient(180deg, #03060d 0%, #07101d 62%, #0b1720 100%);
+}
+
+@media (min-width: 640px) {
+	.fw-demo .fw-sky {
+		height: 300px;
+	}
+}
+
+/* The sweep affordance only exists where there is a cursor to sweep with. */
+@media (hover: hover) and (pointer: fine) {
+	.fw-demo .fw-sky {
+		cursor: ew-resize;
+	}
+}
+
+.fw-demo .fw-star {
+	position: absolute;
+	width: var(--star-size);
+	height: var(--star-size);
+	border-radius: 50%;
+	background: var(--cream);
+	box-shadow: 0 0 5px color-mix(in srgb, var(--cream) 55%, transparent);
+	will-change: transform, opacity;
+}
+
+.fw-demo .fw-cloud {
+	position: absolute;
+	width: var(--cloud-w);
+	height: 28px;
+	border-radius: 50%;
+	background: hsl(212 60% 72% / 0.07);
+	filter: blur(10px);
+	will-change: transform, opacity;
+}
+
+.fw-demo .fw-shell {
+	position: absolute;
+}
+
+.fw-demo .fw-trail {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 3px;
+	height: 48px;
+	border-radius: 3px;
+	background: linear-gradient(
+		180deg,
+		#fff,
+		hsl(var(--hue) 92% 70%) 20%,
+		hsl(var(--hue) 92% 70% / 0)
+	);
+	box-shadow: 0 0 8px hsl(var(--hue) 92% 65% / 0.7);
+	transform-origin: center top;
+	will-change: transform, opacity;
+}
+
+.fw-demo .fw-flash {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: #fff;
+	box-shadow:
+		0 0 28px 8px hsl(0 0% 100% / 0.85),
+		0 0 70px 22px hsl(var(--hue) 92% 66% / 0.34);
+	will-change: transform, opacity;
+}
+
+/* The wrapper's rotate comes last, so --g always falls in world space while
+   the inner spark travels out along its rotated spoke. --r is the clip's one
+   constant throw; --spread (fixed per spark) and --burst (re-rolled every
+   loop) are what make sixteen identical keyframes land sixteen different
+   distances, differently each time round. */
+.fw-demo .fw-spark {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 0;
+	height: 0;
+	will-change: transform, opacity;
+}
+
+.fw-demo .fw-spark > i {
+	display: block;
+	width: var(--spark-size);
+	height: var(--spark-size);
+	border-radius: 50%;
+	background: hsl(var(--hue) 92% 72%);
+	box-shadow: 0 0 8px hsl(var(--hue) 92% 65%);
+	transform: translateX(calc(var(--r) * var(--spread) * var(--burst)))
+		scale(var(--spark-scale));
+	will-change: transform;
+}
+
+/* The hover affordance says its piece once and gets out of the way. */
+.fw-demo .fw-hint {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0.625rem;
+	margin: 0;
+	text-align: center;
+	pointer-events: none;
+	font-family: var(--fw-mono);
+	font-weight: 500;
+	font-size: 0.625rem;
+	line-height: 1.2;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: color-mix(in srgb, var(--cream) 25%, transparent);
+	transition: opacity 250ms ease;
+}
+
+.fw-demo .fw-sky:hover .fw-hint {
+	opacity: 0;
+}
+
+.fw-demo .is-hidden {
+	display: none !important;
+}
+
+/* --- transport ---------------------------------------------------------- */
+
+.fw-demo .fw-transport {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	margin-top: 1.25rem;
+}
+
+.fw-demo .fw-toggle {
+	display: inline-flex;
+	flex-shrink: 0;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0.5rem 1rem;
+	border: 1px solid var(--hairline-strong, rgba(251, 248, 238, 0.18));
+	border-radius: 9999px;
+	background: color-mix(in srgb, var(--cream) 4%, transparent);
+	font-family: var(--fw-mono);
+	font-size: 11px;
+	line-height: 1;
+	text-transform: uppercase;
+	letter-spacing: 0.16em;
+	color: var(--cream);
+	cursor: pointer;
+	transition:
+		color 0.15s ease,
+		border-color 0.15s ease;
+}
+
+.fw-demo .fw-toggle:hover {
+	border-color: color-mix(in srgb, var(--gold) 60%, transparent);
+	color: var(--gold);
+}
+
+.fw-demo .fw-toggle:focus-visible {
+	outline: 2px solid var(--gold);
+	outline-offset: 2px;
+}
+
+.fw-demo .fw-icon {
+	display: block;
+	width: 0.75rem;
+	height: 0.75rem;
+}
+
+.fw-demo .fw-readout {
+	margin: 0 0 0 auto;
+	font-family: var(--fw-mono);
+	font-size: 0.75rem;
+	line-height: 1;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0.12em;
+	color: color-mix(in srgb, var(--cream) 55%, transparent);
+}
+
+/* --- the track ---------------------------------------------------------- */
+
+.fw-demo .tl-panel {
+	position: relative;
+	margin-top: 1rem;
+	padding: 0.75rem;
+	border: 1px solid var(--hairline, rgba(251, 248, 238, 0.08));
+	border-radius: 0.75rem;
+	background: color-mix(in srgb, var(--ground) 55%, transparent);
+	user-select: none;
+	-webkit-user-select: none;
+}
+
+@media (min-width: 640px) {
+	.fw-demo .tl-panel {
+		padding: 1rem;
+	}
+}
+
+.fw-demo .tl-head {
+	display: flex;
+	align-items: flex-end;
+}
+
+.fw-demo .tl-marks-row {
+	display: flex;
+	align-items: flex-start;
+}
+
+.fw-demo .tl-row {
+	display: flex;
+	align-items: center;
+}
+
+.fw-demo .tl-gutter {
+	flex: 0 0 auto;
+	width: var(--tl-gutter);
+}
+
+.fw-demo .tl-gutter-time {
+	padding-right: 0.5rem;
+	text-align: right;
+	font-family: var(--fw-mono);
+	font-size: 9px;
+	line-height: 1;
+	text-transform: uppercase;
+	letter-spacing: 0.14em;
+	color: color-mix(in srgb, var(--cream) 25%, transparent);
+}
+
+.fw-demo .tl-gutter-lane {
+	padding-right: 0.5rem;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	text-align: right;
+	font-family: var(--fw-mono);
+	font-size: 10px;
+	line-height: 1;
+	color: color-mix(in srgb, var(--cream) 45%, transparent);
+}
+
+@media (max-width: 639.98px) {
+	.fw-demo .tl-gutter {
+		display: none;
+	}
+}
+
+.fw-demo .tl-ruler {
+	position: relative;
+	flex: 1 1 0%;
+	height: 26px;
+}
+
+/* Sixteen minor ticks under the labelled ones — the editor-ruler texture. */
+.fw-demo .tl-ruler::after {
+	content: '';
+	position: absolute;
+	inset-inline: 0;
+	bottom: 0;
+	height: 4px;
+	background-image: repeating-linear-gradient(
+		to right,
+		color-mix(in srgb, var(--cream) 14%, transparent) 0 1px,
+		transparent 1px 6.25%
+	);
+	pointer-events: none;
+}
+
+.fw-demo .tl-tick {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+}
+
+.fw-demo .tl-tick-mark {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 1px;
+	height: 0.5rem;
+	background: color-mix(in srgb, var(--cream) 25%, transparent);
+}
+
+.fw-demo .tl-tick-label {
+	position: absolute;
+	left: 0;
+	top: 0;
+	white-space: nowrap;
+	font-family: var(--fw-mono);
+	font-size: 9px;
+	line-height: 1;
+	font-variant-numeric: tabular-nums;
+	color: color-mix(in srgb, var(--cream) 35%, transparent);
+}
+
+.fw-demo .tl-marks {
+	position: relative;
+	flex: 1 1 0%;
+	height: 18px;
+}
+
+.fw-demo .tl-mark {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+}
+
+.fw-demo .tl-mark-tick {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 1px;
+	height: 0.375rem;
+	background: color-mix(in srgb, var(--gold) 45%, transparent);
+}
+
+.fw-demo .tl-mark-label {
+	position: absolute;
+	left: 0;
+	top: 7px;
+	white-space: nowrap;
+	font-family: var(--fw-mono);
+	font-size: 7px;
+	line-height: 1;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: color-mix(in srgb, var(--gold) 70%, transparent);
+}
+
+@media (min-width: 640px) {
+	.fw-demo .tl-mark-label {
+		font-size: 9px;
+		letter-spacing: 0.12em;
+	}
+}
+
+.fw-demo .tl-lane {
+	position: relative;
+	flex: 1 1 0%;
+	height: 22px;
+}
+
+.fw-demo .tl-lane-bg {
+	position: absolute;
+	top: 4px;
+	bottom: 4px;
+	left: 0;
+	right: 0;
+	border-radius: 3px;
+	background: color-mix(in srgb, var(--cream) 3%, transparent);
+}
+
+.fw-demo .tl-clip {
+	position: absolute;
+	top: 4px;
+	bottom: 4px;
+	min-width: 2px;
+	overflow: hidden;
+	padding: 0 0.25rem;
+	border: 1px solid transparent;
+	border-radius: 3px;
+	font-family: var(--fw-mono);
+	font-size: 8px;
+	line-height: 14px;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	transition:
+		filter 0.15s ease,
+		box-shadow 0.15s ease;
+}
+
+/* The clip's tint is an inline style (it varies per lane), so "live" has to be
+   expressed with properties the inline style never sets. */
+.fw-demo .tl-clip.is-live {
+	filter: brightness(1.5) saturate(1.15);
+	box-shadow: 0 0 0 1px color-mix(in srgb, var(--cream) 22%, transparent);
+}
+
+/* The playhead and the scrub surface are the same box, one on top of the
+   other, both offset by the shared gutter. */
+.fw-demo .tl-playhead-wrap,
+.fw-demo .tl-scrub {
+	position: absolute;
+	top: 0.75rem;
+	bottom: 0.75rem;
+	right: 0.75rem;
+	left: calc(0.75rem + var(--tl-gutter));
+}
+
+@media (min-width: 640px) {
+	.fw-demo .tl-playhead-wrap,
+	.fw-demo .tl-scrub {
+		top: 1rem;
+		bottom: 1rem;
+		right: 1rem;
+		left: calc(1rem + var(--tl-gutter));
+	}
+}
+
+.fw-demo .tl-playhead-wrap {
+	pointer-events: none;
+}
+
+.fw-demo .tl-playhead {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 1px;
+	background: var(--gold);
+	box-shadow: 0 0 10px color-mix(in srgb, var(--gold) 55%, transparent);
+}
+
+/* The grab handle at the top of the playhead. */
+.fw-demo .tl-playhead::before {
+	content: '';
+	position: absolute;
+	top: -1px;
+	left: 50%;
+	width: 9px;
+	height: 9px;
+	transform: translateX(-50%) rotate(45deg);
+	border-radius: 2px;
+	background: var(--gold);
+}
+
+.fw-demo .tl-scrub {
+	border-radius: 3px;
+	cursor: ew-resize;
+	touch-action: pan-y;
+}
+
+.fw-demo .tl-scrub:focus-visible {
+	outline: 2px solid var(--gold);
+	outline-offset: 2px;
+}
