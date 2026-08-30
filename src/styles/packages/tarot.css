@@ -113,8 +113,6 @@ padding-bottom reserves the strip the pagination is lifted into. */
 .proj-demo-tarot {
 position: relative;
 display: block;
-border: 0;
-background: none;
 /* Top padding gives the card shadows headroom; the bottom strip is
 where the pagination dots are lifted to. */
 padding: 0.75rem 0 3.5rem;
