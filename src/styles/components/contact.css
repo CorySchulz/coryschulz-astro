@@ -83,11 +83,6 @@
 	padding: 0;
 }
 
-/* The package's own stylesheet loads after app.css, so anything it declares
-   on a bare element selector is re-asserted here, where the scoped selector
-   outranks it. The host's width and font live in packages/select-dropdown.css
-   instead: they are not specific to this field. */
-
 /* The package paints .select-icon as a CSS border triangle. Ours is an svg
    wearing the class, so the border comes off and only the flip-on-open the
    package drives is kept. */
@@ -114,12 +109,6 @@
 
 .budget-field select-trigger.select-trigger:hover {
 	border-color: var(--gold-soft);
-}
-
-/* The component positions the panel itself, aligning the selected option over
-   the trigger, so nothing here may add a vertical offset. */
-.budget-field select-panel.select-options {
-	width: 100%;
 }
 
 .budget-field select-option.select-option {
@@ -253,6 +242,13 @@
 		animation: none;
 	}
 	.pill:hover {
+		transform: none;
+	}
+	/* The press states, beside the hover they compose with. contact.css is the
+	   last component sheet, so these beat the rules in buttons.css and
+	   split-text-demo.css on source order at equal specificity. */
+	.pill:active,
+	.st-chip:active {
 		transform: none;
 	}
 	.tl-scroll .tl-pin {

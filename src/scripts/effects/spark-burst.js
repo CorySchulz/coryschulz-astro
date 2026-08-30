@@ -52,7 +52,9 @@ const burst = (host, side) => {
 				{ duration: rand(420, 680), easing: 'ease-out' }
 			)
 			.play()
-			.then(() => dot.remove());
+			// Settled either way: a rejected scene must not strand a dot in the DOM.
+			.then(() => dot.remove())
+			.catch(() => dot.remove());
 	}
 };
 

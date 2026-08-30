@@ -41,6 +41,17 @@ select-panel {
 	box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55) !important;
 }
 
+/* The package locks body scroll while the panel is open. Wherever scrollbars
+   are classic rather than overlay, that removes the gutter and jumps the whole
+   page sideways as the dropdown opens. The gutter wins: the panel is absolutely
+   positioned inside its host, so it travels with the page and has nothing to
+   gain from the lock. !important because the package re-declares this exact
+   selector at the same specificity, and later. */
+body:has(select-dropdown[visible]) {
+	overflow-x: hidden !important;
+	overflow-y: scroll !important;
+}
+
 select-option {
 	color: var(--cream);
 }
