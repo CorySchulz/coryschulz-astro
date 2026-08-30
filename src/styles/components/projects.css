@@ -106,3 +106,23 @@ background: none;
 }
 
 /* Split text, the replayable lab */
+
+/* Puzzle Pieces: the registry as three drifting rows. Same component as the
+Tools marquee, tighter gap — these tiles are words, not icons. */
+.pieces-marquee {
+--scrolling-content-gap: 0.625rem;
+display: block;
+}
+
+.piece-tile {
+border: 1px solid rgba(251, 248, 238, 0.1);
+background: rgba(251, 248, 238, 0.04);
+transition:
+border-color 0.25s ease,
+color 0.25s ease;
+}
+
+.piece-tile:hover {
+border-color: var(--gold);
+color: var(--gold-bright);
+}

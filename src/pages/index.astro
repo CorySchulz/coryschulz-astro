@@ -219,6 +219,23 @@ const puzzleSpecs = [
 	'Router, datastore, and view animations built in',
 ];
 
+const piecesSpecs = [
+	'Over 90 pieces, from Button to DataTable to Kanban',
+	'Copied into your app as source, never installed from npm',
+	'Tailwind-styled, accessible, and morph-aware',
+	'Easy to add using the CLI',
+];
+
+// Every piece in the registry, dealt into three rows so each marquee reads as
+// a different slice of the library rather than three alphabetical runs.
+const pieceRows = [
+	['Accordion', 'Avatar', 'Breadcrumb', 'Carousel', 'Code', 'Copy Button', 'Dialog', 'Empty', 'Input OTP', 'Markdown', 'Meter', 'Panel Stack', 'Progress', 'Rich Text', 'Select', 'Slider', 'Stat Card', 'Tags Input', 'Toggle'],
+	['Alert', 'Avatar Group', 'Button', 'Chat Attachment', 'Collapsible', 'Data Table', 'Dropdown Menu', 'Fader', 'Kanban', 'Markdown Editor', 'Multi Select', 'Password Field', 'Progress Ring', 'Rich Text Editor', 'Separator', 'Sparkline', 'Stepper', 'Textarea', 'Toggle Group'],
+	['Alert Dialog', 'Badge', 'Button Group', 'Chat Message', 'Combobox', 'Date Picker', 'Dropzone', 'Field', 'Kbd', 'Marquee', 'Navigation Menu', 'Pie Chart', 'Quantity Input', 'Scroll Area', 'Sheet', 'Spinner', 'Switch', 'Time Picker', 'Toolbar'],
+	['Area Chart', 'Bar Chart', 'Calendar', 'Chat Scroller', 'Command', 'Date Range Picker', 'Emoji Picker', 'Hover Card', 'Label', 'Masonry', 'Number Field', 'Popconfirm', 'Radio Group', 'Scroll Stack', 'Sidebar', 'Split Button', 'Table', 'Timeline', 'Tooltip'],
+	['Aspect Ratio', 'Bottom Sheet', 'Card', 'Checkbox', 'Context Menu', 'Description List', 'Emoji Picker Simple', 'Input Group', 'Line Chart', 'Menubar', 'Pagination', 'Popover', 'Rating', 'Search Field', 'Skeleton', 'Split Panel', 'Tabs', 'Toast', 'Tree'],
+];
+
 const constellationSpecs = [
 	'Agents build a complete plan before writing code',
 	'Plans live as files in your repo',
@@ -748,6 +765,88 @@ const morphCards = [
     &#125;,
   &#125;;
 <span class="c-punc">&lt;/</span><span class="c-tag">script</span><span class="c-punc">&gt;</span></code></pre>
+						</div>
+					</article>
+
+					<!-- ---------- PUZZLE PIECES ---------- -->
+					<article class="proj-row grid grid-cols-1 items-center gap-8 py-12 lg:py-20 lg:gap-12 reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy flex flex-col items-start gap-3.5 min-w-0">
+							<a
+								class="proj-pill inline-block rounded-full px-3.5 py-1.5 fs-mono-label tracking-[0.14em] text-gold"
+								href="https://github.com/magic-spells/puzzle-pieces"
+								target="_blank"
+								rel="noopener noreferrer">@magic-spells/puzzle-pieces</a
+							>
+							<h3 class="proj-title fs-heading-3 text-cream">
+								<split-text effect="bloom" split="chars" duration="700" stagger="35"
+									>Puzzle Pieces</split-text
+								>
+							</h3>
+							<p class="fs-subheading font-semibold text-cream text-balance">A complete component library, built for Puzzle.</p>
+							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
+								Primitives, overlays, data display, charts and editors &mdash; every one a native
+								<code>.pzl</code> component. The CLI copies the source into your app, so a piece is
+								yours to restyle rather than a dependency to fight.
+							</p>
+							<ul class="flex flex-col gap-1.5 mt-0.5">
+								{
+									piecesSpecs.map((spec) => (
+										<li class="flex items-center gap-2 text-sm text-cream">
+											<svg class="flex-none size-3" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+												<path d={STAR} fill="var(--gold)" />
+											</svg>
+											<span>{spec}</span>
+										</li>
+									))
+								}
+							</ul>
+							<p class="proj-install mt-1.5 rounded-[10px] px-4.5 py-3 font-mono fs-body-sm text-cream max-w-full overflow-x-auto whitespace-nowrap"><span class="text-gold mr-1.5">$</span> puzzle add piece button select</p>
+							<a
+								class="proj-demo-link inline-flex items-center gap-xs self-start mt-0.5 rounded-full px-4.5 py-2 fs-body-sm font-medium text-cream"
+								href="https://magic-spells.github.io/puzzle-pieces/"
+								target="_blank"
+								rel="noopener noreferrer">
+								Browse the library
+								<svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+									<path
+										d="M7 17 L17 7 M9 7 L17 7 L17 15"
+										stroke="var(--gold)"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"></path>
+								</svg>
+							</a>
+						</div>
+						<!-- The whole registry, drifting. Volume is the point, so five rows
+						     running opposite ways put a few dozen names on screen at
+						     once and imply the rest off the edges. <scrolling-content> is the
+						     same component the Tools marquee runs on, and it handles reduced
+						     motion itself: the loop never starts and the rows stay a
+						     scrubbable strip. -->
+						<div class="proj-demo flex flex-col justify-center gap-3.5 py-7 min-h-75 overflow-hidden min-w-0">
+							{
+								[
+									{ row: pieceRows[0], direction: 'left', speed: 22 },
+									{ row: pieceRows[1], direction: 'right', speed: 17 },
+									{ row: pieceRows[2], direction: 'left', speed: 26 },
+									{ row: pieceRows[3], direction: 'right', speed: 20 },
+									{ row: pieceRows[4], direction: 'left', speed: 15 },
+								].map(({ row, direction, speed }) => (
+									<scrolling-content
+										class="pieces-marquee"
+										direction={direction}
+										speed={String(speed)}
+										fade="4rem">
+										<scrolling-track>
+											{row.map((name) => (
+												<span class="piece-tile block rounded-full px-4 py-1.5 font-mono fs-body-xs text-slate whitespace-nowrap">
+													{name}
+												</span>
+											))}
+										</scrolling-track>
+									</scrolling-content>
+								))
+							}
 						</div>
 					</article>
 
