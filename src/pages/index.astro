@@ -1,802 +1,3575 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import * as si from 'simple-icons';
+
+const stops = [
+	{
+		year: '2013',
+		shortYear: "'13",
+		company: "Kohl's",
+		role: 'Lead Web Developer',
+		desc: 'Rewrote the Kohls.com front end.',
+		img: '/kohls.jpg',
+		alt: 'Kohls.com',
+	},
+	{
+		year: '2016',
+		shortYear: "'16",
+		company: 'Pair',
+		role: 'Co-founder',
+		desc: 'Launches for Milwaukee Tool and Empire Level.',
+		img: '/milwaukee.png',
+		alt: 'Milwaukee Tool',
+	},
+	{
+		year: '2018',
+		shortYear: "'18",
+		company: 'Fuel Made',
+		role: 'Front-End Developer',
+		desc: 'Custom Shopify themes. Casamigos Tequila.',
+		img: '/casamigos.jpg',
+		alt: 'Casamigos',
+	},
+	{
+		year: '2022',
+		shortYear: "'22",
+		company: 'Pura',
+		role: 'Sr. Front-End Developer / Tech Lead',
+		desc: 'Rebuilt pura.com, hired and trained the team.',
+		img: '/pura.png',
+		alt: 'Pura',
+	},
+	{
+		year: '2024',
+		shortYear: "'24",
+		company: 'Magic Spells',
+		role: 'Founder',
+		desc: 'Open-source web components, the Tarot carousel, and the Puzzle framework.',
+		img: null,
+		alt: 'Magic Spells',
+	},
+	{
+		year: '2025',
+		shortYear: "'25",
+		company: 'Elva',
+		role: 'Front-End Developer',
+		desc: 'Dashing Diva, and Grande Cosmetics.',
+		img: '/dashing-diva.png',
+		alt: 'Dashing Diva',
+	},
+	{
+		year: '2026',
+		shortYear: "'26",
+		company: 'Avex',
+		role: 'Sr. Front-End Developer / Tech Lead',
+		desc: 'Cherokee Uniforms.',
+		img: null,
+		// Brand card rather than a site screenshot: the wordmark, recoloured
+		// white, centred on Cherokee's brand blue.
+		logo: '/cherokee-logo.svg',
+		logoBg: '#000193',
+		alt: 'Cherokee Uniforms',
+	},
+];
+
+const heroStats = [
+	{ num: '20+', label: 'years full-stack' },
+	{ num: '11', label: 'years Shopify' },
+	{ num: '5', label: 'years design' },
+	{ num: '2', label: 'years AI' },
+];
+
+const splitEffects = [
+	'rise',
+	'drop',
+	'slide-right',
+	'slide-left',
+	'bloom',
+	'spin-x',
+	'spin-y',
+	'magnetic',
+];
+
+// Every published @magic-spells library that does not already have a feature
+// row above. Enumerated from the org's public repos and confirmed against the
+// npm scope, so editor plugins, build plugins and the site repo stay out.
+const chips = [
+	{ repo: 'animation-engine', name: 'Animation Engine' },
+	{ repo: 'bottom-sheet', name: 'Bottom Sheet' },
+	{ repo: 'cart', name: 'Cart Item' },
+	{ repo: 'cart', name: 'Cart Panel' },
+	{ repo: 'cart-progress-bar', name: 'Cart Progress Bar' },
+	{ repo: 'collapsible-content', name: 'Collapsible Content' },
+	{ repo: 'dialog-panel', name: 'Dialog Panel' },
+	{ repo: 'dropdown-panel', name: 'Dropdown Panel' },
+	{ repo: 'dropdown-select', name: 'Dropdown Select' },
+	{ repo: 'event-emitter', name: 'Event Emitter' },
+	{ repo: 'focus-trap', name: 'Focus Trap' },
+	{ repo: 'frame-engine', name: 'Frame Engine' },
+	{ repo: 'cart', name: 'Gift With Purchase' },
+	{ repo: 'image-zoom', name: 'Image Zoom' },
+	{ repo: 'load-content', name: 'Load Content' },
+	{ repo: 'panel-stack', name: 'Panel Stack' },
+	{ repo: 'physics-engine', name: 'Physics Engine' },
+	{ repo: 'puzzle-pieces', name: 'Puzzle Pieces' },
+	{ repo: 'pyramid', name: 'Pyramid' },
+	{ repo: 'quantity-input', name: 'Quantity Input' },
+	{ repo: 'quantity-modifier', name: 'Quantity Modifier' },
+	{ repo: 'responsive-video', name: 'Responsive Video' },
+	{ repo: 'reveal', name: 'Reveal' },
+	{ repo: 'scroll-progress', name: 'Scroll Progress' },
+	{ repo: 'scroll-stack', name: 'Scroll Stack' },
+	{ repo: 'scroll-trigger', name: 'Scroll Trigger' },
+	{ repo: 'scroll-velocity', name: 'Scroll Velocity' },
+	{ repo: 'scrolling-content', name: 'Scrolling Content' },
+	{ repo: 'select-dropdown', name: 'Select Dropdown' },
+	{ repo: 'sheet', name: 'Sheet' },
+	{ repo: 'split-panel', name: 'Split Panel' },
+	{ repo: 'sticky-header', name: 'Sticky Header' },
+	{ repo: 'tab-group', name: 'Tab Group' },
+];
+
+// Ordered so neighbours contrast in the peacock spread — the two dark cards
+// never sit next to each other.
+const tarotSlides = [
+	{ img: '/dashing-diva.png', alt: 'Dashing Diva' },
+	{ img: '/homage.png', alt: 'Homage' },
+	{ img: '/braxley.jpg', alt: 'Braxley Bands' },
+	{ img: '/rosita.jpg', alt: 'Rosita' },
+	{ img: '/kohls.jpg', alt: "Kohl's" },
+	{ img: '/casamigos.jpg', alt: 'Casamigos' },
+	{ img: '/ritual.png', alt: 'Ritual Hockey' },
+];
+
+// Magic Spells wordmark, inlined from the magicspells.io Logo component so
+// it can be painted with a token colour (viewBox 0 0 1193 238, single path).
+const MS_LOGO = 'M1156.348 83.463c4.709 16.62 40.996 13.019 36.287-6.371-3.047-12.742-21.052-21.606-49.307-20.221-29.361 1.662-43.489 18.559-39.61 34.625 1.662 6.925 7.202 14.958 14.958 20.221l3.047 1.939c12.188 7.202 32.131 14.681 35.178 27.146 2.217 9.141-3.877 14.404-12.464 14.404-11.635.277-18.837-12.465-5.54-16.343-4.71-16.62-40.72-13.019-36.288 6.371 3.047 12.465 21.33 21.329 49.584 19.944 29.084-1.385 43.489-18.282 39.61-34.625-1.662-6.925-6.647-14.958-14.68-20.498l-2.77-1.662c-12.188-7.479-32.963-14.404-36.01-27.146-1.94-8.864 3.877-14.127 12.464-14.404 11.912 0 18.837 12.742 5.54 16.62M198.482 13.659c.276-1.662-1.386-2.493-3.048-2.493-1.385 0-17.45 3.601-30.746 3.601-13.02 0-29.086-3.601-30.747-3.601-1.386 0-3.048.831-2.77 2.493.554 2.77 6.925 2.216 10.802 8.864l-39.056 68.419-39.612-69.804c3.879-5.263 9.419-4.986 9.696-7.479.276-1.662-1.385-2.493-2.77-2.493H8.736c-1.662 0-3.048.831-2.77 2.493.554 4.155 13.296.831 13.296 22.437v98.058c0 21.606-17.728 24.653-18.283 28.531-.277 1.662 1.386 2.77 2.77 2.77 1.662 0 10.804-3.601 21.606-3.601 10.25 0 19.944 3.601 21.607 3.601 1.661 0 3.323-1.108 3.046-2.77-.83-3.878-18.558-6.925-18.558-28.531V49.115l51.245 85.039 4.155 7.202 22.437-39.334 35.456-62.325v100.551c0 21.606-13.02 18.559-13.573 22.437-.278 1.662 1.384 2.77 2.77 2.77 1.661 0 17.728-3.878 30.746-3.878 13.297 0 29.362 3.878 30.747 3.878 1.662 0 3.324-1.108 3.048-2.77-.832-3.878-13.574-.831-13.574-22.437V36.096c0-21.606 12.742-18.282 13.574-22.437m-95.289 77.56v-.277l6.095 11.08Zm813.826 23.268c2.216 42.104 47.09 37.118 62.88 21.052 3.877-4.155 9.14-3.601 6.924.554-8.864 16.343-29.362 29.362-49.583 29.362-31.3 0-56.784-24.376-56.784-54.292s25.484-54.292 56.784-54.292c43.766 0 56.232 35.179 37.119 54.846-14.404 15.235-47.922 19.113-57.34 2.77M1087.651 3.133v136.838c0 21.883 13.02 18.559 13.573 22.714.277 1.662-1.385 2.493-2.77 2.493-3.324 0-16.62-3.047-26.591-3.047s-23.269 3.047-26.316 3.047h-2.77c-3.047 0-16.343-3.047-26.314-3.047-9.973 0-23.269 3.047-26.593 3.047-1.385 0-3.047-.831-2.77-2.493.555-4.155 13.573-.831 13.573-22.714V68.228c0-14.894-6.58-20.442-10.58-23.813-1.801-1.52-3.079-2.596-2.993-3.887 0-1.108 1.385-2.216 2.77-2.216 13.297 0 32.132-11.08 35.734-15.512 3.047-3.601 6.647-2.77 6.647.831v116.34c0 17.451 8.31 18.836 11.911 20.775 3.602-1.939 11.911-3.324 11.911-20.775V48.007c0-15.269-6.742-20.828-10.724-24.11-1.725-1.423-2.932-2.418-2.849-3.59.277-1.385 1.385-2.493 3.047-2.493 13.02 0 31.855-10.803 35.457-15.235 3.324-3.878 6.647-3.047 6.647.554m-170.354 102.49c29.084 16.343 47.367-31.301 27.976-35.179-14.127-2.77-26.315 14.404-27.976 35.179M804.28 63.796c7.201-4.432 15.511-6.925 24.099-6.925 27.422 0 49.583 24.376 49.583 54.292s-22.16 54.292-49.583 54.292c-8.588 0-16.898-2.493-24.1-6.925v60.386c0 3.601-3.324 4.432-6.647.554-3.602-4.432-22.438-15.235-35.734-15.235-1.384 0-2.77-1.108-2.77-2.216-.086-1.29 1.192-2.368 2.994-3.887 3.998-3.371 10.58-8.92 10.58-23.813V94.266c0-15.269-6.743-20.828-10.725-24.11-1.725-1.423-2.932-2.418-2.848-3.59 0-1.385 1.385-2.493 2.77-2.493 13.295 0 32.131-10.803 35.733-15.235 3.323-3.878 6.648-3.047 6.648.554zm-44.32-24.099c6.924 27.7-43.49 32.686-50.414 9.141 18.281-5.54 8.033-26.038-8.31-25.484-11.911 0-28.255 7.756-24.377 22.437 4.71 18.005 38.504 27.977 55.955 38.503l3.878 2.493c11.08 7.756 18.281 19.39 20.775 29.362 5.816 22.991-11.358 46.813-52.077 49.029-39.61 1.939-65.372-10.803-69.803-28.531-6.926-27.7 43.766-32.686 50.69-9.141-18.559 5.54-8.31 26.038 8.034 25.761 12.188-.277 28.53-6.925 24.375-22.714-4.432-18.005-37.395-28.254-54.846-38.78l-3.877-2.493c-11.357-7.756-19.39-18.836-21.883-28.808-5.54-22.991 11.356-47.09 52.352-49.306 39.335-1.939 65.096 10.803 69.528 28.531m44.32 88.917c5.54 15.512 14.404 25.761 24.099 23.822 12.464-2.216 20.22-25.761 14.68-47.921-5.54-23.268-19.112-37.118-30.47-34.625-3.324.554-6.093 2.77-8.31 5.817zm-466.468 10.803c8.032 3.324 16.897 5.263 26.592 5.263 30.47 0 55.122-19.667 55.122-43.766 0-17.728-12.742-32.686-31.3-39.888 9.14-9.972 32.408-10.526 50.414-4.155 22.99 8.033 34.625-31.578 3.6-31.578-19.112 0-51.521 13.85-60.663 33.794-5.54-1.385-11.08-2.216-17.173-2.216-30.47 0-55.124 19.667-55.124 44.043 0 13.573 7.757 25.761 19.944 33.794-7.479 2.493-13.85 8.31-14.958 16.62-3.55 23.162 17.085 27.903 37.533 32.602 16.233 3.73 32.35 7.433 36.15 20.305 3.6 11.634-9.419 22.714-24.93 22.714-16.067 0-18.836-22.16-4.986-22.16 0-24.099-45.151-27.7-45.151 1.385 0 43.489 110.522 44.043 103.044-15.789-4.107-31.731-37.267-34.534-60.072-36.462-11.038-.933-19.65-1.66-21.367-5.365-1.938-4.155 0-7.202 3.325-9.141m-41.274.831c0 21.606 12.742 18.559 13.297 22.437.276 1.662-1.386 2.77-2.77 2.77-.146 0-.706-.129-1.605-.335-5.959-1.37-26.818-6.163-40.776.335v-13.019c-4.987 6.648-17.728 13.019-36.841 13.019-31.302 0-41.828-35.733-4.433-50.137 14.959-5.817 41.274-9.418 41.274-23.268 0-14.127-6.926-26.038-19.944-24.099-14.958 2.493-16.067 25.207-.832 25.207 0 19.944-39.887 22.991-39.887-2.77 0-18.005 19.944-33.517 44.597-33.517 28.253 0 47.92 12.188 47.92 43.766zm172.849 0v-80.33c0-3.601-3.324-4.432-6.371-.554-3.879 4.432-22.715 15.235-35.733 15.235-1.663 0-2.77 1.108-3.047 2.493-.084 1.172 1.123 2.167 2.848 3.59 3.982 3.282 10.725 8.841 10.725 24.11v35.456c0 21.606-12.742 18.559-13.573 22.437 0 1.662 1.384 2.77 3.047 2.77 3.324 0 16.342-3.324 26.315-3.324 9.971 0 23.268 3.324 26.591 3.324 1.385 0 3.047-1.108 2.77-2.77-.554-3.878-13.572-.831-13.572-22.437m112.739-5.263c-16.067 16.897-62.88 21.883-62.88-23.822 0-23.268 9.696-42.381 25.485-41.273 17.727 1.385 16.343 33.24-2.77 29.639 0 32.686 37.671 22.437 44.043 4.432 8.032-23.822-14.958-47.09-46.536-47.09-31.302 0-56.786 24.376-56.786 54.292s25.484 54.292 56.786 54.292c20.22 0 40.718-13.019 49.583-29.362 2.216-4.155-3.325-4.709-6.925-1.108m-349.02 6.094c3.6 14.127 21.052 10.526 31.578-2.216v-27.7c-1.782 1.559-5.175 3.337-9.108 5.397-10.742 5.629-25.512 13.367-22.47 24.519m131.298-72.02c8.863 0 16.065 14.127 16.065 31.855 0 17.451-7.202 31.578-16.065 31.578-8.865 0-15.79-14.127-15.79-31.578 0-17.728 6.925-31.855 15.79-31.855';
+
+const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
+
+// Tools marquee. Marks come from simple-icons and are inlined here at build
+// time — path data only, painted with currentColor, so a mixed set still reads
+// as one monochrome system and the page ships no runtime icon fetch.
+// simple-icons has no mark for OpenAI, Klaviyo or Yotpo (it carries
+// "OpenAI Gym", which is a different brand), so those three carry local marks
+// below and everything else resolves from the package.
+const toolIcons = si as Record<string, { path: string } | undefined>;
+const iconPath = (slug: string) => toolIcons['si' + slug[0].toUpperCase() + slug.slice(1)]?.path;
+
+// The Klaviyo flame is not in any icon set as a vector, so this one is
+// constructed: a rounded rhombus with two arc bands cut out, every arc
+// centered on the bottom vertex (radii 80/145/250/325 on a 690x445 rhombus,
+// scaled to 24x24). Generator lives in the session scratchpad (klaviyo_mark.py).
+const localMarks: Record<string, string | undefined> = {
+	Klaviyo:
+		'M2.506 13.602L1.585 13.007A1.217 1.217 0 0 1 1.587 10.961L9.741 5.714A4.174 4.174 0 0 1 14.259 5.714L22.413 10.961A1.217 1.217 0 0 1 22.415 13.007L21.494 13.602A11.304 11.304 0 0 0 2.506 13.602ZM4.697 15.019A8.696 8.696 0 0 1 19.303 15.019L16.236 17.001A5.043 5.043 0 0 0 7.764 17.001ZM9.663 18.229A2.783 2.783 0 0 1 14.337 18.229L12.529 19.398A0.974 0.974 0 0 1 11.471 19.398Z',
+	// The lowercase y from Yotpo's official wordmark SVG (their own icon
+	// treatment), rescaled from the source glyph box to 24x24.
+	Yotpo: 'M8.241 0l3.759 10.364L15.938 0h5.591L11.969 24H6.439l2.828-7.437L2.47 0z',
+	// The OpenAI knot, from their brand assets (already on a 24x24 viewBox).
+	OpenAI:
+		'M22.2819 9.8211a5.9847 5.9847 0 0 0 -0.5157 -4.9108 6.0462 6.0462 0 0 0 -6.5098 -2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0 -3.9977 2.9 6.0462 6.0462 0 0 0 0.7427 7.0966 5.98 5.98 0 0 0 0.511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718 -4.2058 5.9894 5.9894 0 0 0 3.9977 -2.9001 6.0557 6.0557 0 0 0 -0.7475 -7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1 -2.8764 -1.0408l0.1419 -0.0804 4.7783 -2.7582a0.7948 0.7948 0 0 0 0.3927 -0.6813v-6.7369l2.02 1.1686a0.071 0.071 0 0 1 0.038 0.052v5.5826a4.504 4.504 0 0 1 -4.4945 4.4944zm-9.6607 -4.1254a4.4708 4.4708 0 0 1 -0.5346 -3.0137l0.142 0.0852 4.783 2.7582a0.7712 0.7712 0 0 0 0.7806 0l5.8428 -3.3685v2.3324a0.0804 0.0804 0 0 1 -0.0332 0.0615L9.74 19.9502a4.4992 4.4992 0 0 1 -6.1408 -1.6464zM2.3408 7.8956a4.485 4.485 0 0 1 2.3655 -1.9728V11.6a0.7664 0.7664 0 0 0 0.3879 0.6765l5.8144 3.3543 -2.0201 1.1685a0.0757 0.0757 0 0 1 -0.071 0l-4.8303 -2.7865A4.504 4.504 0 0 1 2.3408 7.872zm16.5963 3.8558L13.1038 8.364 15.1192 7.2a0.0757 0.0757 0 0 1 0.071 0l4.8303 2.7913a4.4944 4.4944 0 0 1 -0.6765 8.1042v-5.6772a0.79 0.79 0 0 0 -0.407 -0.667zm2.0107 -3.0231 -0.142 -0.0852 -4.7735 -2.7818a0.7759 0.7759 0 0 0 -0.7854 0L9.409 9.2297V6.8974a0.0662 0.0662 0 0 1 0.0284 -0.0615l4.8303 -2.7866a4.4992 4.4992 0 0 1 6.6802 4.66zM8.3065 12.863l-2.02 -1.1638a0.0804 0.0804 0 0 1 -0.038 -0.0567V6.0742a4.4992 4.4992 0 0 1 7.3757 -3.4537l-0.142 0.0805L8.704 5.459a0.7948 0.7948 0 0 0 -0.3927 0.6813zm1.0976 -2.3654 2.602 -1.4998 2.6069 1.4998v2.9994l-2.5974 1.4997 -2.6067 -1.4997Z',
+};
+
+const tools = [
+	{ name: 'JavaScript', slug: 'javascript' },
+	{ name: 'React', slug: 'react' },
+	{ name: 'Next.js', slug: 'nextdotjs' },
+	{ name: 'Tailwind CSS', slug: 'tailwindcss' },
+	{ name: 'Vue.js', slug: 'vuedotjs' },
+	{ name: 'Svelte', slug: 'svelte' },
+	{ name: 'Node.js', slug: 'nodedotjs' },
+	{ name: 'Shopify', slug: 'shopify' },
+	{ name: 'Klaviyo', slug: null },
+	{ name: 'Yotpo', slug: null },
+	{ name: 'Vercel', slug: 'vercel' },
+	{ name: 'Cloudflare', slug: 'cloudflare' },
+	{ name: 'Figma', slug: 'figma' },
+	{ name: 'Sketch', slug: 'sketch' },
+	{ name: 'OpenAI', slug: null },
+	{ name: 'Anthropic', slug: 'anthropic' },
+	{ name: 'Claude', slug: 'claude' },
+	{ name: 'Vite', slug: 'vite' },
+	{ name: 'Webpack', slug: 'webpack' },
+	{ name: 'Rollup', slug: 'rollupdotjs' },
+	{ name: 'Ghostty', slug: 'ghostty' },
+	{ name: 'Sublime Text', slug: 'sublimetext' },
+].map((tool) => ({ ...tool, path: tool.slug ? iconPath(tool.slug) : localMarks[tool.name] }));
+
+// Two counter-scrolling rows at slightly different speeds, so they never lock
+// into step with each other.
+const toolRowA = tools.slice(0, 11);
+const toolRowB = tools.slice(11);
+
+// Counted from the vendored library rather than quoted from memory:
+// 2 built-in effects (carousel, fade) + 16 premium = 18; 4 bundled plugins
+// (buttons, pagination, autoplay, as-nav-for) + 6 optional = 10. The size is
+// the minified UMD core gzipped (25,764 bytes).
+const tarotSpecs = ['25kb gzipped', '18 effects', '10 plugins'];
+
+// Both numbers come from the puzzle repos, not from the landing copy. The size
+// is the framework's own canonical benchmark (`npm run measure:size`), which
+// reports total emitted JS gzipped for its two reference apps: 21.0 KB for the
+// minimal hello-world, 24.0 KB for the full todos example. The component count
+// is the length of puzzle-pieces' registry.json `pieces` array (95).
+const puzzleSpecs = [
+	'21kb gzipped',
+	'Over 90 prebuilt components in Puzzle Pieces',
+	'Compiler written in Go for quick compile times',
+	'Router, datastore, and view animations built in',
+];
+
+const constellationSpecs = [
+	'Agents build a complete plan before writing code',
+	'Plans live as files in your repo',
+	'Agents query the plan later for better context',
+	'Documentation for your entire project',
+];
+
+// Morph Engine demo: each card flies open into the shared dialog. The copy
+// lives here so the card and the dialog are filled from one source.
+const morphCards = [
+	{
+		id: 'tarot',
+		name: 'Tarot',
+		meta: 'carousel',
+		tagline: 'A carousel with real physics.',
+		body: 'Springs, not transitions. Throw it, catch it, or scrub it by hand, and every frame lands where the physics say it should.',
+		install: 'npm i @magic-spells/tarot',
+	},
+	{
+		id: 'puzzle',
+		name: 'Puzzle',
+		meta: 'framework',
+		tagline: 'Single-file components.',
+		body: 'A front-end app framework built on .pzl components, reactive data, and a Go plus esbuild compiler that ships static HTML.',
+		install: 'npm i @magic-spells/puzzle',
+	},
+	{
+		id: 'timeline',
+		name: 'Timeline Engine',
+		meta: 'animation',
+		tagline: 'Choreography you can scrub.',
+		body: 'Group animation scenes in a timeline, then drive it with scroll position, scroll trigger, or scrub events.',
+		install: 'npm i @magic-spells/timeline-engine',
+	},
+	{
+		id: 'split-text',
+		name: 'Split Text',
+		meta: 'type',
+		tagline: 'Text that makes an entrance.',
+		body: 'Splits a line into words, characters, or measured lines and animates each unit on a CSS-driven stagger. Eight effects, no dependencies.',
+		install: 'npm i @magic-spells/split-text',
+	},
+];
 ---
 
-<style>
-	/* Ripple carousel fade animation for slide content */
-	tarot-slide .slide-content {
-		opacity: 0;
-		transition: opacity 0.5s ease-in-out;
-		min-width: 220px;
-		text-align: center;
-		font-family: 'Fields', system-ui, sans-serif;
-	}
+<Layout title="Cory Schulz - Front-End Engineer, Tech Lead & Shopify Developer">
+	<a class="skip-link" href="#experience">Skip to content</a>
 
-	tarot-slide.tarot-fully-visible .slide-content {
-		opacity: 1;
-	}
+	<main id="top">
+		<!-- ============ HERO ============ -->
+		<section class="section hero">
+			<!-- Decorative and deliberately full-bleed: it sits outside the
+			     container so it keeps sizing off the section, not the text column. -->
+			<svg class="constellation" viewBox="0 0 1200 360" aria-hidden="true" focusable="false">
+				<circle class="twinkle twinkle-a" cx="80" cy="60" r="1.6" fill="var(--gold)"></circle>
+				<circle cx="220" cy="180" r="1.1" fill="var(--cream)" opacity="0.5"></circle>
+				<circle class="twinkle twinkle-b" cx="360" cy="40" r="1.3" fill="var(--cream)" opacity="0.4"></circle>
+				<circle cx="540" cy="120" r="1.0" fill="var(--gold)" opacity="0.6"></circle>
+				<circle class="twinkle twinkle-c" cx="700" cy="30" r="1.5" fill="var(--cream)" opacity="0.45"></circle>
+				<circle cx="860" cy="150" r="1.2" fill="var(--gold)" opacity="0.7"></circle>
+				<circle class="twinkle twinkle-d" cx="1000" cy="70" r="1.6" fill="var(--cream)" opacity="0.4"></circle>
+				<circle cx="1120" cy="200" r="1.1" fill="var(--gold)" opacity="0.6"></circle>
+				<circle cx="160" cy="300" r="1.2" fill="var(--cream)" opacity="0.35"></circle>
+				<circle class="twinkle twinkle-e" cx="1040" cy="310" r="1.3" fill="var(--cream)" opacity="0.4"></circle>
+				</svg>
 
-	/* ScrollTrigger fade-up animations */
-	[data-section-trigger] {
-		opacity: 0;
-		transform: translateY(40px);
-		transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-		            transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-	}
+			<div class="container hero-inner">
+				<p class="eyebrow hero-eyebrow">
+					<span>Senior Front-End Engineer &middot; Tech Lead</span>
+				</p>
 
-	[data-section-trigger].visible {
-		opacity: 1;
-		transform: translateY(0);
-	}
+				<h1 class="hero-name">
+					<split-text split="chars" trigger="load" stagger="34" duration="900"
+						><span class="hero-name-part">Cory</span> <span class="hero-name-part">Schulz</span></split-text
+					>
+				</h1>
 
-	/* Dropdown Select Custom Styles Override */
-	dropdown-select {
-		--select-color-background: rgba(0, 0, 0, 0.15);
-		--select-color-border: rgba(255, 255, 255, 0.2);
-		--select-color-border-hover: rgba(255, 255, 255, 0.4);
-		--select-color-text: white;
-		--select-color-hover: rgba(255, 255, 255, 0.1);
-		--select-color-focus: rgba(255, 255, 255, 0.15);
-		--select-color-selected: rgba(255, 255, 255, 0.15);
-		--select-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-		--select-border-radius: 0.5rem;
-		--select-options-max-height: none;
-		width: 100%;
-	}
+				<p class="hero-thesis">
+					<split-text
+						effect="bloom"
+						split="words"
+						trigger="load"
+						duration="1100"
+						stagger="48"
+						delay="420"
+						>I love to design beautiful experiences and build tools that help other people create more
+						amazing things.</split-text
+					>
+				</p>
+				<div class="hero-actions">
+					<a class="pill pill-gold" href="#contact" data-scroll-to-contact>Send a Message</a>
+					<a
+						class="pill pill-outline"
+						href="https://www.linkedin.com/in/cory-schulz/"
+						target="_blank"
+						rel="noopener noreferrer">
+						LinkedIn
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+							<path
+								d="M7 17 L17 7 M9 7 L17 7 L17 15"
+								stroke="var(--gold)"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"></path>
+						</svg>
+					</a>
+				</div>
+			</div>
+		</section>
 
-	dropdown-select-trigger {
-		backdrop-filter: blur(30px);
-		-webkit-backdrop-filter: blur(30px);
-	}
+		<!-- ============ ABOUT ============ -->
+		<!-- An interstitial beat between the hero and Experience: no big section
+		     title, no top hairline, so it reads as a continuation of the hero
+		     rather than the first headline section. -->
+		<section class="section section-about" id="about">
+			<div class="container about-inner reveal reveal-fade-up reveal-delay-500">
+				<p class="eyebrow">A Little About Me</p>
 
-	dropdown-options {
-		background: rgba(24, 30, 40, 1.0) !important;
-	}
+				<p class="about-lede">
+					I&rsquo;m the creator of Magic Spells, an open-source suite of web components, and Tarot, a
+					carousel with real physics. I&rsquo;ve been building for the web for over twenty years. I love working in Figma as
+					much as I do in code, and I care a lot about design systems.
+				</p>
 
-	dropdown-option {
-		position: relative;
-	}
+				<p class="about-lede">
+					I&rsquo;ve also hired and built front-end teams from the ground up. At Pura I hired and
+					trained the team, then led the full rebuild of pura.com. The relaunch doubled the
+					site&rsquo;s conversion rate, and Shopify wrote a
+					<a
+						class="about-link"
+						href="https://www.shopify.com/case-studies/pura-scents"
+						target="_blank"
+						rel="noopener noreferrer">case study</a
+					> on it.
+				</p>
 
-	dropdown-option:first-child {
-		border-top-left-radius: 0.5rem;
-		border-top-right-radius: 0.5rem;
-	}
+				<!-- A display band of four tiles, wider than the text column above it.
+				     The numerals are static at their final values — the only motion here
+				     is the tiles' staggered rise, which the reveal group drives. -->
+				<ul class="stat-line">
+					{
+						heroStats.map((s) => (
+							<li class="stat reveal reveal-fade-up" data-reveal-group="stats:100">
+								<span class="stat-num">{s.num}</span>
+								<span class="stat-label">{s.label}</span>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+		</section>
 
-	dropdown-option:last-child {
-		border-bottom-left-radius: 0.5rem;
-		border-bottom-right-radius: 0.5rem;
-	}
-
-	dropdown-option[aria-selected="true"] {
-		background-color: rgba(255, 255, 255, 0.15) !important;
-		font-weight: 600;
-	}
-
-	dropdown-option:hover {
-		background-color: rgba(255, 255, 255, 0.1) !important;
-	}
-
-	dropdown-option:focus {
-		background-color: rgba(255, 255, 255, 0.15) !important;
-		box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3) !important;
-	}
-
-	/* Canvas wrapper to hide right edge rendering glitch */
-	.canvas-wrapper {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 100vh;
-		overflow: hidden;
-		z-index: 0;
-	}
-
-	#lavaCanvas {
-		width: calc(100% + 10px);
-		height: 100%;
-	}
-</style>
-
-<Layout title="Cory Schulz - Full Stack Developer">
-	<div class="canvas-wrapper">
-		<canvas id="lavaCanvas"></canvas>
-	</div>
-
-	<main class="relative z-10 min-h-screen">
-		<div class="container py-12">
-			<!-- Hero Section -->
-			<section class="mb-20">
-				<div data-section-trigger class="bg-gray-900/50 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20">
-					<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-						<!-- Left: Photo and Name -->
-						<div class="flex flex-col items-center lg:items-start gap-6">
-							<div class="w-64 h-64 rounded-full bg-black/20 bg-noise backdrop-blur-[30px] border-4 border-white/20 shadow-2xl overflow-hidden">
-								<img src="/cory.jpg" alt="Cory Schulz" class="w-full h-full object-cover" />
-							</div>
-							<div class="text-center lg:text-left">
-								<h1 class="text-4xl lg:text-5xl font-black text-white mb-3 tracking-tight text-shadow-lg font-fields">Cory Schulz</h1>
-								<p class="text-white/80 text-lg lg:text-xl leading-relaxed max-w-[500px] font-normal text-shadow text-pretty text-semibold">
-									Hi! I'm the creator of Magic Spells and Tarot carousel. I love to design beautiful experiences and create tools that make the internet more fun. Feel free to send me a message if you're looking for a web developer and think I might be a good fit.
-								</p>
-								<div class="mt-6 flex flex-wrap gap-3 justify-center lg:justify-start">
-									
-									<a
-										href="https://www.linkedin.com/in/cory-schulz/"
-										target="_blank"
-										rel="noopener noreferrer"
-										class="flex items-center gap-2 bg-white/10 bg-noise backdrop-blur-[30px] text-white px-6 py-3 rounded-full hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30"
-										aria-label="Connect on LinkedIn"
-									>
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 264.583 66.146" class="h-5 w-auto"><g class="scaling-icon" style="stroke-width:.084"><g class="logo-21dp" style="stroke-width:.084"><g class="dpi-1" style="stroke-width:.084"><g class="inbug" style="fill:none;fill-rule:evenodd;stroke-width:.084"><path d="M82.479 0H64.583C63.727 0 63 .677 63 1.511v17.977c0 .835.477 1.512 1.333 1.512h17.896c.857 0 1.771-.677 1.771-1.512V1.511C84 .677 83.336 0 82.479 0" class="bug-text-color" style="fill:#fff;stroke-width:.084" transform="scale(3.1498)"/><path d="M82.479 0H64.583C63.727 0 63 .677 63 1.511v17.977c0 .835.477 1.512 1.333 1.512h17.896c.857 0 1.771-.677 1.771-1.512V1.511C84 .677 83.336 0 82.479 0ZM71 8h2.827v1.441h.031c.431-.777 1.704-1.566 3.278-1.566C80.157 7.875 81 9.479 81 12.45V18h-3v-5.003c0-1.33-.531-2.497-1.773-2.497-1.508 0-2.227 1.021-2.227 2.697V18h-3zm-5 10h3V8h-3Zm3.375-13.5a1.875 1.875 0 1 1-3.749.001 1.875 1.875 0 0 1 3.749-.001Z" class="background" style="fill:#0a66c2;stroke-width:.084" transform="scale(3.1498)"/></g><g class="linkedin-text" style="fill:#fff;stroke-width:.084"><path d="M60 18h-2.8v-1.191h-.03c-.623.722-1.705 1.316-3.539 1.316-2.5 0-4.653-1.881-4.653-5.114 0-3.08 2.122-5.136 4.747-5.136 1.625 0 2.634.578 3.245 1.316H57V3h3zm-5.521-7.875c-1.715 0-2.679 1.223-2.679 2.849 0 1.627.964 2.901 2.679 2.901 1.717 0 2.721-1.241 2.721-2.901 0-1.706-1.004-2.849-2.721-2.849zm-6.818 6.264c-.708.917-2.166 1.736-4.52 1.736-3.14 0-5.14-2.08-5.14-5.347 0-2.903 1.811-4.903 5.228-4.903C46.18 7.875 48 9.813 48 13.222c0 .34-.055.678-.055.678h-7.114l.017.309c.197.862.848 1.916 2.342 1.916 1.304 0 2.198-.701 2.602-1.25l1.87 1.514zm-2.548-4.39c.02-1.054-.754-2.124-1.974-2.124-1.452 0-2.227 1.134-2.308 2.125h4.282z" style="stroke-width:.084" transform="scale(3.1498)"/><path d="M38 8h-3.5L31 12V3h-3v15h3v-5l3.699 5h3.542L34 12.533ZM16 8h2.827v1.441h.031c.431-.777 1.704-1.566 3.278-1.566C25.157 7.875 26 9.792 26 12.45V18h-3v-5.003c0-1.472-.531-2.497-1.773-2.497-1.508 0-2.227 1.194-2.227 2.697V18h-3zm-5 10h3V8h-3Zm1.501-11.7a1.8 1.8 0 1 0 0-3.599 1.8 1.8 0 0 0 0 3.599zM3 3H0v15h9v-3H3Z" style="stroke-width:.084" transform="scale(3.1498)"/></g></g></g></g></svg>
-									</a>
-									<button
-										id="scroll-to-contact"
-										class="bg-white/10 bg-noise backdrop-blur-[30px] text-white px-6 py-3 rounded-full hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30 uppercase cursor-pointer">
-										Send a Message
-									</button>
-								</div>
-							</div>
-						</div>
-
-						<!-- Right: Experience Cards -->
-						<div class="grid grid-cols-1 gap-6">
-							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
-								<div class="flex items-center gap-4">
-									<div class="text-6xl font-bold -mb-2 w-[80px] text-right">20</div>
-									<div>
-										<div class="text-lg font-semibold">Years</div>
-										<div class="text-white/80 text-sm">Full Stack Developer</div>
-									</div>
-								</div>
-							</div>
-							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
-								<div class="flex items-center gap-4 ">
-									<div class="text-6xl font-bold  -mb-2 w-[80px] text-right">10</div>
-									<div>
-										<div class="text-lg font-semibold">Years</div>
-										<div class="text-white/80 text-sm">Shopify Developer</div>
-									</div>
-								</div>
-							</div>
-							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
-								<div class="flex items-center gap-4">
-									<div class="text-6xl font-bold  -mb-2 w-[80px] text-right">4</div>
-									<div>
-										<div class="text-lg font-semibold">Years</div>
-										<div class="text-white/80 text-sm">Designer</div>
-									</div>
-								</div>
-							</div>
-							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
-								<div class="flex items-center gap-4">
-									<div class="text-6xl font-bold  -mb-2 w-[80px] text-right">1</div>
-									<div>
-										<div class="text-lg font-semibold">Year</div>
-										<div class="text-white/80 text-sm">AI Engineer</div>
-									</div>
-								</div>
-							</div>
+		<!-- ============ TIMELINE ============ -->
+		<section class="section section-timeline" id="experience">
+			<!-- Desktop: scroll-scrubbed horizontal strip. The heading rides inside
+			     the pinned area so it stays with the strip while it scrubs. -->
+			<div class="tl-scroll" id="tl-scroll">
+				<div class="tl-pin">
+					<div class="container">
+						<div class="section-head reveal reveal-fade-up">
+							<p class="eyebrow">2013&ndash;Today</p>
+							<h2 class="section-title">
+								<split-text effect="rise" split="chars" stagger="26" duration="820"
+									>Experience</split-text
+								>
+							</h2>
+							<p class="section-intro">
+								From a Fortune 500 rewrite to a billion-dollar tequila brand to founding a web app
+								framework and an open-source component library.
+							</p>
 						</div>
 					</div>
-				</div>
-			</section>
-
-			<!-- Featured Work Section -->
-			<section class="mb-20">
-				<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20 text-white">
-					<h2 class="text-4xl font-bold mb-8 text-white drop-shadow-lg font-fields text-center">Featured Work</h2>
-
-					<tarot-carousel>
-						<script type="application/json" data-tarot-options>
+					<!-- The strip is deliberately NOT in the container: it is full-bleed
+					     to the section gutters so the scrub keeps the widest possible
+					     runway. .tl-viewport takes its gutters as margins (not padding)
+					     because the scrub measures travel from its clientWidth. -->
+					<div class="tl-viewport" id="tl-viewport">
+						<div class="tl-strip" id="tl-strip">
+							<div class="tl-rule" aria-hidden="true"></div>
 							{
-								"gap": 16,
-								"loop": true,
-								"slidesPerView": 1,
-								"slidesPerMove": 1,
-								"navigation": {
-									"showButtons": false,
-									"showPagination": true,
-									"paginationPosition": "bottom",
-									"buttonsPosition": "bottom"
-								},
-								"breakpoints": {
-									"768": {
-										"gap": 20,
-										"slidesPerView": 2,
-										"slidesPerMove": 2
-									},
-									"1200": {
-										"gap": 24,
-										"slidesPerView": 3,
-										"slidesPerMove": 3
-									}
-								}
+								stops.map((s) => (
+									<article class="tl-stop">
+										{s.img ? (
+											<img class="tl-media" src={s.img} alt={s.alt} loading="lazy" decoding="async" />
+										) : s.logo ? (
+											<div class="tl-media tl-media-brand" style={`background:${s.logoBg}`}>
+												<img
+													class="tl-brand-logo"
+													src={s.logo}
+													alt={s.alt}
+													loading="lazy"
+													decoding="async"
+												/>
+											</div>
+										) : (
+											<div class="tl-media tl-media-mark">
+												<svg
+													class="ms-logo"
+													viewBox="0 0 1193 238"
+													role="img"
+													aria-label="Magic Spells">
+													<path d={MS_LOGO} fill="currentColor" />
+												</svg>
+											</div>
+										)}
+										<svg class="tl-node" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+											<path d={STAR} fill={s.img ? 'var(--gold)' : 'var(--gold-bright)'} />
+										</svg>
+										<div class="tl-text">
+											<p class="tl-year">{s.year}</p>
+											<h3 class="tl-company">{s.company}</h3>
+											<p class="tl-role">{s.role}</p>
+											<p class="tl-desc">{s.desc}</p>
+										</div>
+									</article>
+								))
 							}
-						</script>
-						<tarot-viewport>
-							<tarot-slide>
-								<a href="https://www.casamigos.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/casamigos.jpg" alt="Casamigos" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Lead Developer</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							<tarot-slide>
-								<a href="https://www.milwaukeetool.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/milwaukee.png" alt="Milwaukee Tool" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Development Support</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							<tarot-slide>
-								<a href="https://pura.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/pura.png" alt="Pura" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Lead Developer</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							<tarot-slide>
-								<a href="https://dashingdiva.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/dashing-diva.png" alt="Dashing Diva" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							<tarot-slide>
-								<a href="https://ritualhockey.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/ritual.png" alt="Ritual Hockey" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Lead Developer</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							
-							<tarot-slide>
-								<a href="https://braxleybands.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/braxley.jpg" alt="Braxley Bands" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Lead Developer</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							<tarot-slide>
-								<a href="https://www.rositausa.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/rosita.jpg" alt="Rosita" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Lead Developer</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							<tarot-slide>
-								<a href="https://www.kohls.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/kohls.jpg" alt="Kohl's" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Lead Developer</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							<tarot-slide>
-								<a href="https://www.homage.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/homage.png" alt="Homage" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Development Support</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-						</tarot-viewport>
-					</tarot-carousel>
-				</div>
-			</section>
-
-			<!-- Magic Spells Section -->
-			<section class="mb-20 hidden">
-				<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20 text-white">
-					<h2 class="text-4xl font-bold mb-8 text-white drop-shadow-lg font-fields">Magic Spells</h2>
-					<div class="space-y-6 mb-8">
-						<p class="text-lg leading-relaxed text-pretty">
-							We specialize in fully custom Shopify themes tailored exactly to your brand's ambitions. Beautifully designed, meticulously coded, and ready to scale.
-						</p>
-
-						<p class="text-lg leading-relaxed text-pretty">
-							Free, open-source web components crafted for developers.
-						</p>
-					</div>
-					<div class="text-center">
-						<a href="https://magicspells.io/" target="_blank" rel="noopener noreferrer" class="inline-block bg-white/10 bg-noise backdrop-blur-[30px] text-white px-8 py-4 rounded-full hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30 uppercase cursor-pointer">
-							Go to Magic Spells
-						</a>
+						</div>
 					</div>
 				</div>
-			</section>
+			</div>
 
-			<!-- Tarot Section -->
-			<section class="mb-20">
+			<!-- Mobile: ledger rows -->
+			<div class="container tl-ledger-wrap">
+				<ol class="tl-ledger">
+					{
+						stops.map((s) => (
+							<li class="tl-row reveal reveal-fade-up" data-reveal-group="ledger:70">
+								<p class="tl-row-year">{s.shortYear}</p>
+								<div class="tl-row-body">
+									<h3 class="tl-row-company">{s.company}</h3>
+									<p class="tl-row-role">{s.role}</p>
+									<p class="tl-row-desc">{s.desc}</p>
+								</div>
+								{s.img ? (
+									<img class="tl-row-thumb" src={s.img} alt={s.alt} loading="lazy" decoding="async" />
+								) : s.logo ? (
+									<div class="tl-row-thumb tl-media-brand" style={`background:${s.logoBg}`}>
+										<img
+											class="tl-brand-logo"
+											src={s.logo}
+											alt={s.alt}
+											loading="lazy"
+											decoding="async"
+										/>
+									</div>
+								) : (
+									<div class="tl-row-thumb tl-media-mark">
+										<svg
+											class="ms-logo ms-logo-sm"
+											viewBox="0 0 1193 238"
+											role="img"
+											aria-label="Magic Spells">
+											<path d={MS_LOGO} fill="currentColor" />
+										</svg>
+									</div>
+								)}
+							</li>
+						))
+					}
+				</ol>
+			</div>
+		</section>
 
-				<div data-section-trigger class="relative p-4 md:p-6 lg:p-10 rounded-xl mb-8 shadow-lg border border-white/20 text-white text-center overflow-hidden" style="background: url(/bg-noise.png) repeat 0 0 / 50px 50px, linear-gradient(to bottom right, rgb(15 23 42), rgb(30 58 138), rgb(30 41 59)); background-blend-mode: overlay;">
-	
-					<!-- Content -->
-					<div class="relative z-10">
-						<p class="text-sm uppercase tracking-wider text-white/70 my-4 font-semibold">Introducing</p>
-						<h2 class="text-6xl md:text-7xl lg:text-8xl font-black mb-6 text-white font-fields uppercase tracking-tight" style="text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);">Tarot</h2>
-						<p class="text-lg md:text-xl mb-6 leading-relaxed text-pretty max-w-2xl mx-auto px-4">A modern carousel with beautiful physics based animations.</p>
-					</div>
+		<!-- ============ TOOLS ============ -->
+		<!-- A light interstitial like About: an eyebrow and the marquee, no
+		     display-size title. The rows are full-bleed, so they sit outside the
+		     container the eyebrow uses. -->
+		<section class="section section-tools" id="tools">
+			<div class="container">
+				<div class="section-head reveal reveal-fade-up">
+					<p class="eyebrow">Everyday Stack</p>
+					<h2 class="section-title">
+						<split-text effect="rise" split="chars" stagger="26" duration="820">Tools I use</split-text>
+					</h2>
+				</div>
+			</div>
+
+			<div class="tools-marquees reveal reveal-fade-up">
+				{
+					[
+						{ row: toolRowA, direction: 'left', speed: 26 },
+						{ row: toolRowB, direction: 'right', speed: 21 },
+					].map(({ row, direction, speed }) => (
+						<scrolling-content
+							class="tools-marquee"
+							direction={direction}
+							speed={String(speed)}
+							fade="6rem">
+							<scrolling-track>
+								{row.map((tool) => (
+									<div class={`tool-tile${tool.path ? '' : ' tool-tile-text'}`}>
+										{tool.path ? (
+											<svg
+												class="tool-mark"
+												viewBox="0 0 24 24"
+												role="img"
+												aria-label={tool.name}
+												focusable="false">
+												<path d={tool.path} fill="currentColor" />
+											</svg>
+										) : (
+											<span class="tool-wordmark">{tool.name}</span>
+										)}
+										<span class="tool-label">{tool.name}</span>
+									</div>
+								))}
+							</scrolling-track>
+						</scrolling-content>
+					))
+				}
+			</div>
+		</section>
+
+		<!-- ============ THINGS I'VE BUILT ============ -->
+		<section class="section section-projects" id="projects">
+			<div class="container container-wide">
+				<div class="section-head reveal reveal-fade-up">
+					<p class="eyebrow">Free &amp; Open Source</p>
+					<h2 class="section-title">
+						<split-text effect="rise" split="chars" stagger="26" duration="820"
+							>Things I&rsquo;ve built</split-text
+						>
+					</h2>
 				</div>
 
-				<!-- Tarot Examples -->
-				<div class="space-y-8 mb-8">
-					<!-- Ripple Effect -->
-					<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20">
-						<h3 class="text-2xl font-bold text-white mb-8 text-center font-fields">Ripple Effect</h3>
-						<tarot-carousel>
-							<script type="application/json" data-tarot-options>
+				<div class="proj-rows">
+					<!-- ---------- TAROT ---------- -->
+					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy">
+							<a class="proj-pill" href="https://magicspells.io" target="_blank" rel="noopener noreferrer"
+								>magicspells.io/tarot</a
+							>
+							<h3 class="proj-title">
+								<split-text effect="bloom" split="chars" duration="700" stagger="35"
+									>Tarot</split-text
+								>
+							</h3>
+							<p class="proj-tagline">A carousel with real physics.</p>
+							<p class="proj-desc">
+								A springy, scrubbable carousel that you can throw, catch, and scrub by hand. Every
+								frame is driven by a real spring, not a CSS transition.
+							</p>
+							<ul class="proj-specs">
 								{
-									"effect": "ripple",
-									"gap": 12,
-									"loop": true,
-									"slidesPerView": 1,
-									"slidesPerMove": 1,
-									"navigation": {
-										"showButtons": false,
-										"showPagination": true,
-										"paginationPosition": "bottom",
-										"buttonsPosition": "bottom"
-									},
-									"breakpoints": {
-										"768": {
-											"gap": 16,
-											"slidesPerView": 2,
-											"slidesPerMove": 2
-										},
-										"1024": {
-											"gap": 20,
-											"slidesPerView": 3,
-											"slidesPerMove": 3
-										},
-										"1200": {
-											"gap": 20,
-											"slidesPerView": 4,
-											"slidesPerMove": 4
-										}
-									}
+									tarotSpecs.map((spec) => (
+										<li class="proj-spec">
+											<svg class="proj-spec-mark" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+												<path d={STAR} fill="var(--gold)" />
+											</svg>
+											<span>{spec}</span>
+										</li>
+									))
 								}
-							</script>
-							<tarot-viewport>
-								<tarot-slide class="bg-gradient-to-br from-purple-500 to-pink-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 1</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-blue-500 to-cyan-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 2</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-green-500 to-emerald-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 3</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-orange-500 to-red-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 4</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-red-500 to-rose-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 5</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-indigo-500 to-violet-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 6</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-amber-500 to-orange-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 7</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-teal-500 to-cyan-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 8</div>
-								</tarot-slide>
-							</tarot-viewport>
-						</tarot-carousel>
-					</div>
-
-					<!-- Butterfly Effect -->
-					<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20">
-						<h3 class="text-2xl font-bold text-white mb-8 text-center font-fields">Butterfly Effect</h3>
-						<tarot-carousel>
-							<script type="application/json" data-tarot-options>
-								{
-									"effect": "butterfly",
-									"goToSelectedSlide": true,
-									"loop": true,
-									"gap": 10,
-									"paddingLeft": "25%",
-									"paddingRight": "25%",
-									"slidesPerView": 1,
-									"navigation": {
-										"showButtons": false,
-										"showPagination": true,
-										"paginationPosition": "bottom",
-										"buttonsPosition": "bottom"
-									}
-								}
-							</script>
-							<tarot-viewport>
-								<tarot-slide class="bg-gradient-to-br from-indigo-500 to-purple-500 aspect-[3/4] lg:aspect-[6/7] rounded-lg flex items-center justify-center text-white text-3xl font-bold font-fields">Slide 1</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-pink-500 to-rose-500 aspect-[3/4] lg:aspect-[6/7] rounded-lg flex items-center justify-center text-white text-3xl font-bold font-fields">Slide 2</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-yellow-500 to-orange-500 aspect-[3/4] lg:aspect-[6/7] rounded-lg flex items-center justify-center text-white text-3xl font-bold font-fields">Slide 3</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-teal-500 to-cyan-500 aspect-[3/4] lg:aspect-[6/7] rounded-lg flex items-center justify-center text-white text-3xl font-bold font-fields">Slide 4</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-violet-500 to-fuchsia-500 aspect-[3/4] lg:aspect-[6/7] rounded-lg flex items-center justify-center text-white text-3xl font-bold font-fields">Slide 5</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-lime-500 to-green-500 aspect-[3/4] lg:aspect-[6/7] rounded-lg flex items-center justify-center text-white text-3xl font-bold font-fields">Slide 6</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-red-500 to-pink-500 aspect-[3/4] lg:aspect-[6/7] rounded-lg flex items-center justify-center text-white text-3xl font-bold font-fields">Slide 7</tarot-slide>
-							</tarot-viewport>
-						</tarot-carousel>
-					</div>
-
-					<!-- Peacock Effect -->
-					<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] px-2 py-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20">
-						<h3 class="text-2xl font-bold text-white mb-8 text-center font-fields">Peacock Effect</h3>
-						<div class="max-w-[700px] mx-auto peacock-carousel">
+							</ul>
+							<p class="proj-note">Free to use. Find it at magicspells.io</p>
+						</div>
+						<div class="proj-demo proj-demo-tarot">
 							<tarot-carousel>
 								<script type="application/json" data-tarot-options>
 									{
 										"effect": "peacock",
-										"gap": 20,
+										"goToSelectedSlide": true,
+										"initialIndex": 2,
 										"loop": true,
-										"paddingLeft": "0%",
-										"paddingRight": "0%",
+										"gap": 20,
+										"paddingLeft": "18%",
+										"paddingRight": "18%",
+										"slidesPerView": 1,
 										"navigation": {
-											"showButtons": false,
-											"showPagination": true,
-											"paginationPosition": "bottom",
-											"buttonsPosition": "bottom"
+											"showButtons": true,
+											"smartButtons": false,
+											"showPagination": false
 										},
-										"breakpoints": {
-											"768": {
-												"paddingLeft": "10%",
-												"paddingRight": "10%"
-											}
+										"scrollbar": {
+											"show": true
 										}
 									}
 								</script>
 								<tarot-viewport>
-									<tarot-slide class="bg-gradient-to-br from-emerald-500 to-teal-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
-										<div class="flex h-full w-full items-center justify-center">
-											<div class="slide-content">Slide 1</div>
-										</div>
-									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-sky-500 to-blue-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
-										<div class="flex h-full w-full items-center justify-center">
-											<div class="slide-content">Slide 2</div>
-										</div>
-									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-amber-500 to-yellow-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
-										<div class="flex h-full w-full items-center justify-center">
-											<div class="slide-content">Slide 3</div>
-										</div>
-									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-rose-500 to-pink-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
-										<div class="flex h-full w-full items-center justify-center">
-											<div class="slide-content">Slide 4</div>
-										</div>
-									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-purple-500 to-indigo-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
-										<div class="flex h-full w-full items-center justify-center">
-											<div class="slide-content">Slide 5</div>
-										</div>
-									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-cyan-500 to-sky-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
-										<div class="flex h-full w-full items-center justify-center">
-											<div class="slide-content">Slide 6</div>
-										</div>
-									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-fuchsia-500 to-purple-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
-										<div class="flex h-full w-full items-center justify-center">
-											<div class="slide-content">Slide 7</div>
-										</div>
-									</tarot-slide>
+									<tarot-track>
+										{
+											tarotSlides.map((s) => (
+												<tarot-slide class="tarot-mini-slide">
+													{/* w-tarot-slide pins the content to --tarot-slide-width so peacock
+													    can animate the slide open around it without squashing the card. */}
+													<div class="w-tarot-slide tarot-mini-inner">
+														<img src={s.img} alt={s.alt} loading="lazy" decoding="async" />
+													</div>
+												</tarot-slide>
+											))
+										}
+									</tarot-track>
 								</tarot-viewport>
 							</tarot-carousel>
 						</div>
-					</div>
+					</article>
 
-					<!-- Spotlight Effect -->
-					<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] py-4 md:py-6 lg:py-10 rounded-xl shadow-lg border border-white/20">
-						<h3 class="text-2xl font-bold text-white mb-8 text-center font-fields">Spotlight Effect</h3>
-						<tarot-carousel>
-							<script type="application/json" data-tarot-options>
+					<!-- ---------- PUZZLE ---------- -->
+					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy">
+							<a
+								class="proj-pill"
+								href="https://github.com/magic-spells/puzzle"
+								target="_blank"
+								rel="noopener noreferrer">@magic-spells/puzzle</a
+							>
+							<h3 class="proj-title">
+								<split-text effect="bloom" split="chars" duration="700" stagger="35"
+									>Puzzle</split-text
+								>
+							</h3>
+							<p class="proj-tagline">Built to compete with React, Vue, and Svelte.</p>
+							<p class="proj-desc">
+								A front-end web app framework: single-file <code>.pzl</code> components, reactive data,
+								and a Go + esbuild compiler.
+							</p>
+							<ul class="proj-specs">
 								{
-									"effect": "spotlight",
-									"gap": 20,
-									"loop": true,
-									"slidesPerView": 1,
-									"slidesPerMove": 1,
-									"paddingLeft": "15%",
-									"paddingRight": "15%",
-									"navigation": {
-										"showButtons": false,
-										"showPagination": true,
-										"paginationPosition": "bottom",
-										"buttonsPosition": "bottom"
-									},
-									"breakpoints": {
-										"768": {
-											"slidesPerView": 2,
-											"slidesPerMove": 2,
-											"paddingLeft": "24.8%",
-											"paddingRight": "24.8%"
-										}
-									}
+									puzzleSpecs.map((spec) => (
+										<li class="proj-spec">
+											<svg class="proj-spec-mark" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+												<path d={STAR} fill="var(--gold)" />
+											</svg>
+											<span>{spec}</span>
+										</li>
+									))
 								}
-							</script>
-							<tarot-viewport>
-								<tarot-slide class="bg-gradient-to-br from-purple-500 to-pink-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 1</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-blue-500 to-cyan-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 2</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-green-500 to-emerald-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 3</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-orange-500 to-red-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 4</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-red-500 to-rose-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 5</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-indigo-500 to-violet-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 6</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-amber-500 to-orange-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 7</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-teal-500 to-cyan-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 8</div>
-								</tarot-slide>
-							</tarot-viewport>
-						</tarot-carousel>
-					</div>
+							</ul>
+							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/puzzle</p>
+							<a
+								class="proj-demo-link"
+								href="https://puzzle-music-demo.vercel.app/"
+								target="_blank"
+								rel="noopener noreferrer">
+								Preview the music app
+								<svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+									<path
+										d="M7 17 L17 7 M9 7 L17 7 L17 15"
+										stroke="var(--gold)"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"></path>
+								</svg>
+							</a>
+						</div>
+						<div class="proj-demo">
+							<pre class="code-card"><code><span class="c-punc">&lt;</span><span class="c-tag">puzzle-view</span><span class="c-punc">&gt;</span>
+  <span class="c-punc">&lt;</span><span class="c-tag">button</span> <span class="c-attr">class</span>=<span class="c-str">"counter"</span> <span class="c-evt">@click</span>=<span class="c-bind">&#123; increment &#125;</span><span class="c-punc">&gt;</span>
+    Clicked <span class="c-bind">&#123; count &#125;</span> times
+  <span class="c-punc">&lt;/</span><span class="c-tag">button</span><span class="c-punc">&gt;</span>
+<span class="c-punc">&lt;/</span><span class="c-tag">puzzle-view</span><span class="c-punc">&gt;</span>
+
+<span class="c-punc">&lt;</span><span class="c-tag">script</span><span class="c-punc">&gt;</span>
+  <span class="c-kw">export default</span> &#123;
+    <span class="c-fn">data</span>: () <span class="c-kw">=&gt;</span> (&#123; <span class="c-attr">count</span>: <span class="c-num">0</span> &#125;),
+    <span class="c-fn">increment</span>() &#123;
+      <span class="c-kw">this</span>.<span class="c-fn">setData</span>(&#123; <span class="c-attr">count</span>: <span class="c-kw">this</span>.<span class="c-fn">getData</span>().count + <span class="c-num">1</span> &#125;);
+    &#125;,
+  &#125;;
+<span class="c-punc">&lt;/</span><span class="c-tag">script</span><span class="c-punc">&gt;</span></code></pre>
+						</div>
+					</article>
+
+					<!-- ---------- TIMELINE ENGINE ---------- -->
+					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy">
+							<a
+								class="proj-pill"
+								href="https://github.com/magic-spells/timeline-engine"
+								target="_blank"
+								rel="noopener noreferrer">@magic-spells/timeline-engine</a
+							>
+							<h3 class="proj-title">
+								<split-text effect="bloom" split="chars" duration="700" stagger="35"
+									>Timeline Engine</split-text
+								>
+							</h3>
+							<p class="proj-tagline">Choreography you can scrub.</p>
+							<p class="proj-desc">
+								Group animation scenes in a timeline. Drive the timeline with scroll position, scroll
+								trigger, or scrub events. Loop scenes, randomize positions, and use physics based
+								animations.
+							</p>
+							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/timeline-engine</p>
+						</div>
+						<div class="proj-demo proj-demo-bare" id="fireworks-mount"></div>
+					</article>
+
+					<!-- ---------- SPLIT TEXT ---------- -->
+					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy">
+							<a
+								class="proj-pill"
+								href="https://github.com/magic-spells/split-text"
+								target="_blank"
+								rel="noopener noreferrer">@magic-spells/split-text</a
+							>
+							<h3 class="proj-title">
+								<split-text effect="bloom" split="chars" duration="700" stagger="35"
+									>Split Text</split-text
+								>
+							</h3>
+							<p class="proj-tagline">Text that makes an entrance.</p>
+							<p class="proj-desc">
+								A web component that splits a line into words, characters, or measured lines and animates
+								each unit on a CSS-driven stagger. Eight built-in effects, no dependencies, and no
+								framework to adopt. Drop the tag around your copy and it reveals itself when it scrolls
+								into view.
+							</p>
+							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/split-text</p>
+						</div>
+						<div class="proj-demo proj-demo-split">
+							<div class="st-demo">
+								<p class="st-stage" id="st-stage"><split-text
+										id="st-specimen"
+										effect="rise"
+										split="chars"
+										trigger="manual"
+										duration="850"
+										stagger="26">Text that makes an entrance</split-text></p>
+
+								<div class="st-controls">
+									<p class="st-label">Effect</p>
+									<div class="st-effects" id="st-effects" role="group" aria-label="Reveal effect">
+										{
+											splitEffects.map((e, i) => (
+												<button
+													type="button"
+													class="st-chip"
+													data-effect={e}
+													aria-pressed={i === 0 ? 'true' : 'false'}>
+													{e}
+												</button>
+											))
+										}
+									</div>
+									<div class="st-actions">
+										<button type="button" class="st-replay" id="st-replay">Replay</button>
+										<code class="st-code" id="st-code"
+											>&lt;split-text effect="rise" split="chars"&gt;</code
+										>
+									</div>
+								</div>
+							</div>
+						</div>
+					</article>
+
+					<!-- ---------- MORPH ENGINE ---------- -->
+					<article class="proj-row reveal reveal-fade-up" data-reveal-group="projects:110">
+						<div class="proj-copy">
+							<a
+								class="proj-pill"
+								href="https://github.com/magic-spells/morph-engine"
+								target="_blank"
+								rel="noopener noreferrer">@magic-spells/morph-engine</a
+							>
+							<h3 class="proj-title">
+								<split-text effect="bloom" split="chars" duration="700" stagger="35"
+									>Morph Engine</split-text
+								>
+							</h3>
+							<p class="proj-tagline">Interfaces that morph into each other.</p>
+							<p class="proj-desc">
+								A spring-driven shared-element morph. It measures what you clicked, flies its rect,
+								radii, background, and shadow into the target&rsquo;s, and reveals the real element in
+								lockstep. Reverse it mid-flight and it simply turns around.
+							</p>
+							<p class="proj-install"><span class="dollar">$</span> npm i @magic-spells/morph-engine</p>
+						</div>
+						<div class="proj-demo proj-demo-morph">
+							<!-- A margin note, not a UI label: it leans a degree off true and
+							     fades out for good once a panel has been opened. -->
+							<!-- Fixed-height stage so the dialog's measured rect never depends on
+							     which card opened it, and the flight stays inside the panel. -->
+							<div class="morph-stage">
+								<p class="morph-hint" id="morph-hint">
+									<span class="morph-hint-text">click to see me morph</span>
+									<svg
+										class="morph-hint-arrow"
+										viewBox="0 0 56 72"
+										fill="none"
+										aria-hidden="true"
+										focusable="false">
+										<path
+											d="M8 6 C 32 14, 48 34, 42 62 M42 62 L33 53 M42 62 L52 55"
+											stroke="currentColor"
+											stroke-width="2.5"
+											stroke-linecap="round"
+											stroke-linejoin="round"></path>
+									</svg>
+								</p>
+								<div class="morph-grid" id="morph-grid" data-cards={JSON.stringify(morphCards)}>
+									{
+										morphCards.map((card) => (
+											<button type="button" class="morph-card" data-morph-card data-id={card.id}>
+												<span class="morph-card-name">{card.name}</span>
+												<span class="morph-card-meta">{card.meta}</span>
+											</button>
+										))
+									}
+								</div>
+							</div>
+						</div>
+					</article>
+
+					<!-- ---------- CONSTELLATION ---------- -->
+					<article
+						class="proj-row proj-row-constellation reveal reveal-fade-up"
+						data-reveal-group="projects:110">
+						<!-- Ambient field, spanning the whole row and bleeding past it. It is
+						     decorative and non-interactive: pointer-events off so the copy
+						     stays selectable, and masked on every side so it has no edge a
+						     viewer could point at. -->
+						<div class="cf-wrap" aria-hidden="true">
+							<canvas id="cf-canvas"></canvas>
+						</div>
+						<div class="proj-copy">
+							<a
+								class="proj-pill"
+								href="https://github.com/magic-spells/constellation"
+								target="_blank"
+								rel="noopener noreferrer">@magic-spells/constellation</a
+							>
+							<h3 class="proj-title">
+								<split-text effect="bloom" split="chars" duration="700" stagger="35"
+									>Constellation</split-text
+								>
+							</h3>
+							<p class="proj-tagline">Long-term memory for AI agents.</p>
+							<p class="proj-desc">
+								Plan your project as a connected graph of typed cards: pages, endpoints, tables, flows.
+								Agents read and update the graph as they work, so plans and context survive from
+								session to session instead of starting over every conversation.
+							</p>
+							<ul class="proj-specs">
+								{
+									constellationSpecs.map((spec) => (
+										<li class="proj-spec">
+											<svg class="proj-spec-mark" viewBox="0 0 18 18" aria-hidden="true" focusable="false">
+												<path d={STAR} fill="var(--gold)" />
+											</svg>
+											<span>{spec}</span>
+										</li>
+									))
+								}
+							</ul>
+							<p class="proj-install">
+								<span class="dollar">$</span> npm i -g @magic-spells/constellation
+							</p>
+						</div>
+						<div class="proj-demo proj-demo-constellation">
+							<img
+								class="cs-shot"
+								src="/constellation-viewer.webp"
+								alt="The Constellation viewer"
+								width="1600"
+								height="1147"
+								loading="lazy"
+								decoding="async"
+							/>
+						</div>
+					</article>
 				</div>
-			</section>
 
-			<!-- Contact Section -->
-			<section id="contact-section" class="mb-20">
+				<p class="chips-lead reveal reveal-fade-up">Plus all of these</p>
+				<!-- Each chip reveals on its own so the set cascades. The step is
+				     batch-relative in @magic-spells/reveal, so the whole group lands in
+				     ~0.65s rather than accumulating a delay per index. Reduced motion is
+				     handled by the package: it shows everything at once. -->
+				<ul class="chips">
+					{
+						chips.map((c) => (
+							<li class="reveal reveal-fade-up" data-reveal-group="chips:20">
+								<a
+									class="chip"
+									href={`https://github.com/magic-spells/${c.repo}`}
+									target="_blank"
+									rel="noopener noreferrer">
+									{c.name}
+								</a>
+							</li>
+						))
+					}
+				</ul>
 
-				<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] p-8 rounded-xl shadow-lg border border-white/20">
-
-					<h2 class="text-4xl font-bold pt-2 mb-6 md:mb-8 lg:mb-6 text-white text-center drop-shadow-lg font-fields text-balance">
-						Let's Build Something Great
-					</h2>
-					<p class="text-lg mb-8 text-white text-center leading-relaxed text-pretty max-w-[750px] mx-auto">
-						I specialize in building custom, high-end Shopify sites in my Shopify theme with close attention to UI/UX and CRO optimization. If you're looking for a Shopify designer or developer and think I might be a good fit for your project, fill out the form below and I'll get back to you as soon as possible.
+				<!-- Closing beat for the section: answers what the whole suite is, and
+				     hands off to magicspells.io. Deliberately lighter than the contact
+				     CTA that follows, which still owns the end of the page. -->
+				<div class="ms-outro reveal reveal-fade-up">
+					<h3 class="ms-outro-title">What is Magic Spells?</h3>
+					<p class="ms-outro-copy">
+						The world is changing fast. With tools like AI you can design, prototype, and build in
+						hours what used to take weeks, and more of the web is starting to feel like magic.
 					</p>
+					<p class="ms-outro-copy">
+						Magic Spells is named for that brain-freeze moment when something just works, feels
+						beautiful, and you want to know how it was done. Frameworks, interface systems, motion
+						engines, and developer tools built to chase that feeling. All free and open source.
+					</p>
+					<a
+						class="pill pill-gold ms-outro-cta"
+						href="https://magicspells.io"
+						target="_blank"
+						rel="noopener noreferrer">
+						Explore magicspells.io
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+							<path
+								d="M7 17 L17 7 M9 7 L17 7 L17 15"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"></path>
+						</svg>
+					</a>
+				</div>
+			</div>
+		</section>
+
+		<!-- Morph Engine target. Fixed-position, so it lives outside the row it
+		     belongs to. The scrim is a page-level element rather than the
+		     dialog's ::backdrop, because the flight starts before showModal()
+		     promotes the dialog — one surface covers both phases. -->
+		<div class="morph-scrim" id="morph-scrim" aria-hidden="true"></div>
+		<dialog class="morph-dialog" id="morph-dialog" aria-labelledby="morph-dialog-title">
+			<div class="morph-dialog-head">
+				<span class="morph-dialog-tag" id="morph-dialog-tag"></span>
+				<button type="button" class="morph-dialog-close" id="morph-dialog-close">Close</button>
+			</div>
+			<h4 class="morph-dialog-title" id="morph-dialog-title"></h4>
+			<p class="morph-dialog-tagline" id="morph-dialog-tagline"></p>
+			<p class="morph-dialog-body" id="morph-dialog-body"></p>
+			<code class="morph-dialog-install" id="morph-dialog-install"></code>
+		</dialog>
+
+		<!-- ============ CONTACT ============ -->
+		<section class="section section-contact" id="contact">
+			<div class="container">
+				<div class="contact-inner">
+					<div class="section-head reveal reveal-fade-up">
+						<img class="portrait" src="/cory.jpg" alt="Cory Schulz" width="76" height="76" loading="lazy" />
+						<h2 class="section-title">
+							<split-text effect="rise" split="chars" stagger="26" duration="820"
+								>Have a project in mind?</split-text
+							>
+						</h2>
+						<p class="contact-sub">
+							Tell me what you&rsquo;re building. If it sounds like a good fit, I&rsquo;ll get back to you as
+							soon as I can.
+						</p>
+					</div>
 
 					<!-- Success Message -->
-					<div id="success-message" class="hidden mb-8 bg-green-500/20 border border-green-500/40 backdrop-blur-[30px] p-6 rounded-xl text-white text-center transition-all duration-300">
-						<p class="text-lg font-semibold">Thanks for reaching out! I'll get back to you soon.</p>
+					<div id="success-message" class="form-note form-note-ok" hidden>
+						<p>Thanks for reaching out! I&rsquo;ll get back to you soon.</p>
 					</div>
 
 					<!-- Error Message -->
-					<div id="error-message" class="hidden mb-8 bg-red-500/20 border border-red-500/40 backdrop-blur-[30px] p-6 rounded-xl text-white text-center transition-all duration-300">
-						<p class="text-lg font-semibold">Oops! Something went wrong. Please try again.</p>
+					<div id="error-message" class="form-note form-note-err" hidden>
+						<p>Oops! Something went wrong. Please try again.</p>
 					</div>
 
-					<form id="contact-form" class="space-y-8" action="https://api.web3forms.com/submit" method="POST">
+					<form id="contact-form" class="contact-form" action="https://api.web3forms.com/submit" method="POST">
 						<!-- Hidden fields -->
 						<input type="hidden" name="access_key" value="585a106a-78ff-4313-b4c9-459b73515114" />
 						<input type="hidden" name="subject" value="New Business Inquiry from Cory Schulz Portfolio" />
 						<input type="hidden" name="from_name" value="Cory Schulz Portfolio" />
 
 						<!-- Honeypot Spam Protection (hidden from humans, visible to bots) -->
-						<input type="checkbox" name="botcheck" class="hidden" style="display: none;" />
-						
-						<!-- Your Info Section -->
-						<div class="space-y-4">
-							<h3 class="text-lg font-semibold text-white mb-4 font-fields">Your Info</h3>
-							<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-								<div class="input-field">
-									<input
-										id="name"
-										name="name"
-										type="text"
-										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-										placeholder="Your name"
-									/>
-									<label for="name" class="floating-label">Name</label>
-								</div>
+						<input type="checkbox" name="botcheck" class="botcheck" style="display: none;" />
 
-								<div class="input-field">
-									<input
-										id="email"
-										name="email"
-										type="email"
-										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-										placeholder="Your email"
-									/>
-									<label for="email" class="floating-label">Email</label>
-								</div>
+						<div class="field-grid">
+							<div class="input-field">
+								<input id="name" name="name" type="text" required placeholder="Your name" />
+								<label for="name" class="floating-label">Name</label>
+							</div>
+							<div class="input-field">
+								<input id="email" name="email" type="email" required placeholder="Your email" />
+								<label for="email" class="floating-label">Email</label>
 							</div>
 						</div>
 
-						<!-- About Your Business Section -->
-						<div class="space-y-4">
-							<h3 class="text-lg font-semibold text-white mb-4 font-fields">About Your Business</h3>
-							<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-								<div class="input-field">
-									<input
-										id="company"
-										name="company"
-										type="text"
-										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-										placeholder="Company name"
-									/>
-									<label for="company" class="floating-label">Company Name</label>
-								</div>
-
-								<div class="input-field">
-									<input
-										id="website"
-										name="website"
-										type="text"
-										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-										placeholder="Your website"
-									/>
-									<label for="website" class="floating-label">Website URL</label>
-								</div>
+						<div class="field-grid">
+							<div class="input-field">
+								<input id="company" name="company" type="text" required placeholder="Company name" />
+								<label for="company" class="floating-label">Company</label>
+							</div>
+							<div class="input-field">
+								<input id="website" name="website" type="text" required placeholder="Your website" />
+								<label for="website" class="floating-label">Website</label>
 							</div>
 						</div>
 
-		
+						<div class="field-grid">
+							<div class="budget-field">
+								<p class="field-legend">Budget</p>
+								<dropdown-select>
+									<dropdown-select-trigger class="select-trigger">
+										<span class="dropdown-label">$10,000 - $20,000</span>
+										<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+											<path
+												d="M2 4 L6 8 L10 4"
+												stroke="var(--slate-dim)"
+												stroke-width="1.5"
+												stroke-linecap="round"
+												stroke-linejoin="round"></path>
+										</svg>
+									</dropdown-select-trigger>
 
-						<!-- Project Details Section -->
-						<div class="space-y-4">
-							<h3 class="text-lg font-semibold text-white mb-4 font-fields">Tell me about your project</h3>
-							<div class="space-y-6">
-								<!-- Budget and Services Row - Side by side on desktop, stacked on mobile -->
-								<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-									<!-- Budget Column -->
-									<div class="relative">
-										<label class="block text-white mb-2 font-fields">Budget</label>
-										<dropdown-select class="w-full">
-											<dropdown-select-trigger class="w-full px-4 py-4 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 cursor-pointer flex justify-between items-center">
-												<span class="dropdown-label">$10,000 - $20,000</span>
-											</dropdown-select-trigger>
+									<input type="hidden" class="dropdown-hidden-input" name="budget" value="$10,000 - $20,000" required />
 
-											<input type="hidden" class="dropdown-hidden-input" name="budget" value="$10,000 - $20,000" required />
-
-											<dropdown-options class="w-full mt-2 border border-white/20 rounded-lg shadow-xl overflow-hidden">
-												<dropdown-option value="$10,000 - $20,000" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$10,000 - $20,000</dropdown-option>
-												<dropdown-option value="$20,000 - $40,000" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$20,000 - $40,000</dropdown-option>
-												<dropdown-option value="$40,000 - $60,000" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$40,000 - $60,000</dropdown-option>
-												<dropdown-option value="$60,000 - $100,000" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$60,000 - $100,000</dropdown-option>
-												<dropdown-option value="$100,000+" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$100,000+</dropdown-option>
-											</dropdown-options>
-										</dropdown-select>
-									</div>
-
-									<!-- Services Column -->
-									<div class="space-y-4">
-										<h4 class="text-base font-semibold text-white font-fields">What services do you need?</h4>
-										<div class="space-y-3">
-											<label class="flex items-center gap-3 cursor-pointer group">
-												<input
-													type="checkbox"
-													name="services"
-													value="Custom Shopify Theme Development"
-													class="w-5 h-5 bg-black/15 bg-noise border-2 border-white/20 rounded checked:bg-white/20 checked:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 cursor-pointer"
-												/>
-												<span class="text-white group-hover:text-white/80 transition-colors duration-200">Custom Shopify Theme Development</span>
-											</label>
-											<label class="flex items-center gap-3 cursor-pointer group">
-												<input
-													type="checkbox"
-													name="services"
-													value="Shopify Site Design"
-													class="w-5 h-5 bg-black/15 bg-noise border-2 border-white/20 rounded checked:bg-white/20 checked:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 cursor-pointer"
-												/>
-												<span class="text-white group-hover:text-white/80 transition-colors duration-200">Shopify Site Design</span>
-											</label>
-										</div>
-									</div>
-								</div>
-
-								<!-- How did you hear about us -->
-	
-								<div class="input-field">
-									<textarea
-										id="project-description"
-										name="project-description"
-										rows="4"
-										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 resize-none"
-										placeholder="Tell us about your project"
-									></textarea>
-									<label for="project-description" class="floating-label">Message</label>
-								</div>
+									<dropdown-options class="select-options">
+										<dropdown-option value="$10,000 - $20,000" class="select-option">$10,000 - $20,000</dropdown-option>
+										<dropdown-option value="$20,000 - $40,000" class="select-option">$20,000 - $40,000</dropdown-option>
+										<dropdown-option value="$40,000 - $60,000" class="select-option">$40,000 - $60,000</dropdown-option>
+										<dropdown-option value="$60,000 - $100,000" class="select-option">$60,000 - $100,000</dropdown-option>
+										<dropdown-option value="$100,000+" class="select-option">$100,000+</dropdown-option>
+									</dropdown-options>
+								</dropdown-select>
 							</div>
+
+							<fieldset class="services">
+								<legend class="field-legend">What services do you need?</legend>
+								<label class="check">
+									<input type="checkbox" name="services" value="Custom Shopify Theme Development" />
+									<span>Custom Shopify Theme Development</span>
+								</label>
+								<label class="check">
+									<input type="checkbox" name="services" value="Shopify Site Design" />
+									<span>Shopify Site Design</span>
+								</label>
+							</fieldset>
 						</div>
-						
-						<div class="text-center">
-							<button
-								id="submit-button"
-								type="submit"
-								class="bg-white/10 bg-noise backdrop-blur-[30px] text-white px-8 py-3 rounded-full hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed uppercase cursor-pointer"
-							>
+
+						<div class="input-field">
+							<textarea
+								id="project-description"
+								name="project-description"
+								rows="4"
+								required
+								placeholder="Tell me about your project"></textarea>
+							<label for="project-description" class="floating-label">Tell me about your project</label>
+						</div>
+
+						<div class="form-actions">
+							<button id="submit-button" type="submit" class="pill pill-gold">
 								<span id="button-text">Send Message</span>
 							</button>
 						</div>
 					</form>
 				</div>
-			</section>
-		</div>
+			</div>
+		</section>
 	</main>
+
+	<!-- ============ FOOTER ============ -->
+	<footer class="site-footer">
+		<div class="container footer-inner">
+			<p>&copy; 2026 Cory Schulz</p>
+			<nav class="footer-links" aria-label="Elsewhere">
+				<a href="mailto:coryschulz@gmail.com">coryschulz@gmail.com</a>
+				<a href="https://www.linkedin.com/in/cory-schulz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+				<a class="footer-gold" href="https://magicspells.io" target="_blank" rel="noopener noreferrer"
+					>magicspells.io</a
+				>
+			</nav>
+		</div>
+	</footer>
 </Layout>
 
+<style>
+	/* ============================================ */
+	/* Shared primitives                             */
+	/* ============================================ */
+
+	.skip-link {
+		position: absolute;
+		left: -9999px;
+		top: 0;
+		z-index: 100;
+		background: var(--gold);
+		color: var(--ground);
+		padding: 0.75rem 1.25rem;
+		border-radius: 0 0 8px 0;
+		font-weight: 600;
+	}
+	.skip-link:focus {
+		left: 0;
+	}
+
+	.eyebrow {
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
+		color: var(--gold);
+	}
+
+	.pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		border-radius: 999px;
+		font-family: var(--font-body);
+		font-size: 0.9375rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		white-space: nowrap;
+		cursor: pointer;
+		transition:
+			background-color 0.25s ease,
+			border-color 0.25s ease,
+			color 0.25s ease,
+			transform 0.25s ease;
+	}
+
+	.pill-gold {
+		background: var(--gold);
+		color: var(--ground);
+		border: 1px solid var(--gold);
+		padding: 1rem 2.125rem;
+	}
+	.pill-gold:hover {
+		background: var(--gold-bright);
+		border-color: var(--gold-bright);
+		color: var(--ground);
+		transform: translateY(-1px);
+	}
+
+	.pill-outline {
+		background: transparent;
+		color: var(--cream);
+		border: 1px solid rgba(251, 248, 238, 0.25);
+		padding: 0.9375rem 1.75rem;
+		font-weight: 500;
+		text-transform: none;
+		letter-spacing: 0.01em;
+	}
+	.pill-outline:hover {
+		border-color: var(--gold);
+		color: var(--cream);
+		transform: translateY(-1px);
+	}
+
+	/* Sections own the vertical rhythm and the hairline that separates them.
+	   Horizontal gutters and the max width belong to the .container inside
+	   (global, in app.css) so nothing double-pads. */
+	.section {
+		/* Desktop maxima carry most of the rhythm: the clamp minimums keep
+		   phones tight while large viewports get real air between sections.
+		   No divider rule — the whitespace does that work now. */
+		padding-block: clamp(5rem, 10vw, 11rem) clamp(5.5rem, 11vw, 12rem);
+	}
+
+	.section-head {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: 1rem;
+		margin-bottom: clamp(2.5rem, 5vw, 4rem);
+	}
+
+	.section-title {
+		font-size: clamp(2rem, 5.2vw, 3.25rem);
+		color: var(--cream);
+		text-wrap: balance;
+		/* Sentence case, like the hero name: Fields has a full lower case and
+		   reads better in it. Mixed case wants tighter tracking than caps, so
+		   this carries the hero's negative letter-spacing rather than the
+		   global heading rule's +0.01em. */
+		text-transform: none;
+		letter-spacing: -0.005em;
+	}
+
+	/* Every section title is split now. The block keeps the line wrapping as it
+	   did before the split, and the padding is the same descender fix the hero
+	   name carries: split-text masks each character, which shaves the tails on
+	   p, g and y without a little headroom. */
+	.section-title split-text {
+		display: block;
+	}
+
+	.section-title :global(.split-text-char) {
+		padding-bottom: 0.06em;
+	}
+
+	.section-intro {
+		font-size: clamp(0.9375rem, 1.8vw, 1.0625rem);
+		line-height: 1.6;
+		color: var(--slate-dim);
+		max-width: 560px;
+		text-wrap: pretty;
+	}
+
+	/* ============================================ */
+	/* Hero                                          */
+	/* ============================================ */
+
+	/* First section on the page, so it drops .section's top hairline. */
+	.hero {
+		position: relative;
+		padding-block: clamp(5rem, 11vw, 11rem) clamp(4rem, 9vw, 10rem);
+		border-top: 0;
+		background: var(--ground-glow);
+	}
+
+	.hero-inner {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	.constellation {
+		position: absolute;
+		top: 1.25rem;
+		left: 50%;
+		transform: translateX(-50%);
+		width: min(1200px, 92%);
+		height: auto;
+		opacity: 0.7;
+		pointer-events: none;
+	}
+
+	.twinkle {
+		animation: twinkle 7s ease-in-out infinite;
+	}
+	.twinkle-b {
+		animation-duration: 9s;
+		animation-delay: -2s;
+	}
+	.twinkle-c {
+		animation-duration: 11s;
+		animation-delay: -5s;
+	}
+	.twinkle-d {
+		animation-duration: 8s;
+		animation-delay: -3.5s;
+	}
+	.twinkle-e {
+		animation-duration: 12s;
+		animation-delay: -1s;
+	}
+
+	@keyframes twinkle {
+		0%,
+		100% {
+			opacity: 0.15;
+		}
+		50% {
+			opacity: 0.85;
+		}
+	}
+
+	.hero-eyebrow {
+		position: relative;
+		font-size: 0.8125rem;
+		margin-bottom: 1.75rem;
+		text-wrap: balance;
+	}
+
+	.hero-eyebrow span {
+		white-space: nowrap;
+	}
+
+	@media (max-width: 599px) {
+		.hero-eyebrow {
+			font-size: 0.6875rem;
+			letter-spacing: 0.14em;
+		}
+		/* Break into two balanced lines rather than three ragged ones */
+		.hero-eyebrow span {
+			display: block;
+		}
+	}
+
+	/* The one mixed-case display line on the page. */
+	.hero-name {
+		position: relative;
+		font-size: clamp(3.25rem, 10.5vw, 8rem);
+		color: var(--cream);
+		margin-bottom: 2.25rem;
+		text-transform: none;
+		/* Roomy enough that the descenders on "y" and "z" clear the
+		   split-text char masks while the reveal is still running. */
+		line-height: 1.14;
+		letter-spacing: -0.005em;
+	}
+
+	.hero-name split-text {
+		display: block;
+	}
+
+	@media (max-width: 599px) {
+		.hero-name-part {
+			display: block;
+		}
+	}
+
+	.hero-name :global(.split-text-char) {
+		padding-bottom: 0.04em;
+	}
+
+	.hero-thesis {
+		position: relative;
+		font-size: clamp(1.0625rem, 2.2vw, 1.3125rem);
+		font-weight: 400;
+		line-height: 1.6;
+		color: var(--slate);
+		max-width: 620px;
+		margin-bottom: 2.75rem;
+		text-wrap: pretty;
+	}
+
+	/* ============================================ */
+	/* About — interstitial beat                     */
+	/* ============================================ */
+
+	.section-about {
+		/* Lighter than the headline sections, and no top hairline: it carries
+		   straight on from the hero. Kept at roughly 60% of .section's rhythm so
+		   it stays proportional as that scales. No tail of its own — the stat
+		   band ends the section and Experience's own top padding carries the
+		   seam, which keeps the tiles from sitting in a double gap. */
+		padding-block: clamp(2.5rem, 4vw, 4rem) 0;
+		border-top: 0;
+	}
+
+	.about-inner {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: 0.875rem;
+	}
+
+	.about-lede {
+		font-size: clamp(1.1875rem, 2.2vw, 1.375rem);
+		line-height: 1.6;
+		color: var(--slate);
+		max-width: 620px;
+		text-wrap: pretty;
+	}
+
+	.about-inner .eyebrow {
+		margin-bottom: 0.375rem;
+	}
+
+	.about-link {
+		color: var(--gold);
+		text-decoration: underline;
+		text-decoration-color: rgba(201, 168, 106, 0.4);
+		text-underline-offset: 0.2em;
+		transition: color 0.2s ease;
+	}
+	.about-link:hover {
+		color: var(--gold-bright);
+	}
+
+	/* The stat band: four tiles in the page's established tile language (same
+	   face as .tool-tile), deliberately wider than the 620px text column above
+	   so it reads as a substantial closing beat rather than a caption. */
+	.stat-line {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 1rem;
+		list-style: none;
+		/* Escapes .about-inner's text measure — the band, not the prose, sets
+		   the width here. */
+		width: 100%;
+		max-width: 1080px;
+		margin: clamp(2.5rem, 5vw, 3.75rem) 0 0;
+		padding: 0;
+	}
+
+	.stat {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.75rem;
+		padding: clamp(1.75rem, 3.2vw, 2.5rem) 1rem;
+		border-radius: 14px;
+		background: rgba(251, 248, 238, 0.05);
+	}
+
+	.stat-num {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: clamp(2.5rem, 4.5vw, 4rem);
+		line-height: 1;
+		text-align: center;
+		color: var(--gold);
+		font-variant-numeric: lining-nums;
+	}
+
+	.stat-label {
+		font-size: 0.75rem;
+		font-weight: 500;
+		line-height: 1.3;
+		text-transform: uppercase;
+		letter-spacing: 0.14em;
+		text-align: center;
+		text-wrap: balance;
+		color: var(--slate-dim);
+	}
+
+	/* 2x2 on phones, with the tiles kept roomy rather than squeezed. */
+	@media (max-width: 599px) {
+		.stat-line {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 0.75rem;
+		}
+
+		.stat {
+			padding: 1.5rem 0.75rem;
+			gap: 0.625rem;
+		}
+
+		.stat-label {
+			font-size: 0.6875rem;
+			letter-spacing: 0.11em;
+		}
+	}
+
+	.hero-actions {
+		position: relative;
+		display: flex;
+		gap: 1.25rem;
+		align-items: center;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	/* Both CTAs are exactly the same height — the outline pill's 1px border
+	   is absorbed by border-box rather than adding 2px to its height. */
+	.hero-actions .pill {
+		box-sizing: border-box;
+		height: 54px;
+		padding-block: 0;
+		justify-content: center;
+	}
+
+	/* ============================================ */
+	/* Timeline — desktop scrubbed strip             */
+	/* ============================================ */
+
+	.tl-scroll {
+		position: relative;
+	}
+
+	.tl-pin {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.tl-viewport {
+		/* Edge to edge: the strip is deliberately outside .container and takes
+		   the full viewport width, so cards run off the screen edge rather than
+		   stopping at a gutter line. The side breathing room lives on the track
+		   below (.tl-strip padding-inline), which the travel math picks up
+		   because scrollWidth includes it. */
+		width: 100%;
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: thin;
+		scrollbar-color: var(--hairline-strong) transparent;
+		padding-bottom: 1rem;
+	}
+
+	.tl-strip {
+		/* One source of truth for the strip's vertical metrics, so the gold
+		   hairline lands on the exact centre of the star nodes. */
+		--tl-media-h: 190px;
+		--tl-stack-gap: 0.75rem;
+		--tl-node-size: 18px;
+		--tl-node-margin: 2px;
+
+		position: relative;
+		display: flex;
+		gap: 3rem;
+		width: max-content;
+		/* The track carries the side spacing, not the viewport — that keeps the
+		   viewport full-bleed while the first and last cards still clear the
+		   screen edge. scrollWidth counts this padding, so the scrub travels
+		   the whole track. */
+		padding-inline: var(--gutter);
+	}
+
+	/* Very wide displays: the whole strip fits, so there is no travel and no
+	   pin (see buildScrub). Without this it would sit flush-left with dead
+	   space to the right; margin auto on a max-content block centres it. */
+	.tl-scroll.tl-fits .tl-strip {
+		margin-inline: auto;
+	}
+
+	.tl-rule {
+		position: absolute;
+		/* media + stack gap + node's top margin + half the node = node centre.
+		   translateY(-50%) then centres the rule's own thickness on that line,
+		   so it stays exact whatever the rule's height is. */
+		top: calc(
+			var(--tl-media-h) + var(--tl-stack-gap) + var(--tl-node-margin) + var(--tl-node-size) / 2
+		);
+		transform: translateY(-50%);
+		left: 0;
+		right: 0;
+		height: 1px;
+		background: linear-gradient(
+			90deg,
+			rgba(201, 168, 106, 0) 0%,
+			var(--gold-soft) 6%,
+			var(--gold-soft) 94%,
+			rgba(201, 168, 106, 0) 100%
+		);
+	}
+
+	.tl-stop {
+		position: relative;
+		flex: 0 0 340px;
+		width: 340px;
+		display: flex;
+		flex-direction: column;
+		gap: var(--tl-stack-gap);
+		scroll-snap-align: center;
+	}
+
+	.tl-media {
+		width: 100%;
+		height: var(--tl-media-h);
+		object-fit: cover;
+		border-radius: var(--radius-media);
+		border: 1px solid var(--card-border);
+		background: var(--panel);
+	}
+
+	.tl-media-mark {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-color: rgba(201, 168, 106, 0.4);
+		background: linear-gradient(160deg, #0b1626 0%, var(--ground) 100%);
+		/* The wordmark is inlined SVG painted with currentColor — cream reads
+		   cleaner than gold against this card's dark blue gradient. */
+		color: var(--cream);
+	}
+
+	/* Curated brand card: a flat brand colour behind a centred wordmark, the
+	   same read as the Milwaukee and Casamigos screenshots next to it. The
+	   colour comes from the stop's own data, so only the layout lives here. */
+	.tl-media-brand {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1rem;
+		border-color: var(--card-border);
+	}
+
+	/* The wordmark is a very wide lockup (~7:1), so it is sized off the card's
+	   width and left with generous vertical whitespace. */
+	.tl-brand-logo {
+		width: 68%;
+		height: auto;
+		display: block;
+	}
+
+	.ms-logo {
+		width: 150px;
+		height: auto;
+		display: block;
+	}
+
+	.ms-logo-sm {
+		width: 74px;
+	}
+
+	.tl-node {
+		margin: var(--tl-node-margin) auto;
+		display: block;
+		width: var(--tl-node-size);
+		height: var(--tl-node-size);
+	}
+
+	.tl-text {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3125rem;
+		text-align: center;
+	}
+
+	.tl-year {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: 1.25rem;
+		color: var(--gold);
+	}
+
+	.tl-company {
+		font-family: var(--font-body);
+		font-size: 1.125rem;
+		font-weight: 600;
+		text-transform: none;
+		letter-spacing: 0;
+		line-height: 1.3;
+		color: var(--cream);
+	}
+
+	/* Quiet metadata line between the company and what the work was. */
+	.tl-role {
+		font-size: 0.6875rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		line-height: 1.35;
+		color: var(--slate-dim);
+	}
+
+	.tl-desc {
+		font-size: 0.8125rem;
+		line-height: 1.5;
+		color: var(--slate-dim);
+		text-wrap: pretty;
+	}
+
+	/* Pinned scrub mode — enabled by JS */
+	.tl-scroll.is-scrubbed .tl-pin {
+		position: sticky;
+		top: 0;
+		height: 100vh;
+		height: 100svh;
+		overflow: hidden;
+	}
+
+	.tl-scroll.is-scrubbed .tl-viewport {
+		overflow: hidden;
+		scroll-snap-type: none;
+		padding-bottom: 0;
+	}
+
+	.tl-scroll.is-scrubbed .tl-strip {
+		will-change: transform;
+	}
+
+	/* ============================================ */
+	/* Timeline — mobile ledger rows                 */
+	/* ============================================ */
+
+	.tl-ledger {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		border-top: 1px solid var(--hairline);
+	}
+
+	.tl-row {
+		display: grid;
+		grid-template-columns: auto 1fr 104px;
+		align-items: center;
+		column-gap: 1.125rem;
+		row-gap: 0.75rem;
+		padding: 1.375rem 0;
+		border-bottom: 1px solid var(--hairline);
+	}
+
+	.tl-row-year {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: clamp(2.75rem, 12vw, 3.375rem);
+		line-height: 0.9;
+		color: var(--gold);
+		font-variant-numeric: lining-nums;
+	}
+
+	.tl-row-body {
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.tl-row-company {
+		font-family: var(--font-body);
+		font-size: 1.125rem;
+		font-weight: 600;
+		text-transform: none;
+		letter-spacing: 0;
+		line-height: 1.3;
+		color: var(--cream);
+	}
+
+	/* Same quiet metadata treatment the strip uses, one step smaller. */
+	.tl-row-role {
+		font-size: 0.6875rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		line-height: 1.35;
+		color: var(--slate-dim);
+	}
+
+	.tl-row-desc {
+		font-size: 0.8125rem;
+		line-height: 1.5;
+		color: var(--slate-dim);
+		text-wrap: pretty;
+	}
+
+	.tl-row-thumb {
+		width: 104px;
+		height: 66px;
+		object-fit: cover;
+		border-radius: 6px;
+		border: 1px solid var(--card-border);
+		background: var(--panel);
+	}
+
+	/* At the narrowest sizes the thumb drops below the text instead of shrinking */
+	@media (max-width: 419px) {
+		.tl-row {
+			grid-template-columns: auto 1fr;
+		}
+		.tl-row-thumb {
+			grid-column: 2;
+			width: 100%;
+			height: 96px;
+		}
+	}
+
+	/* Below 768px the horizontal strip is replaced by the ledger rows. */
+	.tl-viewport {
+		display: none;
+	}
+
+	@media (min-width: 768px) {
+		.tl-viewport {
+			display: block;
+		}
+		.tl-ledger-wrap {
+			display: none;
+		}
+		.section-timeline {
+			padding-bottom: clamp(2rem, 4vw, 3rem);
+		}
+	}
+
+	/* ============================================ */
+	/* Tools — counter-scrolling marquees             */
+
+	/* The marquee rows need room on both sides of them: this is the seam
+	   between the timeline and Things I've Built, and both neighbours are dense. */
+	.section-tools {
+		padding-block: clamp(3.5rem, 8vw, 10rem);
+	}
+
+	.tools-marquees {
+		display: flex;
+		flex-direction: column;
+		gap: 0.875rem;
+	}
+
+	.tools-marquee {
+		--scrolling-content-gap: 0.875rem;
+		display: block;
+	}
+
+	/* Fixed width so the marquee measures a stable item and the tiles keep a
+	   square-ish face at every breakpoint. */
+	.tool-tile {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5rem;
+		width: 108px;
+		height: 108px;
+		padding: 0.5rem;
+		border-radius: 12px;
+		background: rgba(251, 248, 238, 0.05);
+		transition: background-color 0.25s ease;
+	}
+
+	.tool-tile:hover {
+		background: rgba(251, 248, 238, 0.08);
+	}
+
+	.tool-mark {
+		width: 26px;
+		height: 26px;
+		color: var(--cream);
+		opacity: 0.8;
+		transition: opacity 0.25s ease;
+	}
+
+	.tool-tile:hover .tool-mark {
+		opacity: 1;
+	}
+
+	/* The three brands simple-icons has no mark for. A slightly larger label
+	   stands in for the logo, with the caption below suppressed so the name is
+	   not printed twice. */
+	.tool-wordmark {
+		font-family: var(--font-mono);
+		font-size: 0.8125rem;
+		letter-spacing: 0.01em;
+		color: var(--cream);
+		opacity: 0.8;
+		text-align: center;
+		transition: opacity 0.25s ease;
+	}
+
+	.tool-tile:hover .tool-wordmark {
+		opacity: 1;
+	}
+
+	.tool-tile-text .tool-label {
+		display: none;
+	}
+
+	.tool-label {
+		font-size: 0.6875rem;
+		line-height: 1.2;
+		text-align: center;
+		color: var(--slate-dim);
+	}
+
+	@media (max-width: 599px) {
+		.tool-tile {
+			width: 92px;
+			height: 92px;
+		}
+
+		.tools-marquee {
+			--scrolling-content-fade: 3rem;
+		}
+	}
+
+	/* Things I've built — five feature rows          */
+	/* ============================================ */
+
+	/* The constellation field bleeds sideways out of its row; clip (not hidden,
+	   which would make this a scroll container) keeps that bleed from ever
+	   widening the page. */
+	.section-projects {
+		overflow-x: clip;
+		/* The ms-outro closes this section with its own headroom, so the stock
+		   section tail would double up against contact's top padding. Trimmed on
+		   both sides of that seam. */
+		padding-bottom: clamp(3rem, 6vw, 6rem);
+	}
+
+	.proj-rows {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.proj-row {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 2rem;
+		align-items: center;
+		padding-block: clamp(3rem, 6vw, 5rem);
+		border-top: 1px solid var(--hairline);
+
+		/* Reveal tuning, scoped to these rows. The package's own stylesheet is
+		   imported after app.css and re-declares these on :root, so the global
+		   defaults there never reach the element — setting them here puts the
+		   value where nothing outranks it. data-reveal-group="projects:110"
+		   staggers each wave of arriving rows. Reduced motion is handled by the
+		   package's own media query, which cancels transform and transition. */
+		--reveal-duration: 0.72s;
+		--reveal-distance: 34px;
+	}
+
+	.proj-row:first-child {
+		border-top: 0;
+		padding-top: 0;
+	}
+
+	@media (min-width: 900px) {
+		.proj-row {
+			grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+			gap: clamp(2.5rem, 5vw, 4.5rem);
+		}
+		/* Alternate copy-left / demo-left down the column */
+		.proj-row:nth-child(even) .proj-copy {
+			order: 2;
+		}
+		/* Cap the copy block and centre it in its column so the row reads
+		   balanced against the filled demo panel instead of hugging the inner
+		   edge. Auto margins are symmetric, so it works either way round.
+		   The text itself stays left-aligned inside the block. */
+		.proj-copy {
+			max-width: 46ch;
+			margin-inline: auto;
+		}
+	}
+
+	.proj-copy {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.875rem;
+		min-width: 0;
+	}
+
+	.proj-pill {
+		display: inline-block;
+		border: 1px solid var(--gold-faint);
+		border-radius: 999px;
+		padding: 0.4375rem 0.875rem;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--gold);
+		transition:
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.proj-pill:hover {
+		border-color: var(--gold);
+		color: var(--gold-bright);
+	}
+
+	.proj-title {
+		font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+		color: var(--cream);
+	}
+
+	/* Product names keep their display casing; only the bloom is added. The
+	   block keeps the heading wrapping as it did before the split. */
+	.proj-title split-text {
+		display: block;
+	}
+
+	.proj-title :global(.split-text-char) {
+		padding-bottom: 0.06em;
+	}
+
+	.proj-tagline {
+		font-size: clamp(1.0625rem, 2vw, 1.1875rem);
+		font-weight: 600;
+		color: var(--cream);
+		text-wrap: balance;
+	}
+
+	.proj-desc {
+		font-size: 0.9375rem;
+		line-height: 1.65;
+		color: var(--slate-dim);
+		text-wrap: pretty;
+		max-width: 46ch;
+	}
+
+	.proj-desc code {
+		font-family: var(--font-mono);
+		font-size: 0.875em;
+		color: var(--slate);
+	}
+
+	.proj-install {
+		margin-top: 0.375rem;
+		border: 1px solid var(--card-border);
+		border-radius: 10px;
+		background: var(--panel);
+		padding: 0.75rem 1.125rem;
+		font-family: var(--font-mono);
+		font-size: 0.8125rem;
+		color: var(--cream);
+		max-width: 100%;
+		overflow-x: auto;
+		white-space: nowrap;
+	}
+
+	.proj-install .dollar {
+		color: var(--gold);
+		margin-right: 0.375rem;
+	}
+
+	/* Spec list: a gold star marker per line, carrying the numbers the
+	   description used to state inline. */
+	.proj-specs {
+		list-style: none;
+		margin: 0.125rem 0 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4375rem;
+	}
+
+	.proj-spec {
+		display: flex;
+		align-items: center;
+		gap: 0.5625rem;
+		font-size: 0.875rem;
+		color: var(--cream);
+	}
+
+	.proj-spec-mark {
+		flex: none;
+		width: 12px;
+		height: 12px;
+	}
+
+	/* Outlined pill link, sized down to sit in the copy column's rhythm rather
+	   than compete with the hero's actions. */
+	.proj-demo-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		align-self: flex-start;
+		margin-top: 0.125rem;
+		border: 1px solid rgba(251, 248, 238, 0.25);
+		border-radius: 999px;
+		padding: 0.5625rem 1.125rem;
+		font-size: 0.8125rem;
+		font-weight: 500;
+		color: var(--cream);
+		transition:
+			border-color 0.25s ease,
+			color 0.25s ease;
+	}
+
+	.proj-demo-link:hover {
+		border-color: var(--gold);
+		color: var(--gold-bright);
+	}
+
+	.proj-note {
+		margin-top: 0.375rem;
+		font-size: 0.8125rem;
+		color: var(--slate-dim);
+	}
+
+	/* Demo panels ------------------------------------------------ */
+
+	.proj-demo {
+		border: 1px solid var(--card-border);
+		border-radius: var(--radius-card);
+		background: var(--card-bg);
+		padding: 1.75rem;
+		min-height: 300px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		min-width: 0;
+	}
+
+	/* No panel chrome at all: the carousel breaks out and fills the demo side
+	   of the row. The slides' own shadows give them definition against the
+	   night ground, so a border and a background would only box them in.
+	   padding-bottom reserves the strip the pagination is lifted into. */
+	.proj-demo-tarot {
+		position: relative;
+		display: block;
+		border: 0;
+		background: none;
+		/* Top padding gives the card shadows headroom; the bottom strip is
+		   where the scrollbar is lifted to. Deep enough to clear the plugin's
+		   44px coarse-pointer touch target at its lowered position. */
+		padding: 0.75rem 0 3.5rem;
+		min-height: 0;
+		/* The carousel's own clipping is off below so the shadows survive, which
+		   leaves its off-screen slides free to widen the page. This is the box
+		   that catches them — the visible slides sit ~80px inside it, so their
+		   shadows are never touched. */
+		overflow: hidden;
+	}
+
+	/* The scrollbar plugin replaces the pagination dots. It is lifted out of
+	   flow so tarot-carousel's box collapses to exactly the viewport's slide
+	   area — that is what makes the buttons below centre on the slides rather
+	   than on the slides-plus-scrollbar stack. Centred on a point just under
+	   the carousel, so a coarse-pointer track (which the plugin grows to a
+	   44px touch target) stays centred on the same rail. */
+	.proj-demo-tarot :global(.tarot-scrollbar) {
+		/* Night-palette theming for the plugin's own custom properties. They are
+		   declared on :root upstream, so redeclaring them here wins for this
+		   carousel and takes the prefers-color-scheme branch out of play. */
+		--tarot-scrollbar-height: 6px;
+		--tarot-scrollbar-bg: rgba(251, 248, 238, 0.12);
+		--tarot-scrollbar-thumb-bg: var(--gold);
+		--tarot-scrollbar-thumb-hover-bg: var(--gold-bright);
+		--tarot-scrollbar-thumb-active-bg: var(--gold-bright);
+		--tarot-scrollbar-border-radius: 999px;
+		--tarot-scrollbar-margin: 0;
+
+		position: absolute;
+		/* Sits clear of the card shadows rather than tight under the slides. */
+		top: calc(100% + 28px);
+		left: 50%;
+		transform: translate(-50%, -50%);
+		width: min(300px, 72%);
+	}
+
+	/* The plugin sizes the thumb to the full track height, which on coarse
+	   pointers is the 44px touch target rather than the visible rail. Pin it to
+	   the rail's height and centre it so the thumb reads as a slim pill on
+	   every pointer type. */
+	.proj-demo-tarot :global(.tarot-scrollbar-thumb),
+	.proj-demo-tarot :global(.tarot-scrollbar-ghost) {
+		top: 50%;
+		height: var(--tarot-scrollbar-height);
+		transform: translateY(-50%);
+	}
+
+	/* The carousel's own chrome clips at the viewport edge, which would cut the
+	   card shadows off. The slides sit well inside the panel and .proj-demo
+	   still clips at its rounded border, so letting these overflow is safe. */
+	.proj-demo-tarot tarot-carousel,
+	.proj-demo-tarot tarot-viewport {
+		overflow: visible;
+	}
+
+	/* Peacock animates the slide element's own width, so the slide is the
+	   visible card — it carries the corners and the shadow — while the fixed
+	   geometry lives on the inner wrapper it reveals. */
+	.proj-demo-tarot tarot-slide.tarot-mini-slide {
+		display: block;
+		border-radius: var(--radius-media);
+		overflow: hidden;
+		/* Two layers: a soft ambient throw plus a tight contact shadow, so the
+		   card still separates from the night ground. */
+		box-shadow:
+			0 24px 48px -12px rgba(0, 0, 0, 0.55),
+			0 4px 12px rgba(0, 0, 0, 0.4);
+	}
+
+	/* The card is a brand lockup (920x500): the frame matches that aspect and
+	   the image is contained, never cropped — a logo card that loses its edges
+	   looks broken. .w-tarot-slide holds the width; this centres it so the
+	   slide can open and close around a card that never moves or resizes. */
+	.proj-demo-tarot .tarot-mini-inner {
+		position: relative;
+		left: 50%;
+		transform: translateX(-50%);
+		aspect-ratio: 920 / 500;
+		overflow: hidden;
+		background: var(--panel);
+	}
+
+	/* Prev/next: circular icon buttons that ride over the slide area, hidden
+	   until the carousel is hovered. The package builds these at runtime, so
+	   they carry no scope attribute — hence :global(). */
+	.proj-demo-tarot :global(.tarot-button) {
+		/* Anchored to the viewport's slide area: tarot-carousel is the
+		   positioning context and, with the scrollbar lifted out of flow above,
+		   its box is exactly tarot-viewport's box — so 50% is the slides' centre
+		   line and the scrollbar below is excluded from the maths. */
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		z-index: 2;
+		width: 44px;
+		height: 44px;
+		padding: 0;
+		display: none;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+		border: 1px solid var(--hairline-strong);
+		background: rgba(2, 6, 15, 0.72);
+		backdrop-filter: blur(6px);
+		color: var(--cream);
+		opacity: 0;
+		transition:
+			opacity 0.25s ease,
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	/* Symmetric inset from the viewport's own edges. */
+	.proj-demo-tarot :global(.tarot-previous) {
+		left: 12px;
+	}
+
+	.proj-demo-tarot :global(.tarot-next) {
+		right: 12px;
+	}
+
+	.proj-demo-tarot :global(.tarot-button svg) {
+		width: 22px;
+		height: 22px;
+	}
+
+	.proj-demo-tarot :global(.tarot-button:hover) {
+		border-color: var(--gold);
+		color: var(--gold-bright);
+	}
+
+	/* Pointer devices only — a touch screen has no hover to reveal them, so it
+	   stays on the scrollbar. Keyboard focus reveals them too, so they are never
+	   reachable-but-invisible. */
+	@media (hover: hover) and (min-width: 900px) {
+		.proj-demo-tarot :global(.tarot-button) {
+			display: flex;
+		}
+
+		.proj-demo-tarot:hover :global(.tarot-button),
+		.proj-demo-tarot :global(.tarot-button:focus-visible) {
+			opacity: 1;
+		}
+	}
+
+	/* Everything but the fully-in-view card sits behind a soft blur, so the
+	   fan reads as depth rather than five competing logos. Gated on
+	   tarot-carousel:defined: if the component never upgrades, the slides stay
+	   sharp instead of permanently blurred. The blur lives on the inner
+	   wrapper, so the slide's overflow clips it to the rounded corners and the
+	   slide's own box-shadow is left alone. */
+	.proj-demo-tarot tarot-carousel:defined :global(tarot-slide.tarot-mini-slide .tarot-mini-inner) {
+		/* Soft focus, not frosted glass: enough to push the flanking cards back
+		   without making their logos unreadable. */
+		filter: blur(2.5px);
+		transition: filter 0.45s ease;
+	}
+
+	.proj-demo-tarot
+		tarot-carousel:defined
+		:global(tarot-slide.tarot-mini-slide.tarot-fully-visible .tarot-mini-inner) {
+		filter: none;
+	}
+
+	/* tarot.min.css's peacock rule pushes slide images around with
+	   position/left/transform and crops them with object-fit: cover — the
+	   inner wrapper already handles placement, so undo all of that here. */
+	.proj-demo-tarot .tarot-mini-inner img {
+		position: static;
+		left: auto;
+		transform: none;
+		width: 100%;
+		max-width: 100%;
+		height: 100%;
+		object-fit: contain;
+		display: block;
+	}
+
+	/* Morph engine — cards that fly open into a dialog ------------- */
+
+	/* The panel is unboxed like the tarot one: the cards carry their own
+	   surfaces, so a frame around them would only double the chrome. */
+	/* .proj-demo centres its children in a row; this one stacks so the margin
+	   note sits above the stage rather than beside it. */
+	.proj-demo-morph {
+		border: 0;
+		background: none;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		/* .proj-demo clips its panel; that cut the card off mid-morph as it flew
+		   toward the dialog. The blob and the dialog are both position: fixed, so
+		   nothing here needs clipping to stay in bounds. */
+		overflow: visible;
+	}
+
+	/* Reads as something scribbled in the margin: off-axis, gold, and gone for
+	   good once the reader has taken the hint. */
+	/* Label, arrow and card top read as one gesture: the label sits above the
+	   stage, the arrow starts at the end of the words and curves down-and-right
+	   so its tip lands inside the first card rather than in the gutter. Layered
+	   over the grid and click-through, so it never intercepts a card. */
+	.morph-hint {
+		position: absolute;
+		left: 0.5rem;
+		top: -34px;
+		z-index: 2;
+		display: flex;
+		align-items: flex-start;
+		gap: 0.125rem;
+		width: fit-content;
+		margin: 0;
+		color: var(--gold);
+		pointer-events: none;
+		transition: opacity 0.4s ease;
+	}
+
+	.morph-hint[data-used] {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.morph-hint-text {
+		font-family: var(--font-body);
+		font-size: 0.8125rem;
+		line-height: 1.2;
+		transform: rotate(-2deg);
+	}
+
+	.morph-hint-arrow {
+		width: 56px;
+		height: 72px;
+		flex: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.morph-hint {
+			transition: none;
+		}
+	}
+
+	/* Fixed height so the dialog's measured rect is the same whichever card
+	   opened it, and so the row doesn't reflow when the grid goes inert. */
+	.morph-stage {
+		position: relative;
+		height: 320px;
+	}
+
+	.morph-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		grid-template-rows: repeat(2, 1fr);
+		gap: 0.875rem;
+		height: 100%;
+	}
+
+	/* Opaque background and a real border: the engine lerps background-color,
+	   border and radius, so both ends need something concrete to interpolate.
+	   Only colours transition — never opacity or transform, which the engine
+	   owns during the flight. */
+	.morph-card {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 0.25rem;
+		padding: 0 1.25rem;
+		text-align: left;
+		cursor: pointer;
+		border: 1px solid var(--card-border);
+		border-radius: 12px;
+		background-color: var(--panel);
+		font-family: inherit;
+		transition:
+			border-color 0.25s ease,
+			background-color 0.25s ease;
+	}
+
+	.morph-card:hover {
+		border-color: var(--gold-faint);
+		background-color: #0a1220;
+	}
+
+	.morph-card:focus-visible {
+		outline: 2px solid var(--gold);
+		outline-offset: 2px;
+	}
+
+	.morph-card-name {
+		font-family: var(--font-mono);
+		font-size: 0.9375rem;
+		color: var(--cream);
+	}
+
+	.morph-card-meta {
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.04em;
+		color: var(--slate-dim);
+	}
+
+	/* One scrim for both phases of the flight. Opacity is fine here — this is
+	   not a morph element, so the engine never touches it. */
+	.morph-scrim {
+		position: fixed;
+		inset: 0;
+		z-index: 940;
+		background: rgba(2, 6, 15, 0.72);
+		backdrop-filter: blur(2px);
+		opacity: 0;
+		visibility: hidden;
+		transition:
+			opacity 0.3s ease,
+			visibility 0.3s ease;
+	}
+
+	.morph-scrim[visible] {
+		opacity: 1;
+		visibility: visible;
+	}
+
+	/* Closed, the UA keeps this display:none; the engine flips display on to
+	   measure and drives it through the flight, then showModal() promotes it at
+	   the reveal point. inset/margin centring rather than a transform, because
+	   the engine owns transform. max-width/height none keeps the in-flow and
+	   :modal geometry identical. */
+	.morph-dialog {
+		position: fixed;
+		inset: 0;
+		margin: auto;
+		z-index: 950;
+		flex-direction: column;
+		width: min(420px, calc(100vw - 3rem));
+		height: min(380px, calc(100vh - 6rem));
+		max-width: none;
+		max-height: none;
+		padding: 1.5rem 1.625rem 1.375rem;
+		border: 1px solid var(--gold-faint);
+		border-radius: 16px;
+		background-color: #060d18;
+		color: var(--cream);
+		box-shadow: 0 30px 90px rgba(0, 0, 0, 0.7);
+	}
+
+	.morph-dialog[open] {
+		display: flex;
+	}
+
+	/* The page scrim owns the dimming, so the UA backdrop stays out of it. */
+	.morph-dialog::backdrop {
+		background: transparent;
+	}
+
+	.morph-dialog-head {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+
+	.morph-dialog-tag {
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--gold);
+		border: 1px solid var(--gold-faint);
+		border-radius: 999px;
+		padding: 0.25rem 0.625rem;
+	}
+
+	.morph-dialog-close {
+		border: 1px solid var(--hairline-strong);
+		border-radius: 999px;
+		background: transparent;
+		color: var(--cream);
+		font-family: var(--font-body);
+		font-size: 0.75rem;
+		padding: 0.3125rem 0.75rem;
+		cursor: pointer;
+		transition:
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.morph-dialog-close:hover {
+		border-color: var(--gold);
+		color: var(--gold-bright);
+	}
+
+	.morph-dialog-title {
+		margin-top: 1.125rem;
+		font-family: var(--font-display);
+		font-size: 1.75rem;
+		color: var(--cream);
+	}
+
+	.morph-dialog-tagline {
+		margin-top: 0.375rem;
+		font-size: 0.9375rem;
+		font-weight: 600;
+		color: var(--cream);
+	}
+
+	.morph-dialog-body {
+		margin-top: 0.625rem;
+		font-size: 0.875rem;
+		line-height: 1.65;
+		color: var(--slate-dim);
+	}
+
+	.morph-dialog-install {
+		margin-top: auto;
+		width: fit-content;
+		max-width: 100%;
+		overflow-x: auto;
+		border: 1px solid var(--card-border);
+		border-radius: 8px;
+		background: var(--panel);
+		padding: 0.5rem 0.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		color: var(--cream);
+		white-space: nowrap;
+	}
+
+	/* Puzzle — code card */
+
+	.code-card {
+		width: 100%;
+		margin: 0;
+		background: var(--panel);
+		border-radius: 10px;
+		padding: 1.25rem 1.375rem;
+		font-family: var(--font-mono);
+		font-size: 0.78125rem;
+		line-height: 1.75;
+		color: var(--cream);
+		overflow-x: auto;
+		tab-size: 2;
+	}
+
+	.c-tag {
+		color: var(--gold);
+	}
+	.c-punc {
+		color: var(--slate-dim);
+	}
+	.c-attr {
+		color: var(--slate);
+	}
+	.c-str,
+	.c-evt,
+	.c-bind,
+	.c-num {
+		color: var(--gold-bright);
+	}
+	.c-kw {
+		color: var(--slate);
+	}
+	.c-fn {
+		color: var(--cream);
+	}
+
+	/* Timeline engine — the ported fireworks demo brings its own CSS.
+	   The mount point drops this card's padding so the demo owns its chrome. */
+
+	.proj-demo-bare {
+		display: block;
+	}
+
+	/* ...but only until the demo is actually there. initFireworks() adds
+	   `.fw-demo`, which paints the panel itself (padding, border, background);
+	   this rule is scoped so it hands that job over rather than fighting
+	   fireworks.css on specificity and winning — which stripped the demo's
+	   chrome entirely. Before the lazy mount lands the empty box stays bare. */
+	.proj-demo-bare:not(.fw-demo) {
+		padding: 0;
+		border: 0;
+		background: none;
+	}
+
+	/* Split text — the replayable lab */
+
+	.st-demo {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.st-stage {
+		min-height: 118px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: clamp(1.25rem, 2.8vw, 1.875rem);
+		text-transform: uppercase;
+		line-height: 1.3;
+		letter-spacing: 0.04em;
+		color: var(--cream);
+		--split-text-blur: 8px;
+		--split-text-scale: 0.82;
+	}
+
+	/* Fields caps are shaved by split-text's per-character overflow mask without
+	   this headroom — the same fix the magicspells.io demo carries, and the
+	   reason the stage sets line-height 1.3 rather than something tighter. */
+	.st-stage :global(.split-text-char) {
+		padding-top: 0.24em;
+	}
+
+	.st-controls {
+		margin-top: 1.75rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--hairline);
+	}
+
+	.st-label {
+		font-size: 0.6875rem;
+		font-weight: 600;
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--slate-dim);
+	}
+
+	.st-effects {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin-top: 1rem;
+	}
+
+	.st-chip {
+		border: 1px solid var(--hairline-strong);
+		background: rgba(251, 248, 238, 0.04);
+		border-radius: 999px;
+		padding: 0.375rem 0.75rem;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.08em;
+		color: var(--slate);
+		cursor: pointer;
+		transition:
+			border-color 0.2s ease,
+			background-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.st-chip:hover {
+		border-color: var(--gold-soft);
+		color: var(--cream);
+	}
+
+	.st-chip[aria-pressed='true'] {
+		border-color: var(--gold);
+		background: rgba(201, 168, 106, 0.15);
+		color: var(--gold-bright);
+	}
+
+	.st-actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem 1.5rem;
+		margin-top: 1.5rem;
+	}
+
+	.st-replay {
+		border: 1px solid var(--hairline-strong);
+		background: transparent;
+		border-radius: 999px;
+		padding: 0.5rem 1.25rem;
+		font-family: var(--font-body);
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--cream);
+		cursor: pointer;
+		transition:
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.st-replay:hover {
+		border-color: var(--gold);
+		color: var(--gold-bright);
+	}
+
+	.st-code {
+		min-width: 0;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		letter-spacing: 0.02em;
+		color: var(--slate-dim);
+		word-break: break-all;
+	}
+
+	/* Constellation — node-graph field */
+
+	/* The row is the field's positioning context, and the only thing that puts
+	   the copy and the screenshot in front of it. */
+	.proj-row-constellation {
+		position: relative;
+	}
+
+	.proj-row-constellation > .proj-copy,
+	.proj-row-constellation > .proj-demo {
+		position: relative;
+		z-index: 1;
+	}
+
+	/* Bleeds well past the row on every side so the drift reads as part of the
+	   page rather than a panel that happens to be animated. .section-projects
+	   clips horizontally, so the side bleed can never widen the page. The mask
+	   is a long ellipse fade — by the time the canvas actually ends there is
+	   nothing left to see. */
+	.cf-wrap {
+		position: absolute;
+		inset: -90px -8vw;
+		z-index: 0;
+		pointer-events: none;
+		-webkit-mask-image: radial-gradient(
+			ellipse 62% 58% at 50% 50%,
+			rgba(0, 0, 0, 1) 0%,
+			rgba(0, 0, 0, 0.85) 38%,
+			rgba(0, 0, 0, 0.4) 66%,
+			rgba(0, 0, 0, 0) 100%
+		);
+		mask-image: radial-gradient(
+			ellipse 62% 58% at 50% 50%,
+			rgba(0, 0, 0, 1) 0%,
+			rgba(0, 0, 0, 0.85) 38%,
+			rgba(0, 0, 0, 0.4) 66%,
+			rgba(0, 0, 0, 0) 100%
+		);
+	}
+
+	/* Quieter than the hero's static stars: this is ambiance behind real
+	   content, not the subject. */
+	.cf-wrap canvas {
+		opacity: 0.65;
+	}
+
+	/* Unboxed like the tarot demo — the screenshot carries its own frame, so a
+	   panel around it would only double the chrome and give the field an edge. */
+	.proj-demo-constellation {
+		border: 0;
+		background: none;
+		padding: 0;
+		overflow: visible;
+	}
+
+	/* The app UI is dark, so the hairline is what finds its edge against the
+	   night ground, and the shadow lifts it off the drifting field. Cropped to
+	   the top-left, which is the sidebar-plus-content the app is recognised by. */
+	.cs-shot {
+		display: block;
+		width: 100%;
+		/* At the demo column's width this is just past the image's own cover
+		   height, so the UI is shown whole rather than scaled down inside a
+		   letterbox, and the card stands up to the copy column beside it. */
+		height: 400px;
+		object-fit: cover;
+		object-position: left top;
+		border: 1px solid var(--card-border);
+		border-radius: var(--radius-media);
+		background: var(--panel);
+		box-shadow:
+			0 24px 48px -12px rgba(0, 0, 0, 0.6),
+			0 4px 12px rgba(0, 0, 0, 0.45);
+	}
+
+	@media (max-width: 899px) {
+		.cs-shot {
+			height: 260px;
+		}
+
+		.cf-wrap {
+			inset: -60px -6vw;
+		}
+	}
+
+	#cf-canvas {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+
+	/* Chips */
+	/* Conversational lead-in, not an eyebrow: sentence case, no tracking. Sized
+	   as a sub-heading so it introduces the chips rather than captioning them,
+	   with the gap below scaled to match. */
+	.chips-lead {
+		margin: clamp(2.5rem, 5vw, 4rem) 0 1.5rem;
+		text-align: center;
+		font-family: var(--font-body);
+		font-size: clamp(1.3125rem, 2.2vw, 1.5rem);
+		font-weight: 600;
+		line-height: 1.3;
+		color: var(--cream);
+	}
+
+	.chips {
+		display: flex;
+		justify-content: center;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+		list-style: none;
+		margin: 0 0 1.75rem;
+		padding: 0;
+	}
+
+	.chip {
+		display: block;
+		font-size: 0.8125rem;
+		font-weight: 500;
+		color: var(--slate);
+		border: 1px solid rgba(251, 248, 238, 0.15);
+		padding: 0.5625rem 1.125rem;
+		border-radius: 999px;
+		transition:
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.chip:hover,
+	.chip:focus-visible {
+		border-color: var(--gold);
+		color: var(--gold-bright);
+	}
+
+	.ms-outro {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: 1.25rem;
+		padding-block: clamp(3rem, 7vw, 6rem) 0;
+	}
+
+	/* Near section scale, but a step down: the contact heading below is still
+	   the loudest thing on the page. */
+	.ms-outro-title {
+		font-size: clamp(1.75rem, 4vw, 2.5rem);
+		color: var(--cream);
+		text-transform: none;
+		letter-spacing: -0.005em;
+	}
+
+	.ms-outro-copy {
+		max-width: 560px;
+		font-size: 1.125rem;
+		line-height: 1.6;
+		color: var(--slate);
+		text-wrap: pretty;
+	}
+
+	.ms-outro-copy + .ms-outro-copy {
+		margin-top: 0.875rem;
+	}
+
+	.ms-outro-cta {
+		margin-top: 0.5rem;
+	}
+
+	/* ============================================ */
+	/* Contact                                       */
+	/* ============================================ */
+
+	/* The other half of the projects/contact seam trim above. */
+	.section-contact {
+		padding-top: clamp(2.5rem, 5vw, 5rem);
+	}
+
+	.contact-inner {
+		max-width: 720px;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
+	}
+
+	.portrait {
+		width: 76px;
+		height: 76px;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 2px solid rgba(201, 168, 106, 0.6);
+	}
+
+	.contact-sub {
+		font-size: 1.0625rem;
+		line-height: 1.6;
+		color: var(--slate-dim);
+		max-width: 520px;
+		text-wrap: pretty;
+	}
+
+	.contact-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.field-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.25rem;
+	}
+
+	@media (min-width: 640px) {
+		.field-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	.contact-form :global(input[type='text']),
+	.contact-form :global(input[type='email']),
+	.contact-form :global(textarea) {
+		width: 100%;
+		background: transparent;
+		border: 1px solid var(--hairline-strong);
+		border-radius: var(--radius-input);
+		padding: 1.5rem 1.25rem 0.75rem;
+		font-family: var(--font-body);
+		font-size: 0.9375rem;
+		color: var(--cream);
+		transition:
+			border-color 0.2s ease,
+			box-shadow 0.2s ease;
+	}
+
+	.contact-form :global(textarea) {
+		min-height: 120px;
+		resize: vertical;
+		display: block;
+	}
+
+	.contact-form :global(input[type='text']):focus,
+	.contact-form :global(input[type='email']):focus,
+	.contact-form :global(textarea):focus {
+		outline: none;
+		border-color: var(--gold);
+		box-shadow: 0 0 0 3px rgba(201, 168, 106, 0.18);
+	}
+
+	.field-legend {
+		font-size: 0.6875rem;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--slate-dim);
+		margin-bottom: 0.625rem;
+		padding: 0;
+	}
+
+	/* The package's own stylesheet loads after app.css, so the host's width is
+	   re-asserted here where the scoped selector outranks it. */
+	.budget-field :global(dropdown-select) {
+		display: block;
+		width: 100%;
+	}
+
+	/* dropdown-select appends its own caret, so the chevron in the markup would
+	   be a second one. Hide the package's and keep ours, which is tokenized. */
+	.budget-field :global(.dropdown-caret) {
+		display: none;
+	}
+
+	.budget-field :global(dropdown-select-trigger.select-trigger) {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.5rem;
+		width: 100%;
+		padding: 1.125rem 1.25rem;
+		background: transparent;
+		border: 1px solid var(--hairline-strong);
+		border-radius: var(--radius-input);
+		color: var(--cream);
+		font-size: 0.9375rem;
+		cursor: pointer;
+		transition: border-color 0.2s ease;
+	}
+
+	.budget-field :global(dropdown-select-trigger.select-trigger:hover) {
+		border-color: var(--gold-soft);
+	}
+
+	.budget-field :global(dropdown-options.select-options) {
+		width: 100%;
+		margin-top: 0.5rem;
+		border-radius: var(--radius-input);
+		overflow: hidden;
+	}
+
+	.budget-field :global(dropdown-option.select-option) {
+		display: block;
+		padding: 0.8125rem 1.25rem;
+		font-size: 0.9375rem;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+	}
+
+	.services {
+		border: 0;
+		margin: 0;
+		padding: 0;
+		min-width: 0;
+	}
+
+	.check {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		cursor: pointer;
+		font-size: 0.875rem;
+		color: var(--slate);
+		padding: 0.3125rem 0;
+		transition: color 0.2s ease;
+	}
+	.check:hover {
+		color: var(--cream);
+	}
+
+	.check input[type='checkbox'] {
+		appearance: none;
+		flex: 0 0 auto;
+		width: 18px;
+		height: 18px;
+		border: 1px solid var(--hairline-strong);
+		border-radius: 4px;
+		background: transparent;
+		cursor: pointer;
+		display: grid;
+		place-content: center;
+		transition:
+			border-color 0.2s ease,
+			background-color 0.2s ease;
+	}
+
+	.check input[type='checkbox']::after {
+		content: '';
+		width: 9px;
+		height: 9px;
+		border-radius: 1px;
+		transform: scale(0);
+		transition: transform 0.15s ease;
+		background: var(--ground);
+	}
+
+	.check input[type='checkbox']:checked {
+		background: var(--gold);
+		border-color: var(--gold);
+	}
+
+	.check input[type='checkbox']:checked::after {
+		transform: scale(1);
+	}
+
+	.form-actions {
+		display: flex;
+		justify-content: center;
+		margin-top: 0.5rem;
+	}
+
+	#submit-button {
+		font-family: var(--font-body);
+		padding: 1rem 2.5rem;
+	}
+
+	#submit-button:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.form-note {
+		border-radius: var(--radius-input);
+		padding: 1.125rem 1.25rem;
+		text-align: center;
+		font-size: 0.9375rem;
+		font-weight: 500;
+	}
+
+	.form-note-ok {
+		border: 1px solid var(--ok-border);
+		background: var(--ok-bg);
+		color: var(--cream);
+	}
+
+	.form-note-err {
+		border: 1px solid var(--err-border);
+		background: var(--err-bg);
+		color: var(--cream);
+	}
+
+	/* ============================================ */
+	/* Footer                                        */
+	/* ============================================ */
+
+	.site-footer {
+		padding-block: 1.75rem;
+		border-top: 1px solid var(--hairline);
+		font-size: 0.8125rem;
+		color: var(--slate-dim);
+	}
+
+	.footer-inner {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.footer-links {
+		display: flex;
+		gap: clamp(1rem, 3vw, 1.75rem);
+		flex-wrap: wrap;
+	}
+
+	.footer-links a {
+		color: var(--slate);
+	}
+	.footer-links a:hover {
+		color: var(--cream);
+	}
+	.footer-links a.footer-gold {
+		color: var(--gold);
+	}
+	.footer-links a.footer-gold:hover {
+		color: var(--gold-bright);
+	}
+
+	/* ============================================ */
+	/* Reduced motion                                */
+	/* ============================================ */
+
+	@media (prefers-reduced-motion: reduce) {
+		.twinkle {
+			animation: none;
+		}
+		.pill:hover {
+			transform: none;
+		}
+		.tl-scroll .tl-pin {
+			position: static;
+			height: auto;
+			overflow: visible;
+		}
+		.tl-scroll .tl-viewport {
+			overflow-x: auto;
+		}
+	}
+</style>
+
 <script>
-	import '../scripts/bg-animation.js';
 	import '@magic-spells/dropdown-select';
+	import '@magic-spells/split-text';
+	// Registers <scrolling-content> and injects its own layered stylesheet.
+	// Reduced motion is handled inside the component: the loop never starts and
+	// the rows stay a scrubbable strip.
+	import '@magic-spells/scrolling-content';
+	import Reveal from '@magic-spells/reveal';
+	import { timeline, scrollDriver } from '@magic-spells/timeline-engine';
+
+	const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+	// ---- Scroll reveals ------------------------------------------------------
+	Reveal.init({ offset: 100, once: true });
+
+	// ---- Timeline: scroll-scrubbed horizontal strip (desktop only) ----------
+	const scrollEl = document.getElementById('tl-scroll') as HTMLElement | null;
+	const stripEl = document.getElementById('tl-strip') as HTMLElement | null;
+	const viewportEl = document.getElementById('tl-viewport') as HTMLElement | null;
+
+	const desktop = window.matchMedia('(min-width: 768px)');
+
+	let scrub: { destroy: () => void } | null = null;
+
+	function buildScrub() {
+		if (!scrollEl || !stripEl || !viewportEl) return;
+		if (!desktop.matches) {
+			scrollEl.classList.remove('tl-fits');
+			return;
+		}
+
+		// Pin first, then measure the real travel distance — pinning collapses
+		// the section's height, which can take the page scrollbar with it and
+		// change how much room the viewport actually has.
+		const canPin = !reduced.matches;
+		if (canPin) scrollEl.classList.add('is-scrubbed');
+		// scrollWidth is the full track including its own padding-inline, so the
+		// last card clears the right edge by the same gutter the first one has.
+		const travel = Math.round(stripEl.scrollWidth - viewportEl.clientWidth);
+
+		// Wide enough that the whole strip fits: nothing to travel, so no pin
+		// and no transform — the page just scrolls through. .tl-fits centres
+		// the strip so it doesn't sit flush-left with dead space beside it.
+		// The resize handler re-runs this in both directions, so shrinking the
+		// window re-engages the scrub and widening it releases again.
+		scrollEl.classList.toggle('tl-fits', travel <= 0);
+
+		if (travel <= 0 || !canPin) {
+			scrollEl.classList.remove('is-scrubbed');
+			return;
+		}
+
+		// 1:1 scroll feel — the pinned viewport plus exactly the horizontal travel.
+		scrollEl.style.height = `${window.innerHeight + travel}px`;
+
+		const tl = timeline();
+		tl.tween(
+			'#tl-strip',
+			{
+				0: { transform: 'translateX(0px)' },
+				100: { transform: `translateX(${-travel}px)` },
+			},
+			{ duration: 1000, easing: 'linear' }
+		);
+
+		const driver = scrollDriver(tl, {
+			trigger: '#tl-scroll',
+			start: 'top top',
+			end: 'bottom bottom',
+			smoothing: 90,
+		});
+
+		scrub = {
+			destroy() {
+				driver.destroy();
+				tl.destroy();
+				scrollEl.classList.remove('is-scrubbed');
+				scrollEl.style.height = '';
+				stripEl.style.transform = '';
+			},
+		};
+	}
+
+	function teardownScrub() {
+		if (scrub) {
+			scrub.destroy();
+			scrub = null;
+		}
+	}
+
+	function rebuildScrub() {
+		teardownScrub();
+		buildScrub();
+	}
+
+	buildScrub();
+
+	// Only re-measure when the width actually changes. Height-only resizes
+	// (mobile URL bars, devtools) would otherwise collapse the pinned region
+	// and yank the reader's scroll position mid-scrub.
+	let lastWidth = window.innerWidth;
+	let resizeTimer: number | undefined;
+	window.addEventListener('resize', () => {
+		if (window.innerWidth === lastWidth) return;
+		lastWidth = window.innerWidth;
+		window.clearTimeout(resizeTimer);
+		resizeTimer = window.setTimeout(rebuildScrub, 200);
+	});
+
+	desktop.addEventListener('change', rebuildScrub);
+	reduced.addEventListener('change', rebuildScrub);
+
+	// ---- Split Text lab ------------------------------------------------------
+	// Ported from magicspells.io's SplitTextDemo. The replay contract is exact:
+	// `effect` is read once inside connectedCallback while the element is
+	// uninitialised, so it MUST be written before split(). split() rebuilds
+	// brand-new spans (so no rAF is needed to restart the animation) and
+	// reveal() then sets data-state="revealing".
+	const specimen = document.getElementById('st-specimen');
+	const stStage = document.getElementById('st-stage');
+	const stEffects = document.getElementById('st-effects');
+	const stReplay = document.getElementById('st-replay');
+	const stCode = document.getElementById('st-code');
+
+	if (specimen && stStage && stEffects && stReplay && stCode) {
+		const SPLIT_MODE = 'chars';
+		const markupFor = (effect) => `<split-text effect="${effect}" split="${SPLIT_MODE}">`;
+		let current = 'rise';
+
+		const play = (effect) => {
+			const next = effect || current;
+			specimen.setAttribute('effect', next);
+			// Under reduced motion split-text marks itself revealed and never
+			// splits, so the line stays plain readable text. The attribute is
+			// still written above, which keeps the code line honest.
+			if (reduced.matches) return;
+			if (typeof specimen.split !== 'function' || typeof specimen.reveal !== 'function') return;
+			specimen.split();
+			specimen.reveal();
+		};
+
+		stEffects.addEventListener('click', (e) => {
+			const button = (e.target as HTMLElement).closest('.st-chip') as HTMLElement | null;
+			if (!button) return;
+			const effect = button.dataset.effect;
+			if (!effect) return;
+			current = effect;
+			stEffects.querySelectorAll('.st-chip').forEach((b) => {
+				b.setAttribute('aria-pressed', b === button ? 'true' : 'false');
+			});
+			stCode.textContent = markupFor(effect);
+			play(effect);
+		});
+
+		stReplay.addEventListener('click', () => play());
+
+		// First run fires when the specimen scrolls into view, so the visitor
+		// sees the reveal rather than arriving after it. trigger="manual" means
+		// the element does no observing of its own.
+		if (reduced.matches || typeof IntersectionObserver === 'undefined') {
+			play();
+		} else {
+			const io = new IntersectionObserver(
+				(entries) => {
+					for (const entry of entries) {
+						if (!entry.isIntersecting) continue;
+						io.disconnect();
+						play();
+						break;
+					}
+				},
+				{ threshold: 0.5 }
+			);
+			io.observe(stStage);
+		}
+	}
+
+	// ---- Ported demos: fireworks (timeline-engine) and the constellation field
+	// Both are heavy and only matter once they are near the viewport, so they
+	// are code-split and mounted lazily. Both also run open-ended loops — a
+	// self-rescheduling rAF and a `loop: true` timeline — that would otherwise
+	// keep burning frames long after the panel has scrolled away, so the handle
+	// each one returns is kept and driven from here: a second, permanent
+	// observer for "is it on screen", plus the document's visibility for "is
+	// anyone even looking at this tab".
+	type DemoHandle = { destroy: () => void; pause?: () => void; resume?: () => void };
+
+	const mountWhenNear = (el: Element | null, load: () => Promise<DemoHandle>) => {
+		if (!el) return;
+
+		let handle: DemoHandle | null = null;
+		let onScreen = true;
+
+		const sync = () => {
+			if (!handle) return;
+			if (onScreen && document.visibilityState !== 'hidden') handle.resume?.();
+			else handle.pause?.();
+		};
+
+		document.addEventListener('visibilitychange', sync);
+
+		const mount = () =>
+			load()
+				.then((demo) => {
+					handle = demo;
+					if (typeof IntersectionObserver === 'undefined') return;
+					// Distinct from the loader observer above, which disconnects
+					// after firing once: this one stays for the life of the page.
+					const live = new IntersectionObserver(
+						(entries) => {
+							for (const entry of entries) onScreen = entry.isIntersecting;
+							sync();
+						},
+						{ rootMargin: '100px' }
+					);
+					live.observe(el);
+				})
+				.catch((err) => {
+					// A demo that refuses to load is a missing flourish, not a
+					// broken page — say so in the console and leave the rest alone.
+					console.error('demo failed to mount', err);
+				});
+
+		if (typeof IntersectionObserver === 'undefined') {
+			mount();
+			return;
+		}
+		const io = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (!entry.isIntersecting) continue;
+					io.disconnect();
+					mount();
+					break;
+				}
+			},
+			{ rootMargin: '200px' }
+		);
+		io.observe(el);
+	};
+
+	const fireworksMount = document.getElementById('fireworks-mount');
+	mountWhenNear(fireworksMount, async () => {
+		const { default: initFireworks } = await import('../scripts/demos/fireworks.js');
+		return initFireworks(fireworksMount as HTMLElement);
+	});
+
+	// Ambient settings: sparse, slow, and no gold constellation patterns — the
+	// field is background here, not the demo it was in the hero. It still pauses
+	// offscreen and on tab-hide through mountWhenNear, and the module parks it
+	// static under prefers-reduced-motion.
+	const cfCanvas = document.getElementById('cf-canvas');
+	mountWhenNear(cfCanvas, async () => {
+		const { default: initConstellationField } = await import(
+			'../scripts/demos/constellation-field.js'
+		);
+		return initConstellationField(cfCanvas as HTMLCanvasElement, {
+			density: 0.4,
+			driftScale: 0.55,
+			maxEvents: 0,
+		});
+	});
+
+	// ---- Morph engine: card flies open into a real <dialog> -------------------
+	// The dialog is promoted with showModal() at the engine's `reveal` event
+	// rather than at settle: the destination is still at opacity 0 there, so the
+	// top-layer repaint lands on an invisible surface and it fades in already
+	// modal. Being a real modal dialog is what supplies the focus trap, the
+	// inert page and Escape — the library ships no a11y helpers of its own.
+	const morphGrid = document.getElementById('morph-grid');
+	const morphDialog = document.getElementById('morph-dialog') as HTMLDialogElement | null;
+	const morphScrim = document.getElementById('morph-scrim');
+
+	if (morphGrid && morphDialog && morphScrim) {
+		const cards = JSON.parse(morphGrid.dataset.cards || '[]') as Array<{
+			id: string;
+			name: string;
+			meta: string;
+			tagline: string;
+			body: string;
+			install: string;
+		}>;
+
+		const field = (id: string) => document.getElementById(id) as HTMLElement;
+		const closeButton = document.getElementById('morph-dialog-close');
+
+		let engine: any = null;
+		let openCard: HTMLElement | null = null;
+		// 'plain' when the morph is unavailable or unwanted, so the close path
+		// unwinds exactly the way the open path went.
+		let mode: 'morph' | 'plain' = 'plain';
+
+		const fill = (id: string) => {
+			const card = cards.find((c) => c.id === id);
+			if (!card) return;
+			field('morph-dialog-tag').textContent = card.meta;
+			field('morph-dialog-title').textContent = card.name;
+			field('morph-dialog-tagline').textContent = card.tagline;
+			field('morph-dialog-body').textContent = card.body;
+			field('morph-dialog-install').textContent = `$ ${card.install}`;
+		};
+
+		const openPlainly = () => {
+			morphScrim.setAttribute('visible', '');
+			morphDialog.showModal();
+			closeButton?.focus({ preventScroll: true });
+		};
+
+		const closePlainly = () => {
+			morphScrim.removeAttribute('visible');
+			if (morphDialog.open) morphDialog.close();
+		};
+
+		const open = async (card: HTMLElement) => {
+			if (morphDialog.open) return;
+			openCard = card;
+			fill(card.dataset.id || '');
+
+			// Reduced motion, or a library that failed to load, both land here.
+			if (reduced.matches) {
+				mode = 'plain';
+				openPlainly();
+				return;
+			}
+
+			if (!engine) {
+				try {
+					const { MorphEngine } = await import('@magic-spells/morph-engine');
+					engine = new MorphEngine({
+						attraction: 0.13,
+						friction: 0.36,
+						revealAt: 0.65,
+						sourceRevealUntil: 0.2,
+						cloneFadeUntil: 0.3,
+						lockScroll: false,
+						zIndex: 950,
+					});
+
+					engine.on('reveal', ({ to }: { to: Element }) => {
+						if (to === morphDialog && !morphDialog.open) morphDialog.showModal();
+					});
+					// A reversal that swings back below the reveal point has to
+					// demote the dialog the same way it was promoted.
+					engine.on('unreveal', ({ to }: { to: Element }) => {
+						if (to === morphDialog && morphDialog.open) morphDialog.close();
+					});
+					engine.on('show', () => morphScrim.setAttribute('visible', ''));
+					engine.on('hide', () => morphScrim.removeAttribute('visible'));
+					engine.on('stop', () => morphScrim.removeAttribute('visible'));
+				} catch (err) {
+					console.error('morph-engine failed to load', err);
+					engine = null;
+				}
+			}
+
+			if (!engine) {
+				mode = 'plain';
+				openPlainly();
+				return;
+			}
+
+			mode = 'morph';
+			// show() during 'hiding' reverses the in-flight morph rather than
+			// queueing a second one.
+			if (engine.state === 'idle' || engine.state === 'hiding') {
+				await engine.show({ from: card, to: morphDialog, display: 'flex' });
+			}
+			// Focus after the settle: for most of the flight the dialog is at
+			// opacity 0, and focusing something invisible is worse than waiting.
+			if (morphDialog.open) closeButton?.focus({ preventScroll: true });
+		};
+
+		const close = () => {
+			if (mode === 'plain' || !engine) {
+				closePlainly();
+				openCard?.focus({ preventScroll: true });
+				openCard = null;
+				return;
+			}
+			if (engine.state !== 'showing' && engine.state !== 'shown') return;
+			// Demote first, reverse second, in the same task: the dialog drops
+			// back into normal flow at the identical rect and the blob covers it
+			// on that same frame, so nothing flashes between the two.
+			if (morphDialog.open) morphDialog.close();
+			const returning = openCard;
+			openCard = null;
+			engine.hide().then(() => returning?.focus({ preventScroll: true }));
+		};
+
+		const hint = document.getElementById('morph-hint');
+
+		morphGrid.querySelectorAll<HTMLElement>('[data-morph-card]').forEach((card) => {
+			card.addEventListener('click', () => {
+				hint?.setAttribute('data-used', '');
+				open(card);
+			});
+		});
+
+		closeButton?.addEventListener('click', close);
+
+		// Escape on the open modal: morph home rather than snapping shut.
+		morphDialog.addEventListener('cancel', (event) => {
+			event.preventDefault();
+			close();
+		});
+
+		// Safety net for any close path we did not drive.
+		morphDialog.addEventListener('close', () => {
+			morphScrim.removeAttribute('visible');
+			if (engine && engine.state === 'shown' && !morphDialog.open) engine.hide();
+		});
+
+		// While modal, an outside click lands on the dialog element itself.
+		morphDialog.addEventListener('click', (event) => {
+			if (event.target !== morphDialog) return;
+			const rect = morphDialog.getBoundingClientRect();
+			const e = event as MouseEvent;
+			const outside =
+				e.clientX < rect.left ||
+				e.clientX > rect.right ||
+				e.clientY < rect.top ||
+				e.clientY > rect.bottom;
+			if (outside) close();
+		});
+
+		// Mid-flight the dialog is not modal yet, so the page scrim takes the click.
+		morphScrim.addEventListener('click', close);
+	}
 </script>
 
 <script is:inline>
@@ -815,8 +3588,8 @@ import Layout from '../layouts/Layout.astro';
 		buttonText.textContent = 'Sending...';
 
 		// Hide any previous messages
-		successMessage.classList.add('hidden');
-		errorMessage.classList.add('hidden');
+		successMessage.hidden = true;
+		errorMessage.hidden = true;
 
 		// Get form data
 		const formData = new FormData(form);
@@ -825,14 +3598,14 @@ import Layout from '../layouts/Layout.astro';
 			// Submit to Web3Forms
 			const response = await fetch('https://api.web3forms.com/submit', {
 				method: 'POST',
-				body: formData
+				body: formData,
 			});
 
 			const data = await response.json();
 
 			if (data.success) {
 				// Show success message
-				successMessage.classList.remove('hidden');
+				successMessage.hidden = false;
 
 				// Reset form
 				form.reset();
@@ -843,14 +3616,14 @@ import Layout from '../layouts/Layout.astro';
 
 				// Hide success message after 5 seconds
 				setTimeout(() => {
-					successMessage.classList.add('hidden');
+					successMessage.hidden = true;
 				}, 5000);
 			} else {
 				throw new Error('Form submission failed');
 			}
 		} catch (error) {
 			// Show error message
-			errorMessage.classList.remove('hidden');
+			errorMessage.hidden = false;
 
 			// Reset button
 			buttonText.textContent = 'Send Message';
@@ -858,7 +3631,7 @@ import Layout from '../layouts/Layout.astro';
 
 			// Hide error message after 5 seconds
 			setTimeout(() => {
-				errorMessage.classList.add('hidden');
+				errorMessage.hidden = true;
 			}, 5000);
 
 			console.error('Form submission error:', error);
@@ -866,50 +3639,12 @@ import Layout from '../layouts/Layout.astro';
 	});
 
 	// Smooth scroll to contact form
-	const scrollButton = document.getElementById('scroll-to-contact');
-	const contactSection = document.getElementById('contact-section');
-
-	if (scrollButton && contactSection) {
-		scrollButton.addEventListener('click', () => {
+	const contactSection = document.getElementById('contact');
+	document.querySelectorAll('[data-scroll-to-contact]').forEach((el) => {
+		el.addEventListener('click', (e) => {
+			if (!contactSection) return;
+			e.preventDefault();
 			contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 		});
-	}
-</script>
-
-<script>
-	import ScrollTrigger from '@magic-spells/scroll-trigger';
-
-	// Initialize ScrollTrigger for fade-up animations
-	const trigger = new ScrollTrigger({
-		sections: "[data-section-trigger]",
-		offset: "10%",
-		threshold: 0,
-		throttle: 50,
-		behavior: "smooth",
-		onIndexChange: ({ currentElement, previousElement }) => {
-			// Add visible class to current element
-			if (currentElement) {
-				currentElement.classList.add('visible');
-			}
-		},
 	});
-
-	// On page load, check which sections are already visible
-	// This ensures that sections above the fold are shown immediately
-	const sections = document.querySelectorAll('[data-section-trigger]');
-	const observer = new IntersectionObserver(
-		(entries) => {
-			entries.forEach((entry) => {
-				if (entry.isIntersecting) {
-					entry.target.classList.add('visible');
-				}
-			});
-		},
-		{
-			threshold: 0,
-			rootMargin: '0px 0px -10% 0px'
-		}
-	);
-
-	sections.forEach((section) => observer.observe(section));
 </script>
