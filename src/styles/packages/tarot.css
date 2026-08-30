@@ -216,13 +216,24 @@ border-color 0.2s ease,
 color 0.2s ease;
 }
 
-/* Symmetric inset from the viewport's own edges. */
+/* Symmetric inset from the viewport's own edges. The demo bleeds past its
+column on desktop, so the buttons pull in to stay near the cards. */
 .proj-demo-tarot .tarot-previous {
 left: 12px;
 }
 
 .proj-demo-tarot .tarot-next {
 right: 12px;
+}
+
+@media (width >= 900px) {
+.proj-demo-tarot .tarot-previous {
+left: 76px;
+}
+
+.proj-demo-tarot .tarot-next {
+right: 76px;
+}
 }
 
 .proj-demo-tarot .tarot-button svg {
