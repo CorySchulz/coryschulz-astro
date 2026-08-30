@@ -323,7 +323,14 @@ const morphCards = [
 
 				<p class="about-lede">
 					I&rsquo;ve also hired and built front-end teams from the ground up. At Pura I hired and
-					trained the team, then led the full rebuild of pura.com.
+					trained the team, then led the full rebuild of pura.com. The relaunch doubled the
+					site&rsquo;s conversion rate, and Shopify wrote a
+					<a
+						class="about-link"
+						href="https://www.shopify.com/case-studies/pura-scents"
+						target="_blank"
+						rel="noopener noreferrer">case study</a
+					> on it.
 				</p>
 
 				<!-- A display band of four tiles, wider than the text column above it.
@@ -1327,6 +1334,17 @@ const morphCards = [
 
 	.about-inner .eyebrow {
 		margin-bottom: 0.375rem;
+	}
+
+	.about-link {
+		color: var(--gold);
+		text-decoration: underline;
+		text-decoration-color: rgba(201, 168, 106, 0.4);
+		text-underline-offset: 0.2em;
+		transition: color 0.2s ease;
+	}
+	.about-link:hover {
+		color: var(--gold-bright);
 	}
 
 	/* The stat band: four tiles in the page's established tile language (same
