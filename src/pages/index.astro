@@ -1178,9 +1178,12 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 		min-width: 0;
 	}
 
+	/* The carousel sets its own height, so this panel hugs it rather than
+	   leaving dead space under the pagination. */
 	.proj-demo-tarot {
 		display: block;
 		padding-inline: 0;
+		min-height: 0;
 	}
 
 	.proj-demo-tarot tarot-slide.tarot-mini-slide {

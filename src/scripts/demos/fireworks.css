@@ -181,6 +181,14 @@
 	opacity: 0;
 }
 
+/* Hover-scrub is gated on a fine pointer, so on touch the hint would be
+   advice the visitor cannot take. The scrub track below stays usable. */
+@media not all and (hover: hover) and (pointer: fine) {
+	.fw-demo .fw-hint {
+		display: none;
+	}
+}
+
 .fw-demo .is-hidden {
 	display: none !important;
 }
