@@ -1,0 +1,311 @@
+/* ==========================================================================
+   TYPOGRAPHY
+   The faces, the family tokens, the scale, and the fs-* utilities that bundle
+   them.
+
+   Eleven styles and that is the budget: fs-heading-1..4, fs-overline,
+   fs-subheading, fs-body-lg/md/sm/xs, fs-mono-label. If something wants type
+   that is not on this list, the answer is almost always one of these. Two
+   modifiers ride alongside: fs-sentence-case and fs-overline-centered.
+
+   The scale steps at two breakpoints, 768px and 1024px, and does not move
+   above that. It replaces the per-rule clamp() the page carries today: a clamp
+   ties every heading to a different curve, so no two headings ever agree at
+   any width, and the rendered size is only knowable by arithmetic. Discrete
+   steps are inspectable and every consumer of a var moves in lockstep.
+
+   Each fs-* bundles family, weight, size, leading, tracking and case. Color is
+   composed separately in markup (fs-overline text-gold), so the scale stays
+   reusable.
+
+   One axis is composable on top of that bundle: weight. Tailwind sorts its own
+   utilities AFTER the @utility blocks defined here, so `fs-subheading
+   font-semibold` really does come out at 600 rather than the utility's 400.
+   That is the mechanism the lead-ins rely on, and it is why the weight fork
+   does not need a second named style. It cuts both ways: a stray text-* or
+   uppercase in markup will also beat what an fs-* bundles.
+   ========================================================================== */
+
+/* ==========================================================================
+   FACES
+   Self-hosted from public/ and preloaded in Layout.astro, since a face is only
+   discovered after the CSS parses. font-display: swap so copy paints in the
+   fallback and reflows rather than hanging invisible.
+   ========================================================================== */
+@font-face {
+	font-family: "Fields";
+	src: url("/fieldsdisplay-extrabold.woff2") format("woff2");
+	font-weight: 800;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Metropolis";
+	src: url("/Metropolis-Regular.woff2") format("woff2");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Metropolis";
+	src: url("/Metropolis-Medium.woff2") format("woff2");
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Metropolis";
+	src: url("/Metropolis-SemiBold.woff2") format("woff2");
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* Family tokens, registered in @theme so font-display, font-body and font-mono
+   exist as utilities. The same names app.css declares on :root, same values,
+   so the ~190 var(--font-*) references keep resolving. */
+@theme {
+	--font-display: "Fields", "Georgia", serif;
+	--font-body: "Metropolis", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+	--font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+/* ==========================================================================
+   SCALE
+   Sizes are explicit per breakpoint rather than one scalar multiplier: the h1
+   hero spans 3.25 to 7.5rem while body copy never moves, so no single ratio
+   covers both.
+   ========================================================================== */
+:root {
+	--font-size-h1: 3.25rem;
+	--font-size-h2: 2rem;
+	--font-size-h3: 1.75rem;
+	--font-size-h4: 1.25rem;
+	--overline-font-size: 0.75rem;
+	--subheading-font-size: 1.125rem;
+
+	/* Body md and down do not step: reading copy that grows with the viewport
+	   just widens the measure twice over. body-lg is the exception, because it
+	   is the section deck, the paragraph under a section title, and that one
+	   does want a little more presence once there is a desktop's worth of room
+	   around it. One step at 1024, matching what the deck does today. */
+	--font-size-body-lg: 1rem;
+	--font-size-body-md: 0.9375rem;
+	--font-size-body-sm: 0.8125rem;
+	--font-size-body-xs: 0.6875rem;
+
+	--font-body-weight: 400;
+	--line-height-normal: 1.6;
+	--line-height-snug: 1.5;
+	--line-height-tight: 1.35;
+
+	/* h1 and h2 are the two sentence-case display lines. Fields has a full
+	   lower case and reads better in it, and mixed case wants tighter tracking
+	   than caps, hence the negative letter-spacing where the uppercase
+	   headings carry +0.01em. */
+	--h1-font-family: var(--font-display);
+	--h1-font-weight: 800;
+	--h1-line-height: 1.14;
+	--h1-letter-spacing: -0.005em;
+	--h1-text-transform: none;
+
+	--h2-font-family: var(--font-display);
+	--h2-font-weight: 800;
+	--h2-line-height: 0.96;
+	--h2-letter-spacing: -0.005em;
+	--h2-text-transform: none;
+
+	--h3-font-family: var(--font-display);
+	--h3-font-weight: 800;
+	--h3-line-height: 0.96;
+	--h3-letter-spacing: 0.01em;
+	--h3-text-transform: uppercase;
+
+	/* Caps at h4 sizes need air between letters and between lines, or the
+	   Fields extrabold forms close up. */
+	--h4-font-family: var(--font-display);
+	--h4-font-weight: 800;
+	--h4-line-height: 1.3;
+	--h4-letter-spacing: 0.04em;
+	--h4-text-transform: uppercase;
+
+	--overline-font-family: var(--font-body);
+	--overline-font-weight: 600;
+	--overline-letter-spacing: 0.22em;
+	--overline-text-transform: uppercase;
+
+	--subheading-font-family: var(--font-body);
+	--subheading-font-weight: 400;
+	--subheading-line-height: 1.6;
+	--subheading-letter-spacing: 0;
+	--subheading-text-transform: none;
+}
+
+@media (width >= 768px) {
+	:root {
+		--font-size-h1: 5rem;
+		--font-size-h2: 2.5rem;
+		--font-size-h3: 2rem;
+		--font-size-h4: 1.5rem;
+		--subheading-font-size: 1.1875rem;
+	}
+}
+
+@media (width >= 1024px) {
+	:root {
+		--font-size-h1: 7.5rem;
+		--font-size-h2: 3.25rem;
+		--font-size-h3: 2.5rem;
+		--font-size-h4: 1.75rem;
+		--subheading-font-size: 1.3125rem;
+		--font-size-body-lg: 1.125rem;
+	}
+}
+
+/* ==========================================================================
+   ELEMENT DEFAULTS
+   Layered, unlike the copy in app.css. Base loses to the utilities layer,
+   which is the point: an <h2 class="fs-heading-3"> has to come out as
+   heading-3, and an unlayered element rule would win on font-family and
+   weight while the utility's size applied, which is the worst of both.
+   ========================================================================== */
+@layer base {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		margin: 0;
+		font-family: var(--font-display);
+		font-weight: 800;
+		text-transform: uppercase;
+		line-height: 0.96;
+		letter-spacing: 0.01em;
+	}
+}
+
+/* ==========================================================================
+   UTILITIES
+   ========================================================================== */
+
+/* The hero name, and only the hero name. */
+@utility fs-heading-1 {
+	font-family: var(--h1-font-family);
+	font-weight: var(--h1-font-weight);
+	font-size: var(--font-size-h1);
+	line-height: var(--h1-line-height);
+	letter-spacing: var(--h1-letter-spacing);
+	text-transform: var(--h1-text-transform);
+}
+
+/* Section titles: the sentence-case display line that opens a section. */
+@utility fs-heading-2 {
+	font-family: var(--h2-font-family);
+	font-weight: var(--h2-font-weight);
+	font-size: var(--font-size-h2);
+	line-height: var(--h2-line-height);
+	letter-spacing: var(--h2-letter-spacing);
+	text-transform: var(--h2-text-transform);
+}
+
+/* Product and project titles. Uppercase, where h1 and h2 are not. */
+@utility fs-heading-3 {
+	font-family: var(--h3-font-family);
+	font-weight: var(--h3-font-weight);
+	font-size: var(--font-size-h3);
+	line-height: var(--h3-line-height);
+	letter-spacing: var(--h3-letter-spacing);
+	text-transform: var(--h3-text-transform);
+}
+
+/* Panel and dialog titles, and the split-text stage line. */
+@utility fs-heading-4 {
+	font-family: var(--h4-font-family);
+	font-weight: var(--h4-font-weight);
+	font-size: var(--font-size-h4);
+	line-height: var(--h4-line-height);
+	letter-spacing: var(--h4-letter-spacing);
+	text-transform: var(--h4-text-transform);
+}
+
+/* Drops a heading out of caps. h1 and h2 already bundle this, since the hero
+   name and the section titles are always sentence case; h3 and h4 default to
+   caps and take this where a line reads as prose rather than a title, like the
+   Magic Spells outro. Tracking travels with it: Fields set in mixed case wants
+   the tighter fit, where caps want the +0.01em.
+
+   Defined after the four headings on purpose. Custom utilities cascade in
+   definition order, so this has to come last to win. */
+@utility fs-sentence-case {
+	letter-spacing: -0.005em;
+	text-transform: none;
+}
+
+/* The tracked-out label above a display heading. Replaces .eyebrow. When
+   centered over text, add fs-overline-centered so the trailing letter-spacing
+   gap does not push it off-center. */
+@utility fs-overline {
+	font-family: var(--overline-font-family);
+	font-weight: var(--overline-font-weight);
+	font-size: var(--overline-font-size);
+	line-height: 1;
+	letter-spacing: var(--overline-letter-spacing);
+	text-transform: var(--overline-text-transform);
+}
+
+@utility fs-overline-centered {
+	text-indent: var(--overline-letter-spacing);
+}
+
+/* Ledes and taglines under a display heading. */
+@utility fs-subheading {
+	font-family: var(--subheading-font-family);
+	font-weight: var(--subheading-font-weight);
+	font-size: var(--subheading-font-size);
+	line-height: var(--subheading-line-height);
+	letter-spacing: var(--subheading-letter-spacing);
+	text-transform: var(--subheading-text-transform);
+}
+
+@utility fs-body-lg {
+	font-family: var(--font-body);
+	font-weight: var(--font-body-weight);
+	font-size: var(--font-size-body-lg);
+	line-height: var(--line-height-normal);
+}
+
+@utility fs-body-md {
+	font-family: var(--font-body);
+	font-weight: var(--font-body-weight);
+	font-size: var(--font-size-body-md);
+	line-height: var(--line-height-normal);
+}
+
+@utility fs-body-sm {
+	font-family: var(--font-body);
+	font-weight: var(--font-body-weight);
+	font-size: var(--font-size-body-sm);
+	line-height: var(--line-height-snug);
+}
+
+@utility fs-body-xs {
+	font-family: var(--font-body);
+	font-weight: var(--font-body-weight);
+	font-size: var(--font-size-body-xs);
+	line-height: var(--line-height-tight);
+}
+
+/* The mono micro-label on the demo surfaces: card meta, chips, install lines,
+   stage captions. One definition for a recipe hand-rolled a dozen times. */
+@utility fs-mono-label {
+	font-family: var(--font-mono);
+	font-weight: 400;
+	font-size: var(--font-size-body-xs);
+	line-height: var(--line-height-tight);
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}

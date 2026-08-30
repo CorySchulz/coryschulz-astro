@@ -1,0 +1,59 @@
+/* ============================================
+	 Base Styles & Tailwind v4 Theme Configuration
+	 ============================================ */
+@import "./base/base.css";
+
+/* Typography, layout and spacing are imported at top level, NOT wrapped in
+	 `@layer base` here: they carry @utility blocks (fs-*) and @theme blocks,
+	 neither of which may sit inside a layer, plus :root steps that must stay
+	 unlayered to out-rank the @theme re-exports they feed. Each file layers
+	 what it needs to layer, in its own comments. Order matters only in that
+	 base.css pulls in Tailwind first. */
+@import "./base/typography.css";
+@import "./base/layout.css";
+@import "./base/spacing.css";
+@import "./base/elements.css";
+
+/* ============================================
+	 Element Styles
+	 ============================================ */
+@import "./elements/input-fields.css";
+/* TODO phase 2: buttons.css, links.css, panels.css */
+
+/* ============================================
+	 Package Styles (Vanilla CSS)
+
+	 Each vendor sheet sits immediately BELOW the house file that themes it,
+	 which is the order Layout.astro shipped and the order everything downstream
+	 assumes. It is load-bearing, not cosmetic:
+
+	 - dropdown-select and tarot both re-declare the bare element selectors we
+		 theme, at the same specificity, so the vendor sheet wins ties on source
+		 order. That is what the !important flags in those two house files are
+		 for, and why the vendor @import cannot move above them.
+	 - reveal.css re-declares --reveal-* on :root and must keep beating the
+		 fallbacks in base.css, or every reveal on the page changes duration.
+
+	 Explicit node_modules paths rather than the packages' "./css" export
+	 subpaths, matching magicspells.io: a bare specifier here resolves through
+	 Vite, a relative path is just a file.
+	 ============================================ */
+@import "./packages/tarot.css";
+@import "./tarot.min.css";
+
+@import "./packages/dropdown-select.css";
+@import "../../node_modules/@magic-spells/dropdown-select/dist/dropdown-select.min.css";
+
+@import "../../node_modules/@magic-spells/reveal/dist/reveal.css";
+@import "../../node_modules/@magic-spells/split-text/dist/split-text.min.css";
+
+/* ============================================
+	 Components
+	 ============================================ */
+/* TODO phase 4: the page sections lifted out of index.astro's style block */
+
+/* ============================================
+	 Custom Utilities
+	 Loaded AFTER base styles for proper override
+	 ============================================ */
+@import "./utilities/sizing.css";

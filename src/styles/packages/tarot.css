@@ -1,0 +1,103 @@
+/* ==========================================================================
+   TAROT CAROUSEL, night palette
+
+   The vendored engine sheet (../tarot.min.css) loads AFTER this file, which is
+   the order Layout.astro shipped and the order these rules were written
+   against. Two consequences worth knowing before touching anything here:
+
+   - button.tarot-dots-button carries !important because the engine repaints
+     the dot background from --color-pagination-dot. The element+class selector
+     already out-ranks the engine's bare class, so the flag is belt and braces.
+   - .tarot-dots-list is the engine's own selector at the engine's own
+     specificity, so the engine wins every declaration it also sets. This block
+     is currently inert; the live geometry comes from the engine plus
+     index.astro's scoped .proj-demo-tarot reach-in.
+
+   .tarot-navigation, .tarot-buttons and the -prev / -next buttons style a
+   navigation bar the page does not render. Kept as-is for this pass.
+   ========================================================================== */
+
+tarot-carousel {
+	display: block;
+	width: 100%;
+}
+
+.tarot-navigation {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 2rem;
+	margin-top: 1rem;
+}
+
+.tarot-buttons {
+	display: flex;
+	gap: 0.5rem;
+}
+
+.tarot-button-prev,
+.tarot-button-next {
+	background: transparent;
+	border: 1px solid var(--hairline-strong);
+	color: var(--cream);
+	padding: 0.5rem 1.1rem;
+	border-radius: 999px;
+	font-family: var(--font-body);
+	font-weight: 600;
+	font-size: 0.8125rem;
+	cursor: pointer;
+	transition: all 0.25s ease;
+}
+
+.tarot-button-prev:hover,
+.tarot-button-next:hover {
+	border-color: var(--gold);
+	color: var(--gold-bright);
+}
+
+.tarot-button-prev:disabled,
+.tarot-button-next:disabled {
+	opacity: 0.3;
+	cursor: not-allowed;
+}
+
+.tarot-dots-container {
+	display: flex;
+	width: fit-content;
+	margin-inline: auto;
+	margin-top: 1rem;
+	background: transparent;
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+}
+
+.tarot-dots-list {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+button.tarot-dots-button {
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: var(--hairline-strong) !important;
+	border: 0;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	padding: 0;
+}
+
+button.tarot-dots-button:hover {
+	background: var(--slate-dim) !important;
+}
+
+button.tarot-dots-button[aria-selected="true"] {
+	background: var(--gold) !important;
+	width: 7px;
+	height: 7px;
+}

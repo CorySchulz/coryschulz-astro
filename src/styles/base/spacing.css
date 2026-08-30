@@ -1,0 +1,77 @@
+/* Spacing: one section-rhythm var (py-section) plus a t-shirt scale.
+
+   The scale is deliberately coarser than the raw values on the page. Every
+   step below is a size the site already uses verbatim, so adopting a step is
+   never a nudge:
+
+     2xs 0.25rem, xs 0.5rem (11 uses), sm 0.75rem (15), md 1rem (10),
+     lg 1.5rem (7), xl 2.5rem
+
+   1.25rem is the second most common value on the page and is still NOT a step,
+   because it is the base gutter: that rhythm belongs to --spacing-gutter, and
+   a second name for the same number invites the two to drift. The optical
+   one-offs (0.375, 0.5625, 0.875, 1.125, 1.375, 1.75rem) stay literal rather
+   than being rounded onto a step.
+
+   Source vars are named --space-* so the @theme re-export below is not
+   self-referential. */
+:root {
+	--space-2xs: 0.25rem;
+	--space-xs: 0.5rem;
+	--space-sm: 0.75rem;
+	--space-md: 1rem;
+	--space-lg: 1.5rem;
+	--space-xl: 2.5rem;
+
+	/* Section rhythm. .section currently rides clamp(5rem, 10vw, 11rem), which
+	   renders 5rem up to ~800px, 6.4rem at 1024 and 8rem at 1280. These are
+	   those three points as discrete steps.
+
+	   The tail is 10% longer than the head, which is the ratio the page
+	   already runs (5rem / 5.5rem) and the reason it reads as separated
+	   sections rather than a stack of evenly boxed ones: the gap after a
+	   section belongs to that section, not to the next one. Derived rather
+	   than a second ladder, so the two can never drift. */
+	--section-padding: 5rem;
+	--section-padding-tail: calc(var(--section-padding) * 1.1);
+}
+
+@media (width >= 768px) {
+	:root {
+		--section-padding: 6rem;
+	}
+}
+
+@media (width >= 1024px) {
+	:root {
+		--section-padding: 8rem;
+	}
+}
+
+/* Re-export as Tailwind spacing tokens: p-sm, gap-md, mt-lg. */
+@theme {
+	--spacing-2xs: var(--space-2xs);
+	--spacing-xs: var(--space-xs);
+	--spacing-sm: var(--space-sm);
+	--spacing-md: var(--space-md);
+	--spacing-lg: var(--space-lg);
+	--spacing-xl: var(--space-xl);
+}
+
+/* Section rhythm is hand-written rather than registered as --spacing-section,
+   because the head and the tail are different numbers and a spacing token can
+   only carry one. Registering it would also silently win: Tailwind's generated
+   pb-section would sort after these and overwrite the tail. Vertical only, so
+   there is no p-section or mt-section. */
+@utility pt-section {
+	padding-top: var(--section-padding);
+}
+
+@utility pb-section {
+	padding-bottom: var(--section-padding-tail);
+}
+
+@utility py-section {
+	padding-top: var(--section-padding);
+	padding-bottom: var(--section-padding-tail);
+}
