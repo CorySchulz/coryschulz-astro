@@ -13,9 +13,30 @@
 	color: var(--gold-bright);
 }
 
-/* The other half of the projects/contact seam trim above. */
+/* The other half of the projects/contact seam trim above. position: relative
+   is the containing block for .contact-stars. */
 .section-contact {
+	position: relative;
 	padding-top: clamp(2.5rem, 5vw, 5rem);
+}
+
+/* An echo of the hero's constellation, closing the page the way it opened:
+   half the star count and a lower opacity, so it registers as texture rather
+   than as the same graphic twice. Absolute, so it adds no height and cannot
+   move the form. The .twinkle-* clocks it borrows live in hero.css.
+
+   Sized and centred exactly like .constellation, but anchored to the section's
+   own top padding rather than a fixed offset: contact opens tighter than the
+   hero, so a shared number would sit the field on the portrait. */
+.contact-stars {
+	position: absolute;
+	top: clamp(1.5rem, 4vw, 3rem);
+	left: 50%;
+	transform: translateX(-50%);
+	width: min(1200px, 92%);
+	height: auto;
+	opacity: 0.5;
+	pointer-events: none;
 }
 
 .portrait {

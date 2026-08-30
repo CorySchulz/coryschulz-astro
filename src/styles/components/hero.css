@@ -38,8 +38,14 @@
 	pointer-events: none;
 }
 
-/* Five stars share one animation on five different clocks. The negative
-   delays start each mid-cycle so they never blink in unison. */
+/* Twelve stars share one animation on twelve different clocks. The negative
+   delays start each mid-cycle, and no two durations divide evenly into each
+   other, so the field never resolves into a common pulse.
+
+   These modifiers are the page's star primitive, not the hero's alone: the
+   contact section's echo field (.contact-stars, contact.css) reuses a subset.
+   The reduced-motion rule that stops them lives with that block, in
+   contact.css, alongside the page's other motion opt-outs. */
 .twinkle {
 	animation: twinkle 7s ease-in-out infinite;
 }
@@ -62,6 +68,41 @@
 .twinkle-e {
 	animation-duration: 12s;
 	animation-delay: -1s;
+}
+
+.twinkle-f {
+	animation-duration: 10s;
+	animation-delay: -6s;
+}
+
+.twinkle-g {
+	animation-duration: 13s;
+	animation-delay: -4s;
+}
+
+.twinkle-h {
+	animation-duration: 6.5s;
+	animation-delay: -2.5s;
+}
+
+.twinkle-i {
+	animation-duration: 14s;
+	animation-delay: -7s;
+}
+
+.twinkle-j {
+	animation-duration: 9.5s;
+	animation-delay: -0.5s;
+}
+
+.twinkle-k {
+	animation-duration: 7.5s;
+	animation-delay: -5.5s;
+}
+
+.twinkle-l {
+	animation-duration: 11.5s;
+	animation-delay: -3s;
 }
 
 @keyframes twinkle {

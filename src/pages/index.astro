@@ -275,8 +275,13 @@ const morphCards = [
 		<section class="hero">
 			<!-- Decorative and deliberately full-bleed: it sits outside the
 			     container so it keeps sizing off the section, not the text column. -->
+			<!-- Decorative star field. Every circle carries an explicit opacity, the
+			     twinkling ones included, so the reduced-motion rule that kills the
+			     animation leaves a field at its authored brightness rather than a row
+			     of full-opacity dots. Twelve of the twenty-two twinkle, each on its own
+			     clock (see .twinkle-* in hero.css) so nothing pulses in unison. -->
 			<svg class="constellation" viewBox="0 0 1200 360" aria-hidden="true" focusable="false">
-				<circle class="twinkle twinkle-a" cx="80" cy="60" r="1.6" fill="var(--gold)"></circle>
+				<circle class="twinkle twinkle-a" cx="80" cy="60" r="1.6" fill="var(--gold)" opacity="0.55"></circle>
 				<circle cx="220" cy="180" r="1.1" fill="var(--cream)" opacity="0.5"></circle>
 				<circle class="twinkle twinkle-b" cx="360" cy="40" r="1.3" fill="var(--cream)" opacity="0.4"></circle>
 				<circle cx="540" cy="120" r="1.0" fill="var(--gold)" opacity="0.6"></circle>
@@ -286,7 +291,19 @@ const morphCards = [
 				<circle cx="1120" cy="200" r="1.1" fill="var(--gold)" opacity="0.6"></circle>
 				<circle cx="160" cy="300" r="1.2" fill="var(--cream)" opacity="0.35"></circle>
 				<circle class="twinkle twinkle-e" cx="1040" cy="310" r="1.3" fill="var(--cream)" opacity="0.4"></circle>
-				</svg>
+				<circle class="twinkle twinkle-f" cx="278" cy="92" r="1.4" fill="var(--gold)" opacity="0.45"></circle>
+				<circle cx="118" cy="142" r="0.9" fill="var(--cream)" opacity="0.3"></circle>
+				<circle class="twinkle twinkle-g" cx="468" cy="66" r="1.2" fill="var(--cream)" opacity="0.35"></circle>
+				<circle cx="612" cy="196" r="1.0" fill="var(--gold)" opacity="0.4"></circle>
+				<circle class="twinkle twinkle-h" cx="784" cy="98" r="1.1" fill="var(--cream)" opacity="0.35"></circle>
+				<circle class="twinkle twinkle-i" cx="922" cy="44" r="1.3" fill="var(--gold)" opacity="0.5"></circle>
+				<circle cx="1074" cy="134" r="0.9" fill="var(--cream)" opacity="0.3"></circle>
+				<circle class="twinkle twinkle-j" cx="1162" cy="58" r="1.2" fill="var(--cream)" opacity="0.35"></circle>
+				<circle class="twinkle twinkle-k" cx="44" cy="216" r="1.2" fill="var(--gold)" opacity="0.4"></circle>
+				<circle cx="330" cy="296" r="1.0" fill="var(--gold)" opacity="0.3"></circle>
+				<circle class="twinkle twinkle-l" cx="884" cy="284" r="1.1" fill="var(--cream)" opacity="0.3"></circle>
+				<circle cx="646" cy="326" r="0.9" fill="var(--cream)" opacity="0.25"></circle>
+			</svg>
 
 			<!-- Every block below is `relative` on purpose: the constellation above
 			     is absolutely positioned, so only a positioned sibling later in the
@@ -1009,7 +1026,23 @@ const morphCards = [
 
 		<!-- ============ CONTACT ============ -->
 		<section class="py-section section-contact" id="contact">
-			<div class="container">
+			<!-- An echo of the hero field, not a repeat: half the count, fainter, and
+			     absolutely placed so it adds no height. .container below carries
+			     `relative` so the form paints over it. -->
+			<svg class="contact-stars" viewBox="0 0 1200 420" aria-hidden="true" focusable="false">
+				<circle class="twinkle twinkle-c" cx="96" cy="74" r="1.3" fill="var(--gold)" opacity="0.4"></circle>
+				<circle cx="252" cy="168" r="1.0" fill="var(--cream)" opacity="0.3"></circle>
+				<circle class="twinkle twinkle-g" cx="404" cy="48" r="1.2" fill="var(--cream)" opacity="0.35"></circle>
+				<circle cx="596" cy="132" r="0.9" fill="var(--gold)" opacity="0.3"></circle>
+				<circle class="twinkle twinkle-j" cx="788" cy="62" r="1.3" fill="var(--cream)" opacity="0.35"></circle>
+				<circle cx="944" cy="186" r="1.0" fill="var(--gold)" opacity="0.3"></circle>
+				<circle class="twinkle twinkle-e" cx="1108" cy="88" r="1.2" fill="var(--cream)" opacity="0.35"></circle>
+				<circle cx="1156" cy="252" r="0.9" fill="var(--gold)" opacity="0.25"></circle>
+				<circle class="twinkle twinkle-i" cx="150" cy="330" r="1.1" fill="var(--cream)" opacity="0.3"></circle>
+				<circle cx="682" cy="382" r="0.9" fill="var(--cream)" opacity="0.22"></circle>
+				<circle class="twinkle twinkle-l" cx="1022" cy="356" r="1.0" fill="var(--gold)" opacity="0.28"></circle>
+			</svg>
+			<div class="container relative">
 				<div class="flex flex-col gap-10 max-w-[720px] mx-auto">
 					<div
 						class="flex flex-col items-center gap-md text-center mb-section-head reveal reveal-fade-up">
