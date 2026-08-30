@@ -1,474 +1,229 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const stops = [
+	{
+		year: '2013',
+		shortYear: "'13",
+		company: "Kohl's",
+		desc: "Lead Web Developer — rewrote the Kohls.com front end",
+		img: '/kohls.jpg',
+		alt: 'Kohls.com',
+	},
+	{
+		year: '2016',
+		shortYear: "'16",
+		company: 'Pair',
+		desc: 'Co-founded a consultancy — Milwaukee Tool, Empire Level',
+		img: '/milwaukee.png',
+		alt: 'Milwaukee Tool',
+	},
+	{
+		year: '2018',
+		shortYear: "'18",
+		company: 'Fuel Made',
+		desc: 'Custom Shopify themes — Casamigos Tequila',
+		img: '/casamigos.jpg',
+		alt: 'Casamigos',
+	},
+	{
+		year: '2022',
+		shortYear: "'22",
+		company: 'Pura',
+		desc: 'Tech Lead — rebuilt pura.com, hired & trained the team',
+		img: '/pura.png',
+		alt: 'Pura',
+	},
+	{
+		year: '2024',
+		shortYear: "'24",
+		company: 'Magic Spells',
+		desc: 'Founder — open-source web components',
+		img: null,
+		alt: 'Magic Spells',
+	},
+	{
+		year: '2025',
+		shortYear: "'25",
+		company: 'Avex',
+		desc: 'Tech Lead — lead developer for Homage',
+		img: '/homage.png',
+		alt: 'Homage',
+	},
+];
+
+const chips = ['Animation Engine', 'Reveal', 'Scroll Trigger', 'Scroll Progress', 'Dropdown Select'];
+
+const tarotSlides = [
+	{ img: '/dashing-diva.png', alt: 'Dashing Diva' },
+	{ img: '/ritual.png', alt: 'Ritual Hockey' },
+	{ img: '/braxley.jpg', alt: 'Braxley Bands' },
+	{ img: '/rosita.jpg', alt: 'Rosita' },
+	{ img: '/casamigos.jpg', alt: 'Casamigos' },
+];
+
+// Magic Spells wordmark, inlined from the magicspells.io Logo component so
+// it can be painted with a token colour (viewBox 0 0 1193 238, single path).
+const MS_LOGO = 'M1156.348 83.463c4.709 16.62 40.996 13.019 36.287-6.371-3.047-12.742-21.052-21.606-49.307-20.221-29.361 1.662-43.489 18.559-39.61 34.625 1.662 6.925 7.202 14.958 14.958 20.221l3.047 1.939c12.188 7.202 32.131 14.681 35.178 27.146 2.217 9.141-3.877 14.404-12.464 14.404-11.635.277-18.837-12.465-5.54-16.343-4.71-16.62-40.72-13.019-36.288 6.371 3.047 12.465 21.33 21.329 49.584 19.944 29.084-1.385 43.489-18.282 39.61-34.625-1.662-6.925-6.647-14.958-14.68-20.498l-2.77-1.662c-12.188-7.479-32.963-14.404-36.01-27.146-1.94-8.864 3.877-14.127 12.464-14.404 11.912 0 18.837 12.742 5.54 16.62M198.482 13.659c.276-1.662-1.386-2.493-3.048-2.493-1.385 0-17.45 3.601-30.746 3.601-13.02 0-29.086-3.601-30.747-3.601-1.386 0-3.048.831-2.77 2.493.554 2.77 6.925 2.216 10.802 8.864l-39.056 68.419-39.612-69.804c3.879-5.263 9.419-4.986 9.696-7.479.276-1.662-1.385-2.493-2.77-2.493H8.736c-1.662 0-3.048.831-2.77 2.493.554 4.155 13.296.831 13.296 22.437v98.058c0 21.606-17.728 24.653-18.283 28.531-.277 1.662 1.386 2.77 2.77 2.77 1.662 0 10.804-3.601 21.606-3.601 10.25 0 19.944 3.601 21.607 3.601 1.661 0 3.323-1.108 3.046-2.77-.83-3.878-18.558-6.925-18.558-28.531V49.115l51.245 85.039 4.155 7.202 22.437-39.334 35.456-62.325v100.551c0 21.606-13.02 18.559-13.573 22.437-.278 1.662 1.384 2.77 2.77 2.77 1.661 0 17.728-3.878 30.746-3.878 13.297 0 29.362 3.878 30.747 3.878 1.662 0 3.324-1.108 3.048-2.77-.832-3.878-13.574-.831-13.574-22.437V36.096c0-21.606 12.742-18.282 13.574-22.437m-95.289 77.56v-.277l6.095 11.08Zm813.826 23.268c2.216 42.104 47.09 37.118 62.88 21.052 3.877-4.155 9.14-3.601 6.924.554-8.864 16.343-29.362 29.362-49.583 29.362-31.3 0-56.784-24.376-56.784-54.292s25.484-54.292 56.784-54.292c43.766 0 56.232 35.179 37.119 54.846-14.404 15.235-47.922 19.113-57.34 2.77M1087.651 3.133v136.838c0 21.883 13.02 18.559 13.573 22.714.277 1.662-1.385 2.493-2.77 2.493-3.324 0-16.62-3.047-26.591-3.047s-23.269 3.047-26.316 3.047h-2.77c-3.047 0-16.343-3.047-26.314-3.047-9.973 0-23.269 3.047-26.593 3.047-1.385 0-3.047-.831-2.77-2.493.555-4.155 13.573-.831 13.573-22.714V68.228c0-14.894-6.58-20.442-10.58-23.813-1.801-1.52-3.079-2.596-2.993-3.887 0-1.108 1.385-2.216 2.77-2.216 13.297 0 32.132-11.08 35.734-15.512 3.047-3.601 6.647-2.77 6.647.831v116.34c0 17.451 8.31 18.836 11.911 20.775 3.602-1.939 11.911-3.324 11.911-20.775V48.007c0-15.269-6.742-20.828-10.724-24.11-1.725-1.423-2.932-2.418-2.849-3.59.277-1.385 1.385-2.493 3.047-2.493 13.02 0 31.855-10.803 35.457-15.235 3.324-3.878 6.647-3.047 6.647.554m-170.354 102.49c29.084 16.343 47.367-31.301 27.976-35.179-14.127-2.77-26.315 14.404-27.976 35.179M804.28 63.796c7.201-4.432 15.511-6.925 24.099-6.925 27.422 0 49.583 24.376 49.583 54.292s-22.16 54.292-49.583 54.292c-8.588 0-16.898-2.493-24.1-6.925v60.386c0 3.601-3.324 4.432-6.647.554-3.602-4.432-22.438-15.235-35.734-15.235-1.384 0-2.77-1.108-2.77-2.216-.086-1.29 1.192-2.368 2.994-3.887 3.998-3.371 10.58-8.92 10.58-23.813V94.266c0-15.269-6.743-20.828-10.725-24.11-1.725-1.423-2.932-2.418-2.848-3.59 0-1.385 1.385-2.493 2.77-2.493 13.295 0 32.131-10.803 35.733-15.235 3.323-3.878 6.648-3.047 6.648.554zm-44.32-24.099c6.924 27.7-43.49 32.686-50.414 9.141 18.281-5.54 8.033-26.038-8.31-25.484-11.911 0-28.255 7.756-24.377 22.437 4.71 18.005 38.504 27.977 55.955 38.503l3.878 2.493c11.08 7.756 18.281 19.39 20.775 29.362 5.816 22.991-11.358 46.813-52.077 49.029-39.61 1.939-65.372-10.803-69.803-28.531-6.926-27.7 43.766-32.686 50.69-9.141-18.559 5.54-8.31 26.038 8.034 25.761 12.188-.277 28.53-6.925 24.375-22.714-4.432-18.005-37.395-28.254-54.846-38.78l-3.877-2.493c-11.357-7.756-19.39-18.836-21.883-28.808-5.54-22.991 11.356-47.09 52.352-49.306 39.335-1.939 65.096 10.803 69.528 28.531m44.32 88.917c5.54 15.512 14.404 25.761 24.099 23.822 12.464-2.216 20.22-25.761 14.68-47.921-5.54-23.268-19.112-37.118-30.47-34.625-3.324.554-6.093 2.77-8.31 5.817zm-466.468 10.803c8.032 3.324 16.897 5.263 26.592 5.263 30.47 0 55.122-19.667 55.122-43.766 0-17.728-12.742-32.686-31.3-39.888 9.14-9.972 32.408-10.526 50.414-4.155 22.99 8.033 34.625-31.578 3.6-31.578-19.112 0-51.521 13.85-60.663 33.794-5.54-1.385-11.08-2.216-17.173-2.216-30.47 0-55.124 19.667-55.124 44.043 0 13.573 7.757 25.761 19.944 33.794-7.479 2.493-13.85 8.31-14.958 16.62-3.55 23.162 17.085 27.903 37.533 32.602 16.233 3.73 32.35 7.433 36.15 20.305 3.6 11.634-9.419 22.714-24.93 22.714-16.067 0-18.836-22.16-4.986-22.16 0-24.099-45.151-27.7-45.151 1.385 0 43.489 110.522 44.043 103.044-15.789-4.107-31.731-37.267-34.534-60.072-36.462-11.038-.933-19.65-1.66-21.367-5.365-1.938-4.155 0-7.202 3.325-9.141m-41.274.831c0 21.606 12.742 18.559 13.297 22.437.276 1.662-1.386 2.77-2.77 2.77-.146 0-.706-.129-1.605-.335-5.959-1.37-26.818-6.163-40.776.335v-13.019c-4.987 6.648-17.728 13.019-36.841 13.019-31.302 0-41.828-35.733-4.433-50.137 14.959-5.817 41.274-9.418 41.274-23.268 0-14.127-6.926-26.038-19.944-24.099-14.958 2.493-16.067 25.207-.832 25.207 0 19.944-39.887 22.991-39.887-2.77 0-18.005 19.944-33.517 44.597-33.517 28.253 0 47.92 12.188 47.92 43.766zm172.849 0v-80.33c0-3.601-3.324-4.432-6.371-.554-3.879 4.432-22.715 15.235-35.733 15.235-1.663 0-2.77 1.108-3.047 2.493-.084 1.172 1.123 2.167 2.848 3.59 3.982 3.282 10.725 8.841 10.725 24.11v35.456c0 21.606-12.742 18.559-13.573 22.437 0 1.662 1.384 2.77 3.047 2.77 3.324 0 16.342-3.324 26.315-3.324 9.971 0 23.268 3.324 26.591 3.324 1.385 0 3.047-1.108 2.77-2.77-.554-3.878-13.572-.831-13.572-22.437m112.739-5.263c-16.067 16.897-62.88 21.883-62.88-23.822 0-23.268 9.696-42.381 25.485-41.273 17.727 1.385 16.343 33.24-2.77 29.639 0 32.686 37.671 22.437 44.043 4.432 8.032-23.822-14.958-47.09-46.536-47.09-31.302 0-56.786 24.376-56.786 54.292s25.484 54.292 56.786 54.292c20.22 0 40.718-13.019 49.583-29.362 2.216-4.155-3.325-4.709-6.925-1.108m-349.02 6.094c3.6 14.127 21.052 10.526 31.578-2.216v-27.7c-1.782 1.559-5.175 3.337-9.108 5.397-10.742 5.629-25.512 13.367-22.47 24.519m131.298-72.02c8.863 0 16.065 14.127 16.065 31.855 0 17.451-7.202 31.578-16.065 31.578-8.865 0-15.79-14.127-15.79-31.578 0-17.728 6.925-31.855 15.79-31.855';
+
+const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 ---
 
-<style>
-	/* Ripple carousel fade animation for slide content */
-	tarot-slide .slide-content {
-		opacity: 0;
-		transition: opacity 0.5s ease-in-out;
-		min-width: 220px;
-		text-align: center;
-		font-family: 'Fields', system-ui, sans-serif;
-	}
+<Layout title="Cory Schulz - Front-End Engineer, Tech Lead & Shopify Developer">
+	<a class="skip-link" href="#experience">Skip to content</a>
 
-	tarot-slide.tarot-fully-visible .slide-content {
-		opacity: 1;
-	}
+	<main id="top">
+		<!-- ============ HERO ============ -->
+		<section class="hero">
+			<svg class="constellation" viewBox="0 0 1200 360" aria-hidden="true" focusable="false">
+				<circle class="twinkle twinkle-a" cx="80" cy="60" r="1.6" fill="var(--gold)"></circle>
+				<circle cx="220" cy="180" r="1.1" fill="var(--cream)" opacity="0.5"></circle>
+				<circle class="twinkle twinkle-b" cx="360" cy="40" r="1.3" fill="var(--cream)" opacity="0.4"></circle>
+				<circle cx="540" cy="120" r="1.0" fill="var(--gold)" opacity="0.6"></circle>
+				<circle class="twinkle twinkle-c" cx="700" cy="30" r="1.5" fill="var(--cream)" opacity="0.45"></circle>
+				<circle cx="860" cy="150" r="1.2" fill="var(--gold)" opacity="0.7"></circle>
+				<circle class="twinkle twinkle-d" cx="1000" cy="70" r="1.6" fill="var(--cream)" opacity="0.4"></circle>
+				<circle cx="1120" cy="200" r="1.1" fill="var(--gold)" opacity="0.6"></circle>
+				<circle cx="160" cy="300" r="1.2" fill="var(--cream)" opacity="0.35"></circle>
+				<circle class="twinkle twinkle-e" cx="1040" cy="310" r="1.3" fill="var(--cream)" opacity="0.4"></circle>
+				</svg>
 
-	/* ScrollTrigger fade-up animations */
-	[data-section-trigger] {
-		opacity: 0;
-		transform: translateY(40px);
-		transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-		            transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-	}
+			<p class="eyebrow hero-eyebrow">
+				<span>Front-End Engineer &middot; Tech Lead</span><span class="eyebrow-sep"> &middot; </span><span>Shopify Developer</span>
+			</p>
 
-	[data-section-trigger].visible {
-		opacity: 1;
-		transform: translateY(0);
-	}
+			<h1 class="hero-name">
+				<split-text split="chars" trigger="load" stagger="34" duration="900"
+					><span class="hero-name-part">Cory</span> <span class="hero-name-part">Schulz</span></split-text
+				>
+			</h1>
 
-	/* Dropdown Select Custom Styles Override */
-	dropdown-select {
-		--select-color-background: rgba(0, 0, 0, 0.15);
-		--select-color-border: rgba(255, 255, 255, 0.2);
-		--select-color-border-hover: rgba(255, 255, 255, 0.4);
-		--select-color-text: white;
-		--select-color-hover: rgba(255, 255, 255, 0.1);
-		--select-color-focus: rgba(255, 255, 255, 0.15);
-		--select-color-selected: rgba(255, 255, 255, 0.15);
-		--select-box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-		--select-border-radius: 0.5rem;
-		--select-options-max-height: none;
-		width: 100%;
-	}
+			<p class="hero-thesis">
+				I love to design beautiful experiences and build tools that help other people create more amazing
+				things.
+			</p>
+			<p class="hero-sub">
+				Creator of Magic Spells and the Tarot carousel &middot; twenty years of building for the web
+			</p>
 
-	dropdown-select-trigger {
-		backdrop-filter: blur(30px);
-		-webkit-backdrop-filter: blur(30px);
-	}
+			<div class="hero-actions">
+				<a class="pill pill-gold" href="#contact" data-scroll-to-contact>Send a Message</a>
+				<a
+					class="pill pill-outline"
+					href="https://www.linkedin.com/in/cory-schulz/"
+					target="_blank"
+					rel="noopener noreferrer">
+					LinkedIn
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+						<path
+							d="M7 17 L17 7 M9 7 L17 7 L17 15"
+							stroke="var(--gold)"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"></path>
+					</svg>
+				</a>
+			</div>
+		</section>
 
-	dropdown-options {
-		background: rgba(24, 30, 40, 1.0) !important;
-	}
-
-	dropdown-option {
-		position: relative;
-	}
-
-	dropdown-option:first-child {
-		border-top-left-radius: 0.5rem;
-		border-top-right-radius: 0.5rem;
-	}
-
-	dropdown-option:last-child {
-		border-bottom-left-radius: 0.5rem;
-		border-bottom-right-radius: 0.5rem;
-	}
-
-	dropdown-option[aria-selected="true"] {
-		background-color: rgba(255, 255, 255, 0.15) !important;
-		font-weight: 600;
-	}
-
-	dropdown-option:hover {
-		background-color: rgba(255, 255, 255, 0.1) !important;
-	}
-
-	dropdown-option:focus {
-		background-color: rgba(255, 255, 255, 0.15) !important;
-		box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.3) !important;
-	}
-
-	/* Canvas wrapper to hide right edge rendering glitch */
-	.canvas-wrapper {
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 100vh;
-		overflow: hidden;
-		z-index: 0;
-	}
-
-	#lavaCanvas {
-		width: calc(100% + 10px);
-		height: 100%;
-	}
-</style>
-
-<Layout title="Cory Schulz - Full Stack Developer">
-	<div class="canvas-wrapper">
-		<canvas id="lavaCanvas"></canvas>
-	</div>
-
-	<main class="relative z-10 min-h-screen">
-		<div class="container py-12">
-			<!-- Hero Section -->
-			<section class="mb-20">
-				<div data-section-trigger class="bg-gray-900/50 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20">
-					<div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-						<!-- Left: Photo and Name -->
-						<div class="flex flex-col items-center lg:items-start gap-6">
-							<div class="w-64 h-64 rounded-full bg-black/20 bg-noise backdrop-blur-[30px] border-4 border-white/20 shadow-2xl overflow-hidden">
-								<img src="/cory.jpg" alt="Cory Schulz" class="w-full h-full object-cover" />
-							</div>
-							<div class="text-center lg:text-left">
-								<h1 class="text-4xl lg:text-5xl font-black text-white mb-3 tracking-tight text-shadow-lg font-fields">Cory Schulz</h1>
-								<p class="text-white/80 text-lg lg:text-xl leading-relaxed max-w-[500px] font-normal text-shadow text-pretty text-semibold">
-									Hi! I'm the creator of Magic Spells and Tarot carousel. I love to design beautiful experiences and create tools that make the internet more fun. Feel free to send me a message if you're looking for a web developer and think I might be a good fit.
-								</p>
-								<div class="mt-6 flex flex-wrap gap-3 justify-center lg:justify-start">
-									
-									<a
-										href="https://www.linkedin.com/in/cory-schulz/"
-										target="_blank"
-										rel="noopener noreferrer"
-										class="flex items-center gap-2 bg-white/10 bg-noise backdrop-blur-[30px] text-white px-6 py-3 rounded-full hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30"
-										aria-label="Connect on LinkedIn"
-									>
-										<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 264.583 66.146" class="h-5 w-auto"><g class="scaling-icon" style="stroke-width:.084"><g class="logo-21dp" style="stroke-width:.084"><g class="dpi-1" style="stroke-width:.084"><g class="inbug" style="fill:none;fill-rule:evenodd;stroke-width:.084"><path d="M82.479 0H64.583C63.727 0 63 .677 63 1.511v17.977c0 .835.477 1.512 1.333 1.512h17.896c.857 0 1.771-.677 1.771-1.512V1.511C84 .677 83.336 0 82.479 0" class="bug-text-color" style="fill:#fff;stroke-width:.084" transform="scale(3.1498)"/><path d="M82.479 0H64.583C63.727 0 63 .677 63 1.511v17.977c0 .835.477 1.512 1.333 1.512h17.896c.857 0 1.771-.677 1.771-1.512V1.511C84 .677 83.336 0 82.479 0ZM71 8h2.827v1.441h.031c.431-.777 1.704-1.566 3.278-1.566C80.157 7.875 81 9.479 81 12.45V18h-3v-5.003c0-1.33-.531-2.497-1.773-2.497-1.508 0-2.227 1.021-2.227 2.697V18h-3zm-5 10h3V8h-3Zm3.375-13.5a1.875 1.875 0 1 1-3.749.001 1.875 1.875 0 0 1 3.749-.001Z" class="background" style="fill:#0a66c2;stroke-width:.084" transform="scale(3.1498)"/></g><g class="linkedin-text" style="fill:#fff;stroke-width:.084"><path d="M60 18h-2.8v-1.191h-.03c-.623.722-1.705 1.316-3.539 1.316-2.5 0-4.653-1.881-4.653-5.114 0-3.08 2.122-5.136 4.747-5.136 1.625 0 2.634.578 3.245 1.316H57V3h3zm-5.521-7.875c-1.715 0-2.679 1.223-2.679 2.849 0 1.627.964 2.901 2.679 2.901 1.717 0 2.721-1.241 2.721-2.901 0-1.706-1.004-2.849-2.721-2.849zm-6.818 6.264c-.708.917-2.166 1.736-4.52 1.736-3.14 0-5.14-2.08-5.14-5.347 0-2.903 1.811-4.903 5.228-4.903C46.18 7.875 48 9.813 48 13.222c0 .34-.055.678-.055.678h-7.114l.017.309c.197.862.848 1.916 2.342 1.916 1.304 0 2.198-.701 2.602-1.25l1.87 1.514zm-2.548-4.39c.02-1.054-.754-2.124-1.974-2.124-1.452 0-2.227 1.134-2.308 2.125h4.282z" style="stroke-width:.084" transform="scale(3.1498)"/><path d="M38 8h-3.5L31 12V3h-3v15h3v-5l3.699 5h3.542L34 12.533ZM16 8h2.827v1.441h.031c.431-.777 1.704-1.566 3.278-1.566C25.157 7.875 26 9.792 26 12.45V18h-3v-5.003c0-1.472-.531-2.497-1.773-2.497-1.508 0-2.227 1.194-2.227 2.697V18h-3zm-5 10h3V8h-3Zm1.501-11.7a1.8 1.8 0 1 0 0-3.599 1.8 1.8 0 0 0 0 3.599zM3 3H0v15h9v-3H3Z" style="stroke-width:.084" transform="scale(3.1498)"/></g></g></g></g></svg>
-									</a>
-									<button
-										id="scroll-to-contact"
-										class="bg-white/10 bg-noise backdrop-blur-[30px] text-white px-6 py-3 rounded-full hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30 uppercase cursor-pointer">
-										Send a Message
-									</button>
-								</div>
-							</div>
-						</div>
-
-						<!-- Right: Experience Cards -->
-						<div class="grid grid-cols-1 gap-6">
-							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
-								<div class="flex items-center gap-4">
-									<div class="text-6xl font-bold -mb-2 w-[80px] text-right">20</div>
-									<div>
-										<div class="text-lg font-semibold">Years</div>
-										<div class="text-white/80 text-sm">Full Stack Developer</div>
-									</div>
-								</div>
-							</div>
-							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
-								<div class="flex items-center gap-4 ">
-									<div class="text-6xl font-bold  -mb-2 w-[80px] text-right">10</div>
-									<div>
-										<div class="text-lg font-semibold">Years</div>
-										<div class="text-white/80 text-sm">Shopify Developer</div>
-									</div>
-								</div>
-							</div>
-							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
-								<div class="flex items-center gap-4">
-									<div class="text-6xl font-bold  -mb-2 w-[80px] text-right">4</div>
-									<div>
-										<div class="text-lg font-semibold">Years</div>
-										<div class="text-white/80 text-sm">Designer</div>
-									</div>
-								</div>
-							</div>
-							<div class="bg-black/15 bg-noise backdrop-blur-[30px] p-6 rounded-xl shadow-lg border border-white/20 text-white">
-								<div class="flex items-center gap-4">
-									<div class="text-6xl font-bold  -mb-2 w-[80px] text-right">1</div>
-									<div>
-										<div class="text-lg font-semibold">Year</div>
-										<div class="text-white/80 text-sm">AI Engineer</div>
-									</div>
-								</div>
-							</div>
-						</div>
+		<!-- ============ TIMELINE ============ -->
+		<section class="section section-timeline" id="experience">
+			<!-- Desktop: scroll-scrubbed horizontal strip. The heading rides inside
+			     the pinned area so it stays with the strip while it scrubs. -->
+			<div class="tl-scroll" id="tl-scroll">
+				<div class="tl-pin">
+					<div class="section-head reveal reveal-fade-up">
+						<p class="eyebrow">2013 &mdash; Today</p>
+						<h2 class="section-title">Where I&rsquo;ve Been</h2>
+						<p class="section-intro">
+							From a Fortune-500 rewrite to founding an open-source component library.
+						</p>
 					</div>
-				</div>
-			</section>
-
-			<!-- Featured Work Section -->
-			<section class="mb-20">
-				<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20 text-white">
-					<h2 class="text-4xl font-bold mb-8 text-white drop-shadow-lg font-fields text-center">Featured Work</h2>
-
-					<tarot-carousel>
-						<script type="application/json" data-tarot-options>
+					<div class="tl-viewport" id="tl-viewport">
+						<div class="tl-strip" id="tl-strip">
+							<div class="tl-rule" aria-hidden="true"></div>
 							{
-								"gap": 16,
-								"loop": true,
-								"slidesPerView": 1,
-								"slidesPerMove": 1,
-								"navigation": {
-									"showButtons": false,
-									"showPagination": true,
-									"paginationPosition": "bottom",
-									"buttonsPosition": "bottom"
-								},
-								"breakpoints": {
-									"768": {
-										"gap": 20,
-										"slidesPerView": 2,
-										"slidesPerMove": 2
-									},
-									"1200": {
-										"gap": 24,
-										"slidesPerView": 3,
-										"slidesPerMove": 3
-									}
-								}
+								stops.map((s) => (
+									<article class="tl-stop">
+										{s.img ? (
+											<img class="tl-media" src={s.img} alt={s.alt} loading="lazy" decoding="async" />
+										) : (
+											<div class="tl-media tl-media-mark">
+												<svg
+													class="ms-logo"
+													viewBox="0 0 1193 238"
+													role="img"
+													aria-label="Magic Spells">
+													<path d={MS_LOGO} fill="currentColor" />
+												</svg>
+											</div>
+										)}
+										<svg class="tl-node" width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+											<path d={STAR} fill={s.img ? 'var(--gold)' : 'var(--gold-bright)'} />
+										</svg>
+										<div class="tl-text">
+											<p class="tl-year">{s.year}</p>
+											<h3 class="tl-company">{s.company}</h3>
+											<p class="tl-desc">{s.desc}</p>
+										</div>
+									</article>
+								))
 							}
-						</script>
-						<tarot-viewport>
-							<tarot-slide>
-								<a href="https://www.casamigos.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/casamigos.jpg" alt="Casamigos" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Lead Developer</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							<tarot-slide>
-								<a href="https://www.milwaukeetool.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/milwaukee.png" alt="Milwaukee Tool" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Development Support</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							<tarot-slide>
-								<a href="https://pura.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/pura.png" alt="Pura" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Lead Developer</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							<tarot-slide>
-								<a href="https://dashingdiva.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/dashing-diva.png" alt="Dashing Diva" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full">DEVELOPMENT</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							<tarot-slide>
-								<a href="https://ritualhockey.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/ritual.png" alt="Ritual Hockey" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Lead Developer</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							
-							<tarot-slide>
-								<a href="https://braxleybands.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/braxley.jpg" alt="Braxley Bands" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Lead Developer</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							<tarot-slide>
-								<a href="https://www.rositausa.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/rosita.jpg" alt="Rosita" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Lead Developer</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							<tarot-slide>
-								<a href="https://www.kohls.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/kohls.jpg" alt="Kohl's" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Lead Developer</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-							<tarot-slide>
-								<a href="https://www.homage.com/" target="_blank" rel="noopener noreferrer" class="block bg-black/15 bg-noise backdrop-blur-[30px] rounded-xl overflow-hidden border border-white/20 hover:border-white/40 transition-all duration-300 group">
-									<div class="aspect-video relative">
-										<img src="/homage.png" alt="Homage" class="w-full h-full object-cover" />
-										<div class="absolute top-[13px] left-3 flex gap-2">
-											<span class="px-3 pb-1 pt-[5px] text-xs font-semibold bg-black/70 text-white rounded-full uppercase">Development Support</span>
-										</div>
-										<div class="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm p-2 rounded-lg group-hover:bg-black/80 transition-all duration-300">
-											<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="w-4 h-4 text-white">
-												<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-											</svg>
-										</div>
-									</div>
-								</a>
-							</tarot-slide>
-						</tarot-viewport>
-					</tarot-carousel>
-				</div>
-			</section>
-
-			<!-- Magic Spells Section -->
-			<section class="mb-20 hidden">
-				<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20 text-white">
-					<h2 class="text-4xl font-bold mb-8 text-white drop-shadow-lg font-fields">Magic Spells</h2>
-					<div class="space-y-6 mb-8">
-						<p class="text-lg leading-relaxed text-pretty">
-							We specialize in fully custom Shopify themes tailored exactly to your brand's ambitions. Beautifully designed, meticulously coded, and ready to scale.
-						</p>
-
-						<p class="text-lg leading-relaxed text-pretty">
-							Free, open-source web components crafted for developers.
-						</p>
-					</div>
-					<div class="text-center">
-						<a href="https://magicspells.io/" target="_blank" rel="noopener noreferrer" class="inline-block bg-white/10 bg-noise backdrop-blur-[30px] text-white px-8 py-4 rounded-full hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30 uppercase cursor-pointer">
-							Go to Magic Spells
-						</a>
+						</div>
 					</div>
 				</div>
-			</section>
+			</div>
 
-			<!-- Tarot Section -->
-			<section class="mb-20">
+			<!-- Mobile: ledger rows -->
+			<ol class="tl-ledger">
+				{
+					stops.map((s) => (
+						<li class="tl-row reveal reveal-fade-up" data-reveal-group="ledger:70">
+							<p class="tl-row-year">{s.shortYear}</p>
+							<div class="tl-row-body">
+								<h3 class="tl-row-company">{s.company}</h3>
+								<p class="tl-row-desc">{s.desc}</p>
+							</div>
+							{s.img ? (
+								<img class="tl-row-thumb" src={s.img} alt={s.alt} loading="lazy" decoding="async" />
+							) : (
+								<div class="tl-row-thumb tl-media-mark">
+									<svg
+										class="ms-logo ms-logo-sm"
+										viewBox="0 0 1193 238"
+										role="img"
+										aria-label="Magic Spells">
+										<path d={MS_LOGO} fill="currentColor" />
+									</svg>
+								</div>
+							)}
+						</li>
+					))
+				}
+			</ol>
+		</section>
 
-				<div data-section-trigger class="relative p-4 md:p-6 lg:p-10 rounded-xl mb-8 shadow-lg border border-white/20 text-white text-center overflow-hidden" style="background: url(/bg-noise.png) repeat 0 0 / 50px 50px, linear-gradient(to bottom right, rgb(15 23 42), rgb(30 58 138), rgb(30 41 59)); background-blend-mode: overlay;">
-	
-					<!-- Content -->
-					<div class="relative z-10">
-						<p class="text-sm uppercase tracking-wider text-white/70 my-4 font-semibold">Introducing</p>
-						<h2 class="text-6xl md:text-7xl lg:text-8xl font-black mb-6 text-white font-fields uppercase tracking-tight" style="text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);">Tarot</h2>
-						<p class="text-lg md:text-xl mb-6 leading-relaxed text-pretty max-w-2xl mx-auto px-4">A modern carousel with beautiful physics based animations.</p>
-					</div>
-				</div>
+		<!-- ============ THINGS I'VE BUILT ============ -->
+		<section class="section" id="projects">
+			<div class="section-head reveal reveal-fade-up">
+				<p class="eyebrow">Free &amp; Open Source</p>
+				<h2 class="section-title">Things I&rsquo;ve Built</h2>
+			</div>
 
-				<!-- Tarot Examples -->
-				<div class="space-y-8 mb-8">
-					<!-- Ripple Effect -->
-					<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20">
-						<h3 class="text-2xl font-bold text-white mb-8 text-center font-fields">Ripple Effect</h3>
-						<tarot-carousel>
-							<script type="application/json" data-tarot-options>
-								{
-									"effect": "ripple",
-									"gap": 12,
-									"loop": true,
-									"slidesPerView": 1,
-									"slidesPerMove": 1,
-									"navigation": {
-										"showButtons": false,
-										"showPagination": true,
-										"paginationPosition": "bottom",
-										"buttonsPosition": "bottom"
-									},
-									"breakpoints": {
-										"768": {
-											"gap": 16,
-											"slidesPerView": 2,
-											"slidesPerMove": 2
-										},
-										"1024": {
-											"gap": 20,
-											"slidesPerView": 3,
-											"slidesPerMove": 3
-										},
-										"1200": {
-											"gap": 20,
-											"slidesPerView": 4,
-											"slidesPerMove": 4
-										}
-									}
-								}
-							</script>
-							<tarot-viewport>
-								<tarot-slide class="bg-gradient-to-br from-purple-500 to-pink-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 1</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-blue-500 to-cyan-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 2</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-green-500 to-emerald-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 3</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-orange-500 to-red-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 4</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-red-500 to-rose-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 5</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-indigo-500 to-violet-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 6</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-amber-500 to-orange-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 7</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-teal-500 to-cyan-500 min-h-[200px] rounded-3xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 8</div>
-								</tarot-slide>
-							</tarot-viewport>
-						</tarot-carousel>
-					</div>
-
-					<!-- Butterfly Effect -->
-					<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] p-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20">
-						<h3 class="text-2xl font-bold text-white mb-8 text-center font-fields">Butterfly Effect</h3>
+			<div class="built-grid">
+				<!-- TAROT -->
+				<article class="built-card reveal reveal-fade-up" data-reveal-group="built:110">
+					<div class="built-media built-media-tarot">
 						<tarot-carousel>
 							<script type="application/json" data-tarot-options>
 								{
 									"effect": "butterfly",
 									"goToSelectedSlide": true,
+									"initialIndex": 2,
 									"loop": true,
 									"gap": 10,
-									"paddingLeft": "25%",
-									"paddingRight": "25%",
+									"paddingLeft": "22%",
+									"paddingRight": "22%",
 									"slidesPerView": 1,
 									"navigation": {
 										"showButtons": false,
@@ -479,324 +234,1208 @@ import Layout from '../layouts/Layout.astro';
 								}
 							</script>
 							<tarot-viewport>
-								<tarot-slide class="bg-gradient-to-br from-indigo-500 to-purple-500 aspect-[3/4] lg:aspect-[6/7] rounded-lg flex items-center justify-center text-white text-3xl font-bold font-fields">Slide 1</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-pink-500 to-rose-500 aspect-[3/4] lg:aspect-[6/7] rounded-lg flex items-center justify-center text-white text-3xl font-bold font-fields">Slide 2</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-yellow-500 to-orange-500 aspect-[3/4] lg:aspect-[6/7] rounded-lg flex items-center justify-center text-white text-3xl font-bold font-fields">Slide 3</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-teal-500 to-cyan-500 aspect-[3/4] lg:aspect-[6/7] rounded-lg flex items-center justify-center text-white text-3xl font-bold font-fields">Slide 4</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-violet-500 to-fuchsia-500 aspect-[3/4] lg:aspect-[6/7] rounded-lg flex items-center justify-center text-white text-3xl font-bold font-fields">Slide 5</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-lime-500 to-green-500 aspect-[3/4] lg:aspect-[6/7] rounded-lg flex items-center justify-center text-white text-3xl font-bold font-fields">Slide 6</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-red-500 to-pink-500 aspect-[3/4] lg:aspect-[6/7] rounded-lg flex items-center justify-center text-white text-3xl font-bold font-fields">Slide 7</tarot-slide>
-							</tarot-viewport>
-						</tarot-carousel>
-					</div>
-
-					<!-- Peacock Effect -->
-					<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] px-2 py-4 md:p-6 lg:p-10 rounded-xl shadow-lg border border-white/20">
-						<h3 class="text-2xl font-bold text-white mb-8 text-center font-fields">Peacock Effect</h3>
-						<div class="max-w-[700px] mx-auto peacock-carousel">
-							<tarot-carousel>
-								<script type="application/json" data-tarot-options>
-									{
-										"effect": "peacock",
-										"gap": 20,
-										"loop": true,
-										"paddingLeft": "0%",
-										"paddingRight": "0%",
-										"navigation": {
-											"showButtons": false,
-											"showPagination": true,
-											"paginationPosition": "bottom",
-											"buttonsPosition": "bottom"
-										},
-										"breakpoints": {
-											"768": {
-												"paddingLeft": "10%",
-												"paddingRight": "10%"
-											}
-										}
-									}
-								</script>
-								<tarot-viewport>
-									<tarot-slide class="bg-gradient-to-br from-emerald-500 to-teal-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
-										<div class="flex h-full w-full items-center justify-center">
-											<div class="slide-content">Slide 1</div>
-										</div>
-									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-sky-500 to-blue-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
-										<div class="flex h-full w-full items-center justify-center">
-											<div class="slide-content">Slide 2</div>
-										</div>
-									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-amber-500 to-yellow-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
-										<div class="flex h-full w-full items-center justify-center">
-											<div class="slide-content">Slide 3</div>
-										</div>
-									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-rose-500 to-pink-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
-										<div class="flex h-full w-full items-center justify-center">
-											<div class="slide-content">Slide 4</div>
-										</div>
-									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-purple-500 to-indigo-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
-										<div class="flex h-full w-full items-center justify-center">
-											<div class="slide-content">Slide 5</div>
-										</div>
-									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-cyan-500 to-sky-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
-										<div class="flex h-full w-full items-center justify-center">
-											<div class="slide-content">Slide 6</div>
-										</div>
-									</tarot-slide>
-									<tarot-slide class="bg-gradient-to-br from-fuchsia-500 to-purple-500 min-h-[300px] md:min-h-[500px] rounded flex items-center justify-center text-white text-3xl font-bold">
-										<div class="flex h-full w-full items-center justify-center">
-											<div class="slide-content">Slide 7</div>
-										</div>
-									</tarot-slide>
-								</tarot-viewport>
-							</tarot-carousel>
-						</div>
-					</div>
-
-					<!-- Spotlight Effect -->
-					<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] py-4 md:py-6 lg:py-10 rounded-xl shadow-lg border border-white/20">
-						<h3 class="text-2xl font-bold text-white mb-8 text-center font-fields">Spotlight Effect</h3>
-						<tarot-carousel>
-							<script type="application/json" data-tarot-options>
 								{
-									"effect": "spotlight",
-									"gap": 20,
-									"loop": true,
-									"slidesPerView": 1,
-									"slidesPerMove": 1,
-									"paddingLeft": "15%",
-									"paddingRight": "15%",
-									"navigation": {
-										"showButtons": false,
-										"showPagination": true,
-										"paginationPosition": "bottom",
-										"buttonsPosition": "bottom"
-									},
-									"breakpoints": {
-										"768": {
-											"slidesPerView": 2,
-											"slidesPerMove": 2,
-											"paddingLeft": "24.8%",
-											"paddingRight": "24.8%"
-										}
-									}
+									tarotSlides.map((s) => (
+										<tarot-slide class="tarot-mini-slide">
+											<img src={s.img} alt={s.alt} loading="lazy" decoding="async" />
+										</tarot-slide>
+									))
 								}
-							</script>
-							<tarot-viewport>
-								<tarot-slide class="bg-gradient-to-br from-purple-500 to-pink-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 1</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-blue-500 to-cyan-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 2</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-green-500 to-emerald-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 3</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-orange-500 to-red-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 4</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-red-500 to-rose-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 5</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-indigo-500 to-violet-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 6</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-amber-500 to-orange-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 7</div>
-								</tarot-slide>
-								<tarot-slide class="bg-gradient-to-br from-teal-500 to-cyan-500 min-h-[180px] rounded-2xl flex items-center justify-center text-white text-3xl font-bold">
-									<div class="slide-content">Slide 8</div>
-								</tarot-slide>
 							</tarot-viewport>
 						</tarot-carousel>
 					</div>
-				</div>
-			</section>
-
-			<!-- Contact Section -->
-			<section id="contact-section" class="mb-20">
-
-				<div data-section-trigger class="bg-black/15 bg-noise backdrop-blur-[30px] p-8 rounded-xl shadow-lg border border-white/20">
-
-					<h2 class="text-4xl font-bold pt-2 mb-6 md:mb-8 lg:mb-6 text-white text-center drop-shadow-lg font-fields text-balance">
-						Let's Build Something Great
-					</h2>
-					<p class="text-lg mb-8 text-white text-center leading-relaxed text-pretty max-w-[750px] mx-auto">
-						I specialize in building custom, high-end Shopify sites in my Shopify theme with close attention to UI/UX and CRO optimization. If you're looking for a Shopify designer or developer and think I might be a good fit for your project, fill out the form below and I'll get back to you as soon as possible.
+					<h3 class="built-title">Tarot</h3>
+					<p class="built-desc">
+						A carousel with real physics &mdash; springy, scrubbable, and fun to flick. Five effects and
+						counting.
 					</p>
+				</article>
 
-					<!-- Success Message -->
-					<div id="success-message" class="hidden mb-8 bg-green-500/20 border border-green-500/40 backdrop-blur-[30px] p-6 rounded-xl text-white text-center transition-all duration-300">
-						<p class="text-lg font-semibold">Thanks for reaching out! I'll get back to you soon.</p>
+				<!-- TIMELINE ENGINE -->
+				<article class="built-card reveal reveal-fade-up" data-reveal-group="built:110">
+					<div class="built-media">
+						<svg class="ruler" width="220" height="110" viewBox="0 0 220 110" aria-hidden="true">
+							<line x1="10" y1="55" x2="210" y2="55" stroke="var(--rule-soft)" stroke-width="1"></line>
+							<line x1="10" y1="47" x2="10" y2="63" stroke="var(--rule-tick)" stroke-width="1"></line>
+							<line x1="60" y1="49" x2="60" y2="61" stroke="var(--rule-tick)" stroke-width="1"></line>
+							<line x1="110" y1="47" x2="110" y2="63" stroke="var(--rule-tick)" stroke-width="1"></line>
+							<line x1="160" y1="49" x2="160" y2="61" stroke="var(--rule-tick)" stroke-width="1"></line>
+							<line x1="210" y1="47" x2="210" y2="63" stroke="var(--rule-tick)" stroke-width="1"></line>
+							<path d="M60 55 L66 49 L72 55 L66 61 Z" fill="var(--gold)"></path>
+							<path d="M132 55 L138 49 L144 55 L138 61 Z" fill="var(--gold)"></path>
+							<path d="M176 55 L182 49 L188 55 L182 61 Z" fill="var(--gold-soft)"></path>
+							<g class="playhead">
+								<line x1="10" y1="20" x2="10" y2="90" stroke="var(--gold-bright)" stroke-width="2"></line>
+								<circle cx="10" cy="20" r="4" fill="var(--gold-bright)"></circle>
+							</g>
+						</svg>
 					</div>
+					<h3 class="built-title">Timeline Engine</h3>
+					<p class="built-desc">
+						Scrubbable keyframe timelines &mdash; play them with a clock, or drive them with scroll.
+					</p>
+				</article>
 
-					<!-- Error Message -->
-					<div id="error-message" class="hidden mb-8 bg-red-500/20 border border-red-500/40 backdrop-blur-[30px] p-6 rounded-xl text-white text-center transition-all duration-300">
-						<p class="text-lg font-semibold">Oops! Something went wrong. Please try again.</p>
+				<!-- SPLIT TEXT -->
+				<article class="built-card reveal reveal-fade-up" data-reveal-group="built:110">
+					<div class="built-media built-media-rises">
+						<split-text
+							class="rises"
+							split="chars"
+							effect="rise"
+							stagger="90"
+							duration="900"
+							offset="10%">Rises</split-text
+						>
 					</div>
+					<h3 class="built-title">Split Text</h3>
+					<p class="built-desc">
+						Text that rises into place &mdash; by word, character, or line. No dependencies.
+					</p>
+				</article>
+			</div>
 
-					<form id="contact-form" class="space-y-8" action="https://api.web3forms.com/submit" method="POST">
-						<!-- Hidden fields -->
-						<input type="hidden" name="access_key" value="585a106a-78ff-4313-b4c9-459b73515114" />
-						<input type="hidden" name="subject" value="New Business Inquiry from Cory Schulz Portfolio" />
-						<input type="hidden" name="from_name" value="Cory Schulz Portfolio" />
+			<ul class="chips reveal reveal-fade-up">
+				{chips.map((c) => <li class="chip">{c}</li>)}
+			</ul>
 
-						<!-- Honeypot Spam Protection (hidden from humans, visible to bots) -->
-						<input type="checkbox" name="botcheck" class="hidden" style="display: none;" />
-						
-						<!-- Your Info Section -->
-						<div class="space-y-4">
-							<h3 class="text-lg font-semibold text-white mb-4 font-fields">Your Info</h3>
-							<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-								<div class="input-field">
-									<input
-										id="name"
-										name="name"
-										type="text"
-										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-										placeholder="Your name"
-									/>
-									<label for="name" class="floating-label">Name</label>
-								</div>
+			<p class="built-footnote reveal reveal-fade-up">
+				All free and open source at <a
+					href="https://magicspells.io"
+					target="_blank"
+					rel="noopener noreferrer">magicspells.io</a
+				>
+			</p>
+		</section>
 
-								<div class="input-field">
-									<input
-										id="email"
-										name="email"
-										type="email"
-										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-										placeholder="Your email"
-									/>
-									<label for="email" class="floating-label">Email</label>
-								</div>
-							</div>
-						</div>
-
-						<!-- About Your Business Section -->
-						<div class="space-y-4">
-							<h3 class="text-lg font-semibold text-white mb-4 font-fields">About Your Business</h3>
-							<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-								<div class="input-field">
-									<input
-										id="company"
-										name="company"
-										type="text"
-										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-										placeholder="Company name"
-									/>
-									<label for="company" class="floating-label">Company Name</label>
-								</div>
-
-								<div class="input-field">
-									<input
-										id="website"
-										name="website"
-										type="text"
-										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200"
-										placeholder="Your website"
-									/>
-									<label for="website" class="floating-label">Website URL</label>
-								</div>
-							</div>
-						</div>
-
-		
-
-						<!-- Project Details Section -->
-						<div class="space-y-4">
-							<h3 class="text-lg font-semibold text-white mb-4 font-fields">Tell me about your project</h3>
-							<div class="space-y-6">
-								<!-- Budget and Services Row - Side by side on desktop, stacked on mobile -->
-								<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-									<!-- Budget Column -->
-									<div class="relative">
-										<label class="block text-white mb-2 font-fields">Budget</label>
-										<dropdown-select class="w-full">
-											<dropdown-select-trigger class="w-full px-4 py-4 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 cursor-pointer flex justify-between items-center">
-												<span class="dropdown-label">$10,000 - $20,000</span>
-											</dropdown-select-trigger>
-
-											<input type="hidden" class="dropdown-hidden-input" name="budget" value="$10,000 - $20,000" required />
-
-											<dropdown-options class="w-full mt-2 border border-white/20 rounded-lg shadow-xl overflow-hidden">
-												<dropdown-option value="$10,000 - $20,000" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$10,000 - $20,000</dropdown-option>
-												<dropdown-option value="$20,000 - $40,000" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$20,000 - $40,000</dropdown-option>
-												<dropdown-option value="$40,000 - $60,000" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$40,000 - $60,000</dropdown-option>
-												<dropdown-option value="$60,000 - $100,000" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$60,000 - $100,000</dropdown-option>
-												<dropdown-option value="$100,000+" class="px-4 py-3 text-white hover:bg-white/10 cursor-pointer transition-colors duration-200">$100,000+</dropdown-option>
-											</dropdown-options>
-										</dropdown-select>
-									</div>
-
-									<!-- Services Column -->
-									<div class="space-y-4">
-										<h4 class="text-base font-semibold text-white font-fields">What services do you need?</h4>
-										<div class="space-y-3">
-											<label class="flex items-center gap-3 cursor-pointer group">
-												<input
-													type="checkbox"
-													name="services"
-													value="Custom Shopify Theme Development"
-													class="w-5 h-5 bg-black/15 bg-noise border-2 border-white/20 rounded checked:bg-white/20 checked:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 cursor-pointer"
-												/>
-												<span class="text-white group-hover:text-white/80 transition-colors duration-200">Custom Shopify Theme Development</span>
-											</label>
-											<label class="flex items-center gap-3 cursor-pointer group">
-												<input
-													type="checkbox"
-													name="services"
-													value="Shopify Site Design"
-													class="w-5 h-5 bg-black/15 bg-noise border-2 border-white/20 rounded checked:bg-white/20 checked:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 cursor-pointer"
-												/>
-												<span class="text-white group-hover:text-white/80 transition-colors duration-200">Shopify Site Design</span>
-											</label>
-										</div>
-									</div>
-								</div>
-
-								<!-- How did you hear about us -->
-	
-								<div class="input-field">
-									<textarea
-										id="project-description"
-										name="project-description"
-										rows="4"
-										required
-										class="w-full px-4 pt-6 pb-3 bg-black/15 bg-noise border border-white/20 rounded-lg text-white focus:border-white/40 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 resize-none"
-										placeholder="Tell us about your project"
-									></textarea>
-									<label for="project-description" class="floating-label">Message</label>
-								</div>
-							</div>
-						</div>
-						
-						<div class="text-center">
-							<button
-								id="submit-button"
-								type="submit"
-								class="bg-white/10 bg-noise backdrop-blur-[30px] text-white px-8 py-3 rounded-full hover:bg-white/20 transition-all duration-300 shadow-lg hover:shadow-xl font-semibold border border-white/30 focus:outline-none focus:ring-2 focus:ring-white/20 disabled:opacity-50 disabled:cursor-not-allowed uppercase cursor-pointer"
-							>
-								<span id="button-text">Send Message</span>
-							</button>
-						</div>
-					</form>
+		<!-- ============ CONTACT ============ -->
+		<section class="section section-contact" id="contact">
+			<div class="contact-inner">
+				<div class="section-head reveal reveal-fade-up">
+					<img class="portrait" src="/cory.jpg" alt="Cory Schulz" width="76" height="76" loading="lazy" />
+					<h2 class="section-title">Have a Project in Mind?</h2>
+					<p class="contact-sub">
+						Tell me what you&rsquo;re building. If it sounds like a good fit, I&rsquo;ll get back to you as
+						soon as I can.
+					</p>
 				</div>
-			</section>
-		</div>
+
+				<!-- Success Message -->
+				<div id="success-message" class="form-note form-note-ok" hidden>
+					<p>Thanks for reaching out! I&rsquo;ll get back to you soon.</p>
+				</div>
+
+				<!-- Error Message -->
+				<div id="error-message" class="form-note form-note-err" hidden>
+					<p>Oops! Something went wrong. Please try again.</p>
+				</div>
+
+				<form id="contact-form" class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+					<!-- Hidden fields -->
+					<input type="hidden" name="access_key" value="585a106a-78ff-4313-b4c9-459b73515114" />
+					<input type="hidden" name="subject" value="New Business Inquiry from Cory Schulz Portfolio" />
+					<input type="hidden" name="from_name" value="Cory Schulz Portfolio" />
+
+					<!-- Honeypot Spam Protection (hidden from humans, visible to bots) -->
+					<input type="checkbox" name="botcheck" class="botcheck" style="display: none;" />
+
+					<div class="field-grid">
+						<div class="input-field">
+							<input id="name" name="name" type="text" required placeholder="Your name" />
+							<label for="name" class="floating-label">Name</label>
+						</div>
+						<div class="input-field">
+							<input id="email" name="email" type="email" required placeholder="Your email" />
+							<label for="email" class="floating-label">Email</label>
+						</div>
+					</div>
+
+					<div class="field-grid">
+						<div class="input-field">
+							<input id="company" name="company" type="text" required placeholder="Company name" />
+							<label for="company" class="floating-label">Company</label>
+						</div>
+						<div class="input-field">
+							<input id="website" name="website" type="text" required placeholder="Your website" />
+							<label for="website" class="floating-label">Website</label>
+						</div>
+					</div>
+
+					<div class="field-grid">
+						<div class="budget-field">
+							<p class="field-legend">Budget</p>
+							<dropdown-select>
+								<dropdown-select-trigger class="select-trigger">
+									<span class="dropdown-label">$10,000 - $20,000</span>
+									<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+										<path
+											d="M2 4 L6 8 L10 4"
+											stroke="var(--slate-dim)"
+											stroke-width="1.5"
+											stroke-linecap="round"
+											stroke-linejoin="round"></path>
+									</svg>
+								</dropdown-select-trigger>
+
+								<input type="hidden" class="dropdown-hidden-input" name="budget" value="$10,000 - $20,000" required />
+
+								<dropdown-options class="select-options">
+									<dropdown-option value="$10,000 - $20,000" class="select-option">$10,000 - $20,000</dropdown-option>
+									<dropdown-option value="$20,000 - $40,000" class="select-option">$20,000 - $40,000</dropdown-option>
+									<dropdown-option value="$40,000 - $60,000" class="select-option">$40,000 - $60,000</dropdown-option>
+									<dropdown-option value="$60,000 - $100,000" class="select-option">$60,000 - $100,000</dropdown-option>
+									<dropdown-option value="$100,000+" class="select-option">$100,000+</dropdown-option>
+								</dropdown-options>
+							</dropdown-select>
+						</div>
+
+						<fieldset class="services">
+							<legend class="field-legend">What services do you need?</legend>
+							<label class="check">
+								<input type="checkbox" name="services" value="Custom Shopify Theme Development" />
+								<span>Custom Shopify Theme Development</span>
+							</label>
+							<label class="check">
+								<input type="checkbox" name="services" value="Shopify Site Design" />
+								<span>Shopify Site Design</span>
+							</label>
+						</fieldset>
+					</div>
+
+					<div class="input-field">
+						<textarea
+							id="project-description"
+							name="project-description"
+							rows="4"
+							required
+							placeholder="Tell me about your project"></textarea>
+						<label for="project-description" class="floating-label">Tell me about your project</label>
+					</div>
+
+					<div class="form-actions">
+						<button id="submit-button" type="submit" class="pill pill-gold">
+							<span id="button-text">Send Message</span>
+						</button>
+					</div>
+				</form>
+			</div>
+		</section>
 	</main>
+
+	<!-- ============ FOOTER ============ -->
+	<footer class="site-footer">
+		<p>&copy; 2026 Cory Schulz</p>
+		<nav class="footer-links" aria-label="Elsewhere">
+			<a href="mailto:coryschulz@gmail.com">coryschulz@gmail.com</a>
+			<a href="https://www.linkedin.com/in/cory-schulz/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+			<a class="footer-gold" href="https://magicspells.io" target="_blank" rel="noopener noreferrer"
+				>magicspells.io</a
+			>
+		</nav>
+	</footer>
 </Layout>
 
+<style>
+	/* ============================================ */
+	/* Shared primitives                             */
+	/* ============================================ */
+
+	.skip-link {
+		position: absolute;
+		left: -9999px;
+		top: 0;
+		z-index: 100;
+		background: var(--gold);
+		color: var(--ground);
+		padding: 0.75rem 1.25rem;
+		border-radius: 0 0 8px 0;
+		font-weight: 600;
+	}
+	.skip-link:focus {
+		left: 0;
+	}
+
+	.eyebrow {
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.22em;
+		text-transform: uppercase;
+		color: var(--gold);
+	}
+
+	.pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		border-radius: 999px;
+		font-family: var(--font-body);
+		font-size: 0.9375rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		white-space: nowrap;
+		cursor: pointer;
+		transition:
+			background-color 0.25s ease,
+			border-color 0.25s ease,
+			color 0.25s ease,
+			transform 0.25s ease;
+	}
+
+	.pill-gold {
+		background: var(--gold);
+		color: var(--ground);
+		border: 1px solid var(--gold);
+		padding: 1rem 2.125rem;
+	}
+	.pill-gold:hover {
+		background: var(--gold-bright);
+		border-color: var(--gold-bright);
+		color: var(--ground);
+		transform: translateY(-1px);
+	}
+
+	.pill-outline {
+		background: transparent;
+		color: var(--cream);
+		border: 1px solid rgba(251, 248, 238, 0.25);
+		padding: 0.9375rem 1.75rem;
+		font-weight: 500;
+		text-transform: none;
+		letter-spacing: 0.01em;
+	}
+	.pill-outline:hover {
+		border-color: var(--gold);
+		color: var(--cream);
+		transform: translateY(-1px);
+	}
+
+	.section {
+		padding: clamp(3.5rem, 7vw, 5rem) var(--gutter) clamp(4rem, 8vw, 5.625rem);
+		border-top: 1px solid var(--hairline);
+	}
+
+	.section-head {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		gap: 1rem;
+		margin-bottom: clamp(2.5rem, 5vw, 4rem);
+	}
+
+	.section-title {
+		font-size: clamp(2rem, 5.2vw, 3.25rem);
+		color: var(--cream);
+		text-wrap: balance;
+	}
+
+	.section-intro {
+		font-size: clamp(0.9375rem, 1.8vw, 1.0625rem);
+		line-height: 1.6;
+		color: var(--slate-dim);
+		max-width: 560px;
+		text-wrap: pretty;
+	}
+
+	/* ============================================ */
+	/* Hero                                          */
+	/* ============================================ */
+
+	.hero {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+		padding: clamp(5rem, 11vw, 9rem) var(--gutter) clamp(4rem, 8vw, 6.875rem);
+		background: var(--ground-glow);
+	}
+
+	.constellation {
+		position: absolute;
+		top: 1.25rem;
+		left: 50%;
+		transform: translateX(-50%);
+		width: min(1200px, 92%);
+		height: auto;
+		opacity: 0.7;
+		pointer-events: none;
+	}
+
+	.twinkle {
+		animation: twinkle 7s ease-in-out infinite;
+	}
+	.twinkle-b {
+		animation-duration: 9s;
+		animation-delay: -2s;
+	}
+	.twinkle-c {
+		animation-duration: 11s;
+		animation-delay: -5s;
+	}
+	.twinkle-d {
+		animation-duration: 8s;
+		animation-delay: -3.5s;
+	}
+	.twinkle-e {
+		animation-duration: 12s;
+		animation-delay: -1s;
+	}
+
+	@keyframes twinkle {
+		0%,
+		100% {
+			opacity: 0.15;
+		}
+		50% {
+			opacity: 0.85;
+		}
+	}
+
+	.hero-eyebrow {
+		position: relative;
+		font-size: 0.8125rem;
+		margin-bottom: 1.75rem;
+		text-wrap: balance;
+	}
+
+	.hero-eyebrow span {
+		white-space: nowrap;
+	}
+
+	.hero-eyebrow .eyebrow-sep {
+		white-space: pre;
+	}
+
+	@media (max-width: 599px) {
+		.hero-eyebrow {
+			font-size: 0.6875rem;
+			letter-spacing: 0.14em;
+		}
+		/* Break into two balanced lines rather than three ragged ones */
+		.hero-eyebrow span {
+			display: block;
+		}
+		.hero-eyebrow .eyebrow-sep {
+			display: none;
+		}
+	}
+
+	/* The one mixed-case display line on the page. */
+	.hero-name {
+		position: relative;
+		font-size: clamp(3.25rem, 10.5vw, 8rem);
+		color: var(--cream);
+		margin-bottom: 2.25rem;
+		text-transform: none;
+		/* Roomy enough that the descenders on "y" and "z" clear the
+		   split-text char masks while the reveal is still running. */
+		line-height: 1.14;
+		letter-spacing: -0.005em;
+	}
+
+	.hero-name split-text {
+		display: block;
+	}
+
+	@media (max-width: 599px) {
+		.hero-name-part {
+			display: block;
+		}
+	}
+
+	.hero-name :global(.split-text-char) {
+		padding-bottom: 0.04em;
+	}
+
+	.hero-thesis {
+		position: relative;
+		font-size: clamp(1.0625rem, 2.2vw, 1.3125rem);
+		font-weight: 400;
+		line-height: 1.6;
+		color: var(--slate);
+		max-width: 620px;
+		margin-bottom: 1rem;
+		text-wrap: pretty;
+	}
+
+	.hero-sub {
+		position: relative;
+		font-size: 0.9375rem;
+		font-weight: 500;
+		color: var(--slate-dim);
+		margin-bottom: 2.75rem;
+		max-width: 520px;
+		text-wrap: pretty;
+	}
+
+	.hero-actions {
+		position: relative;
+		display: flex;
+		gap: 1.25rem;
+		align-items: center;
+		flex-wrap: wrap;
+		justify-content: center;
+	}
+
+	/* Both CTAs are exactly the same height — the outline pill's 1px border
+	   is absorbed by border-box rather than adding 2px to its height. */
+	.hero-actions .pill {
+		box-sizing: border-box;
+		height: 54px;
+		padding-block: 0;
+		justify-content: center;
+	}
+
+	/* ============================================ */
+	/* Timeline — desktop scrubbed strip             */
+	/* ============================================ */
+
+	.tl-scroll {
+		position: relative;
+	}
+
+	.tl-pin {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.tl-viewport {
+		width: 100%;
+		overflow-x: auto;
+		overflow-y: hidden;
+		scroll-snap-type: x mandatory;
+		scrollbar-width: thin;
+		scrollbar-color: var(--hairline-strong) transparent;
+		padding-bottom: 1rem;
+	}
+
+	.tl-strip {
+		/* One source of truth for the strip's vertical metrics, so the gold
+		   hairline lands on the exact centre of the star nodes. */
+		--tl-media-h: 190px;
+		--tl-stack-gap: 0.75rem;
+		--tl-node-size: 18px;
+		--tl-node-margin: 2px;
+
+		position: relative;
+		display: flex;
+		gap: 3rem;
+		width: max-content;
+		padding-inline: 2px;
+	}
+
+	.tl-rule {
+		position: absolute;
+		/* media + stack gap + node's top margin + half the node = node centre.
+		   translateY(-50%) then centres the rule's own thickness on that line,
+		   so it stays exact whatever the rule's height is. */
+		top: calc(
+			var(--tl-media-h) + var(--tl-stack-gap) + var(--tl-node-margin) + var(--tl-node-size) / 2
+		);
+		transform: translateY(-50%);
+		left: 0;
+		right: 0;
+		height: 1px;
+		background: linear-gradient(
+			90deg,
+			rgba(201, 168, 106, 0) 0%,
+			var(--gold-soft) 6%,
+			var(--gold-soft) 94%,
+			rgba(201, 168, 106, 0) 100%
+		);
+	}
+
+	.tl-stop {
+		position: relative;
+		flex: 0 0 340px;
+		width: 340px;
+		display: flex;
+		flex-direction: column;
+		gap: var(--tl-stack-gap);
+		scroll-snap-align: center;
+	}
+
+	.tl-media {
+		width: 100%;
+		height: var(--tl-media-h);
+		object-fit: cover;
+		border-radius: var(--radius-media);
+		border: 1px solid var(--card-border);
+		background: var(--panel);
+	}
+
+	.tl-media-mark {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-color: rgba(201, 168, 106, 0.4);
+		background: linear-gradient(160deg, #0b1626 0%, var(--ground) 100%);
+		color: var(--gold);
+	}
+
+	.ms-logo {
+		width: 150px;
+		height: auto;
+		display: block;
+	}
+
+	.ms-logo-sm {
+		width: 74px;
+	}
+
+	.tl-node {
+		margin: var(--tl-node-margin) auto;
+		display: block;
+		width: var(--tl-node-size);
+		height: var(--tl-node-size);
+	}
+
+	.tl-text {
+		display: flex;
+		flex-direction: column;
+		gap: 0.3125rem;
+		text-align: center;
+	}
+
+	.tl-year {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: 1.25rem;
+		color: var(--gold);
+	}
+
+	.tl-company {
+		font-family: var(--font-body);
+		font-size: 0.9375rem;
+		font-weight: 600;
+		text-transform: none;
+		letter-spacing: 0;
+		line-height: 1.3;
+		color: var(--cream);
+	}
+
+	.tl-desc {
+		font-size: 0.8125rem;
+		line-height: 1.5;
+		color: var(--slate-dim);
+		text-wrap: pretty;
+	}
+
+	/* Pinned scrub mode — enabled by JS */
+	.tl-scroll.is-scrubbed .tl-pin {
+		position: sticky;
+		top: 0;
+		height: 100vh;
+		height: 100svh;
+		overflow: hidden;
+	}
+
+	.tl-scroll.is-scrubbed .tl-viewport {
+		overflow: hidden;
+		scroll-snap-type: none;
+		padding-bottom: 0;
+	}
+
+	.tl-scroll.is-scrubbed .tl-strip {
+		will-change: transform;
+	}
+
+	/* ============================================ */
+	/* Timeline — mobile ledger rows                 */
+	/* ============================================ */
+
+	.tl-ledger {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		border-top: 1px solid var(--hairline);
+	}
+
+	.tl-row {
+		display: grid;
+		grid-template-columns: auto 1fr 104px;
+		align-items: center;
+		column-gap: 1.125rem;
+		row-gap: 0.75rem;
+		padding: 1.375rem 0;
+		border-bottom: 1px solid var(--hairline);
+	}
+
+	.tl-row-year {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: clamp(2.75rem, 12vw, 3.375rem);
+		line-height: 0.9;
+		color: var(--gold);
+		font-variant-numeric: lining-nums;
+	}
+
+	.tl-row-body {
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.tl-row-company {
+		font-family: var(--font-body);
+		font-size: 1rem;
+		font-weight: 600;
+		text-transform: none;
+		letter-spacing: 0;
+		line-height: 1.3;
+		color: var(--cream);
+	}
+
+	.tl-row-desc {
+		font-size: 0.8125rem;
+		line-height: 1.5;
+		color: var(--slate-dim);
+		text-wrap: pretty;
+	}
+
+	.tl-row-thumb {
+		width: 104px;
+		height: 66px;
+		object-fit: cover;
+		border-radius: 6px;
+		border: 1px solid var(--card-border);
+		background: var(--panel);
+	}
+
+	/* At the narrowest sizes the thumb drops below the text instead of shrinking */
+	@media (max-width: 419px) {
+		.tl-row {
+			grid-template-columns: auto 1fr;
+		}
+		.tl-row-thumb {
+			grid-column: 2;
+			width: 100%;
+			height: 96px;
+		}
+	}
+
+	/* Below 768px the horizontal strip is replaced by the ledger rows. */
+	.tl-viewport {
+		display: none;
+	}
+
+	@media (min-width: 768px) {
+		.tl-viewport {
+			display: block;
+		}
+		.tl-ledger {
+			display: none;
+		}
+		.section-timeline {
+			padding-bottom: clamp(2rem, 4vw, 3rem);
+		}
+	}
+
+	/* ============================================ */
+	/* Things I've built                             */
+	/* ============================================ */
+
+	.built-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	@media (min-width: 700px) {
+		.built-grid {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+
+	.built-card {
+		border: 1px solid var(--card-border);
+		border-radius: var(--radius-card);
+		padding: 2.25rem 2rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1.125rem;
+		background: var(--card-bg);
+	}
+
+	.built-media {
+		height: 200px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+	}
+
+	/* Full-bleed to the card edges so the butterfly effect's neighbouring
+	   slides are visible instead of being clipped by the card padding. */
+	.built-media-tarot {
+		display: block;
+		margin-inline: -2rem;
+	}
+
+	.built-title {
+		font-size: 1.625rem;
+		color: var(--cream);
+	}
+
+	.built-desc {
+		font-size: 0.9375rem;
+		line-height: 1.6;
+		color: var(--slate-dim);
+		text-wrap: pretty;
+	}
+
+	/* Tarot mini carousel */
+	.built-media-tarot tarot-slide.tarot-mini-slide {
+		display: block;
+		aspect-ratio: 4 / 3;
+		border-radius: var(--radius-media);
+		overflow: hidden;
+		border: 1px solid var(--card-border);
+		background: var(--panel);
+	}
+
+	.built-media-tarot tarot-slide.tarot-mini-slide img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	/* Timeline-engine ruler playhead */
+	.playhead {
+		animation: sweep 6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+	}
+
+	@keyframes sweep {
+		0% {
+			transform: translateX(0);
+		}
+		45% {
+			transform: translateX(200px);
+		}
+		55% {
+			transform: translateX(200px);
+		}
+		100% {
+			transform: translateX(0);
+		}
+	}
+
+	/* Split-text "RISES" */
+	.built-media-rises {
+		align-items: flex-end;
+		padding-bottom: 1.5rem;
+	}
+
+	.rises {
+		font-family: var(--font-display);
+		font-weight: 800;
+		font-size: 2.75rem;
+		line-height: 1;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--cream);
+		--split-text-distance: 100%;
+	}
+
+	/* Chips */
+	.chips {
+		display: flex;
+		justify-content: center;
+		gap: 0.75rem;
+		flex-wrap: wrap;
+		list-style: none;
+		margin: 0 0 1.75rem;
+		padding: 0;
+	}
+
+	.chip {
+		font-size: 0.8125rem;
+		font-weight: 500;
+		color: var(--slate);
+		border: 1px solid rgba(251, 248, 238, 0.15);
+		padding: 0.5625rem 1.125rem;
+		border-radius: 999px;
+	}
+
+	.built-footnote {
+		text-align: center;
+		font-size: 0.875rem;
+		color: var(--slate-dim);
+	}
+
+	.built-footnote a {
+		font-weight: 600;
+	}
+
+	/* ============================================ */
+	/* Contact                                       */
+	/* ============================================ */
+
+	.contact-inner {
+		max-width: 720px;
+		margin: 0 auto;
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
+	}
+
+	.portrait {
+		width: 76px;
+		height: 76px;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 2px solid rgba(201, 168, 106, 0.6);
+	}
+
+	.contact-sub {
+		font-size: 1.0625rem;
+		line-height: 1.6;
+		color: var(--slate-dim);
+		max-width: 520px;
+		text-wrap: pretty;
+	}
+
+	.contact-form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.field-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.25rem;
+	}
+
+	@media (min-width: 640px) {
+		.field-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	.contact-form :global(input[type='text']),
+	.contact-form :global(input[type='email']),
+	.contact-form :global(textarea) {
+		width: 100%;
+		background: transparent;
+		border: 1px solid var(--hairline-strong);
+		border-radius: var(--radius-input);
+		padding: 1.5rem 1.25rem 0.75rem;
+		font-family: var(--font-body);
+		font-size: 0.9375rem;
+		color: var(--cream);
+		transition:
+			border-color 0.2s ease,
+			box-shadow 0.2s ease;
+	}
+
+	.contact-form :global(textarea) {
+		min-height: 120px;
+		resize: vertical;
+		display: block;
+	}
+
+	.contact-form :global(input[type='text']):focus,
+	.contact-form :global(input[type='email']):focus,
+	.contact-form :global(textarea):focus {
+		outline: none;
+		border-color: var(--gold);
+		box-shadow: 0 0 0 3px rgba(201, 168, 106, 0.18);
+	}
+
+	.field-legend {
+		font-size: 0.6875rem;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--slate-dim);
+		margin-bottom: 0.625rem;
+		padding: 0;
+	}
+
+	.budget-field :global(dropdown-select-trigger.select-trigger) {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 0.5rem;
+		width: 100%;
+		padding: 1.125rem 1.25rem;
+		background: transparent;
+		border: 1px solid var(--hairline-strong);
+		border-radius: var(--radius-input);
+		color: var(--cream);
+		font-size: 0.9375rem;
+		cursor: pointer;
+		transition: border-color 0.2s ease;
+	}
+
+	.budget-field :global(dropdown-select-trigger.select-trigger:hover) {
+		border-color: var(--gold-soft);
+	}
+
+	.budget-field :global(dropdown-options.select-options) {
+		width: 100%;
+		margin-top: 0.5rem;
+		border-radius: var(--radius-input);
+		overflow: hidden;
+	}
+
+	.budget-field :global(dropdown-option.select-option) {
+		display: block;
+		padding: 0.8125rem 1.25rem;
+		font-size: 0.9375rem;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+	}
+
+	.services {
+		border: 0;
+		margin: 0;
+		padding: 0;
+		min-width: 0;
+	}
+
+	.check {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		cursor: pointer;
+		font-size: 0.875rem;
+		color: var(--slate);
+		padding: 0.3125rem 0;
+		transition: color 0.2s ease;
+	}
+	.check:hover {
+		color: var(--cream);
+	}
+
+	.check input[type='checkbox'] {
+		appearance: none;
+		flex: 0 0 auto;
+		width: 18px;
+		height: 18px;
+		border: 1px solid var(--hairline-strong);
+		border-radius: 4px;
+		background: transparent;
+		cursor: pointer;
+		display: grid;
+		place-content: center;
+		transition:
+			border-color 0.2s ease,
+			background-color 0.2s ease;
+	}
+
+	.check input[type='checkbox']::after {
+		content: '';
+		width: 9px;
+		height: 9px;
+		border-radius: 1px;
+		transform: scale(0);
+		transition: transform 0.15s ease;
+		background: var(--ground);
+	}
+
+	.check input[type='checkbox']:checked {
+		background: var(--gold);
+		border-color: var(--gold);
+	}
+
+	.check input[type='checkbox']:checked::after {
+		transform: scale(1);
+	}
+
+	.form-actions {
+		display: flex;
+		justify-content: center;
+		margin-top: 0.5rem;
+	}
+
+	#submit-button {
+		font-family: var(--font-body);
+		padding: 1rem 2.5rem;
+	}
+
+	#submit-button:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	.form-note {
+		border-radius: var(--radius-input);
+		padding: 1.125rem 1.25rem;
+		text-align: center;
+		font-size: 0.9375rem;
+		font-weight: 500;
+	}
+
+	.form-note-ok {
+		border: 1px solid var(--ok-border);
+		background: var(--ok-bg);
+		color: var(--cream);
+	}
+
+	.form-note-err {
+		border: 1px solid var(--err-border);
+		background: var(--err-bg);
+		color: var(--cream);
+	}
+
+	/* ============================================ */
+	/* Footer                                        */
+	/* ============================================ */
+
+	.site-footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1rem;
+		flex-wrap: wrap;
+		padding: 1.75rem var(--gutter);
+		border-top: 1px solid var(--hairline);
+		font-size: 0.8125rem;
+		color: var(--slate-dim);
+	}
+
+	.footer-links {
+		display: flex;
+		gap: clamp(1rem, 3vw, 1.75rem);
+		flex-wrap: wrap;
+	}
+
+	.footer-links a {
+		color: var(--slate);
+	}
+	.footer-links a:hover {
+		color: var(--cream);
+	}
+	.footer-links a.footer-gold {
+		color: var(--gold);
+	}
+	.footer-links a.footer-gold:hover {
+		color: var(--gold-bright);
+	}
+
+	/* ============================================ */
+	/* Reduced motion                                */
+	/* ============================================ */
+
+	@media (prefers-reduced-motion: reduce) {
+		.twinkle,
+		.playhead {
+			animation: none;
+		}
+		.pill:hover {
+			transform: none;
+		}
+		.tl-scroll .tl-pin {
+			position: static;
+			height: auto;
+			overflow: visible;
+		}
+		.tl-scroll .tl-viewport {
+			overflow-x: auto;
+		}
+	}
+</style>
+
 <script>
-	import '../scripts/bg-animation.js';
 	import '@magic-spells/dropdown-select';
+	import '@magic-spells/split-text';
+	import Reveal from '@magic-spells/reveal';
+	import { timeline, scrollDriver } from '@magic-spells/timeline-engine';
+
+	const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+	// ---- Scroll reveals ------------------------------------------------------
+	Reveal.init({ offset: 100, once: true });
+
+	// ---- Timeline: scroll-scrubbed horizontal strip (desktop only) ----------
+	const scrollEl = document.getElementById('tl-scroll') as HTMLElement | null;
+	const stripEl = document.getElementById('tl-strip') as HTMLElement | null;
+	const viewportEl = document.getElementById('tl-viewport') as HTMLElement | null;
+
+	const desktop = window.matchMedia('(min-width: 768px)');
+
+	let scrub: { destroy: () => void } | null = null;
+
+	function buildScrub() {
+		if (!scrollEl || !stripEl || !viewportEl) return;
+		if (!desktop.matches || reduced.matches) return;
+
+		// Pin first, then measure the real travel distance.
+		scrollEl.classList.add('is-scrubbed');
+		const travel = Math.round(stripEl.scrollWidth - viewportEl.clientWidth);
+
+		if (travel <= 0) {
+			scrollEl.classList.remove('is-scrubbed');
+			return;
+		}
+
+		// 1:1 scroll feel — the pinned viewport plus exactly the horizontal travel.
+		scrollEl.style.height = `${window.innerHeight + travel}px`;
+
+		const tl = timeline();
+		tl.tween(
+			'#tl-strip',
+			{
+				0: { transform: 'translateX(0px)' },
+				100: { transform: `translateX(${-travel}px)` },
+			},
+			{ duration: 1000, easing: 'linear' }
+		);
+
+		const driver = scrollDriver(tl, {
+			trigger: '#tl-scroll',
+			start: 'top top',
+			end: 'bottom bottom',
+			smoothing: 90,
+		});
+
+		scrub = {
+			destroy() {
+				driver.destroy();
+				tl.destroy();
+				scrollEl.classList.remove('is-scrubbed');
+				scrollEl.style.height = '';
+				stripEl.style.transform = '';
+			},
+		};
+	}
+
+	function teardownScrub() {
+		if (scrub) {
+			scrub.destroy();
+			scrub = null;
+		}
+	}
+
+	function rebuildScrub() {
+		teardownScrub();
+		buildScrub();
+	}
+
+	buildScrub();
+
+	// Only re-measure when the width actually changes. Height-only resizes
+	// (mobile URL bars, devtools) would otherwise collapse the pinned region
+	// and yank the reader's scroll position mid-scrub.
+	let lastWidth = window.innerWidth;
+	let resizeTimer: number | undefined;
+	window.addEventListener('resize', () => {
+		if (window.innerWidth === lastWidth) return;
+		lastWidth = window.innerWidth;
+		window.clearTimeout(resizeTimer);
+		resizeTimer = window.setTimeout(rebuildScrub, 200);
+	});
+
+	desktop.addEventListener('change', rebuildScrub);
+	reduced.addEventListener('change', rebuildScrub);
 </script>
 
 <script is:inline>
@@ -815,8 +1454,8 @@ import Layout from '../layouts/Layout.astro';
 		buttonText.textContent = 'Sending...';
 
 		// Hide any previous messages
-		successMessage.classList.add('hidden');
-		errorMessage.classList.add('hidden');
+		successMessage.hidden = true;
+		errorMessage.hidden = true;
 
 		// Get form data
 		const formData = new FormData(form);
@@ -825,14 +1464,14 @@ import Layout from '../layouts/Layout.astro';
 			// Submit to Web3Forms
 			const response = await fetch('https://api.web3forms.com/submit', {
 				method: 'POST',
-				body: formData
+				body: formData,
 			});
 
 			const data = await response.json();
 
 			if (data.success) {
 				// Show success message
-				successMessage.classList.remove('hidden');
+				successMessage.hidden = false;
 
 				// Reset form
 				form.reset();
@@ -843,14 +1482,14 @@ import Layout from '../layouts/Layout.astro';
 
 				// Hide success message after 5 seconds
 				setTimeout(() => {
-					successMessage.classList.add('hidden');
+					successMessage.hidden = true;
 				}, 5000);
 			} else {
 				throw new Error('Form submission failed');
 			}
 		} catch (error) {
 			// Show error message
-			errorMessage.classList.remove('hidden');
+			errorMessage.hidden = false;
 
 			// Reset button
 			buttonText.textContent = 'Send Message';
@@ -858,7 +1497,7 @@ import Layout from '../layouts/Layout.astro';
 
 			// Hide error message after 5 seconds
 			setTimeout(() => {
-				errorMessage.classList.add('hidden');
+				errorMessage.hidden = true;
 			}, 5000);
 
 			console.error('Form submission error:', error);
@@ -866,50 +1505,12 @@ import Layout from '../layouts/Layout.astro';
 	});
 
 	// Smooth scroll to contact form
-	const scrollButton = document.getElementById('scroll-to-contact');
-	const contactSection = document.getElementById('contact-section');
-
-	if (scrollButton && contactSection) {
-		scrollButton.addEventListener('click', () => {
+	const contactSection = document.getElementById('contact');
+	document.querySelectorAll('[data-scroll-to-contact]').forEach((el) => {
+		el.addEventListener('click', (e) => {
+			if (!contactSection) return;
+			e.preventDefault();
 			contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 		});
-	}
-</script>
-
-<script>
-	import ScrollTrigger from '@magic-spells/scroll-trigger';
-
-	// Initialize ScrollTrigger for fade-up animations
-	const trigger = new ScrollTrigger({
-		sections: "[data-section-trigger]",
-		offset: "10%",
-		threshold: 0,
-		throttle: 50,
-		behavior: "smooth",
-		onIndexChange: ({ currentElement, previousElement }) => {
-			// Add visible class to current element
-			if (currentElement) {
-				currentElement.classList.add('visible');
-			}
-		},
 	});
-
-	// On page load, check which sections are already visible
-	// This ensures that sections above the fold are shown immediately
-	const sections = document.querySelectorAll('[data-section-trigger]');
-	const observer = new IntersectionObserver(
-		(entries) => {
-			entries.forEach((entry) => {
-				if (entry.isIntersecting) {
-					entry.target.classList.add('visible');
-				}
-			});
-		},
-		{
-			threshold: 0,
-			rootMargin: '0px 0px -10% 0px'
-		}
-	);
-
-	sections.forEach((section) => observer.observe(section));
 </script>
