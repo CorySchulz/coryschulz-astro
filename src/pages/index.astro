@@ -151,10 +151,18 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 // time — path data only, painted with currentColor, so a mixed set still reads
 // as one monochrome system and the page ships no runtime icon fetch.
 // simple-icons has no mark for OpenAI, Klaviyo or Yotpo (it carries
-// "OpenAI Gym", which is a different brand), so those three render as text
-// tiles rather than a brand mark drawn by hand.
+// "OpenAI Gym", which is a different brand), so those render as text tiles.
 const toolIcons = si as Record<string, { path: string } | undefined>;
 const iconPath = (slug: string) => toolIcons['si' + slug[0].toUpperCase() + slug.slice(1)]?.path;
+
+// The Klaviyo flame is not in any icon set as a vector, so this one is
+// constructed: a rounded rhombus with two arc bands cut out, every arc
+// centered on the bottom vertex (radii 80/145/250/325 on a 690x445 rhombus,
+// scaled to 24x24). Generator lives in the session scratchpad (klaviyo_mark.py).
+const localMarks: Record<string, string | undefined> = {
+	Klaviyo:
+		'M2.506 13.602L1.585 13.007A1.217 1.217 0 0 1 1.587 10.961L9.741 5.714A4.174 4.174 0 0 1 14.259 5.714L22.413 10.961A1.217 1.217 0 0 1 22.415 13.007L21.494 13.602A11.304 11.304 0 0 0 2.506 13.602ZM4.697 15.019A8.696 8.696 0 0 1 19.303 15.019L16.236 17.001A5.043 5.043 0 0 0 7.764 17.001ZM9.663 18.229A2.783 2.783 0 0 1 14.337 18.229L12.529 19.398A0.974 0.974 0 0 1 11.471 19.398Z',
+};
 
 const tools = [
 	{ name: 'JavaScript', slug: 'javascript' },
@@ -179,7 +187,7 @@ const tools = [
 	{ name: 'Rollup', slug: 'rollupdotjs' },
 	{ name: 'Ghostty', slug: 'ghostty' },
 	{ name: 'Sublime Text', slug: 'sublimetext' },
-].map((tool) => ({ ...tool, path: tool.slug ? iconPath(tool.slug) : undefined }));
+].map((tool) => ({ ...tool, path: tool.slug ? iconPath(tool.slug) : localMarks[tool.name] }));
 
 // Two counter-scrolling rows at slightly different speeds, so they never lock
 // into step with each other.
