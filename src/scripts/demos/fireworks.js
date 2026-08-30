@@ -302,10 +302,14 @@ const matches = (query) =>
  * Build the whole demo inside `root` and wire it to a live timeline.
  *
  * @param {HTMLElement} root an empty element; every node below is created here
- * @returns {{ destroy: () => void }}
+ * @returns {{ destroy: () => void, pause: () => void, resume: () => void }}
  */
 export default function initFireworks(root) {
-	if (!root || typeof document === 'undefined') return { destroy() {} };
+	if (!root || typeof document === 'undefined') return { destroy() {}, pause() {}, resume() {} };
+
+	// A second init would build a second sky inside the same root and run a
+	// second timeline over it — hand back the live one instead.
+	if (root.__fireworksDemo) return root.__fireworksDemo;
 
 	root.classList.add('fw-demo');
 
@@ -318,6 +322,12 @@ export default function initFireworks(root) {
 	let hoverScrub = false;
 	let trigger = null;
 	let posterShown = false;
+	// Set while the host has the demo suspended (panel off screen, or hidden
+	// tab). `resumeOnReturn` remembers whether it was actually playing, so a
+	// paused-by-choice or reduced-motion poster doesn't spring to life on the
+	// way back.
+	let hostPaused = false;
+	let resumeOnReturn = false;
 
 	const listeners = [];
 	const on = (target, type, handler, opts) => {
@@ -676,6 +686,29 @@ export default function initFireworks(root) {
 		}
 	}
 
+	// The host owns "is this panel worth animating right now" — the timeline
+	// loops forever, so nothing else would ever stop it in a background tab, and
+	// under reduced motion the viewTrigger below is gone entirely. Both calls
+	// are idempotent because the host re-syncs on every scroll and visibility
+	// change.
+	function hostPause() {
+		if (dead || hostPaused) return;
+		hostPaused = true;
+		resumeOnReturn = !!tl.playing;
+		if (tl.playing) {
+			tl.pause();
+			syncToggle();
+		}
+	}
+
+	function hostResume() {
+		if (dead || !hostPaused) return;
+		hostPaused = false;
+		const wasPlaying = resumeOnReturn;
+		resumeOnReturn = false;
+		if (wasPlaying && !userPaused) play();
+	}
+
 	function seekTo(ms) {
 		if (dead) return;
 		tl.seek(Math.min(duration, Math.max(0, ms)), { silent: true });
@@ -753,12 +786,20 @@ export default function initFireworks(root) {
 	// --- the track --------------------------------------------------------
 	on(scrub, 'pointerdown', (event) => {
 		pauseForSeek();
-		dragging = true;
+		// Capture is what guarantees the matching pointerup — and with it
+		// lostpointercapture / pointercancel — comes back to this element even
+		// when the pointer ends up outside the panel. Without it a drag started
+		// here could never be told it had finished, leaving `dragging` latched
+		// on forever and the loop-wrap reseat() permanently suppressed. So a
+		// failed capture means no drag state at all: this pointerdown is just
+		// the one seek below.
 		try {
 			scrub.setPointerCapture(event.pointerId);
 			pointerId = event.pointerId;
+			dragging = true;
 		} catch (err) {
-			/* capture is an optimisation; the drag still works without it */
+			pointerId = null;
+			dragging = false;
 		}
 		scrub.focus({ preventScroll: true });
 		// Stops the drag turning into a text selection or an image drag.
@@ -815,8 +856,9 @@ export default function initFireworks(root) {
 	// ------------------------------------------------- motion preference
 	// Reduced motion never autoplays and never hover-scrubs; it paints one
 	// frame worth looking at and leaves Play and the track live for anyone who
-	// opts in. The query is watched, so flipping the OS setting takes effect
-	// without a reload.
+	// opts in. Play stays honest because the host's off-screen / hidden-tab
+	// pause applies whether or not the viewTrigger exists. The query is watched,
+	// so flipping the OS setting takes effect without a reload.
 	const reduceQuery =
 		typeof window !== 'undefined' && typeof window.matchMedia === 'function'
 			? window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -852,7 +894,11 @@ export default function initFireworks(root) {
 		// frame. Off-screen the loop pauses itself — an infinite timeline has no
 		// natural end to stop at.
 		if (initial) tl.seek(0, { silent: true });
-		if (!trigger) {
+		// viewTrigger throws outright without IntersectionObserver. On that path
+		// the demo simply mounts paused on its first frame — Play and the track
+		// still work, and the host's visibility pause still applies — rather
+		// than the whole mount blowing up.
+		if (!trigger && typeof IntersectionObserver === 'function') {
 			trigger = viewTrigger(root, {
 				enter: () => {
 					if (!userPaused) play();
@@ -884,10 +930,13 @@ export default function initFireworks(root) {
 	syncToggle();
 
 	// ------------------------------------------------------------ teardown
-	return {
+	const handle = {
+		pause: hostPause,
+		resume: hostResume,
 		destroy() {
 			if (dead) return;
 			dead = true;
+			if (root.__fireworksDemo === handle) delete root.__fireworksDemo;
 			releasePointer();
 
 			if (trigger) trigger.destroy();
@@ -914,4 +963,7 @@ export default function initFireworks(root) {
 			while (root.firstChild) root.removeChild(root.firstChild);
 		},
 	};
+
+	root.__fireworksDemo = handle;
+	return handle;
 }

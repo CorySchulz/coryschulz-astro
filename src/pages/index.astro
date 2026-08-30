@@ -1244,10 +1244,18 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 	   The mount point drops this card's padding so the demo owns its chrome. */
 
 	.proj-demo-bare {
+		display: block;
+	}
+
+	/* ...but only until the demo is actually there. initFireworks() adds
+	   `.fw-demo`, which paints the panel itself (padding, border, background);
+	   this rule is scoped so it hands that job over rather than fighting
+	   fireworks.css on specificity and winning — which stripped the demo's
+	   chrome entirely. Before the lazy mount lands the empty box stays bare. */
+	.proj-demo-bare:not(.fw-demo) {
 		padding: 0;
 		border: 0;
 		background: none;
-		display: block;
 	}
 
 	/* Split text — the replayable lab */
@@ -1858,11 +1866,52 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 
 	// ---- Ported demos: fireworks (timeline-engine) and the constellation field
 	// Both are heavy and only matter once they are near the viewport, so they
-	// are code-split and mounted lazily.
-	const mountWhenNear = (el: Element | null, load: () => Promise<() => void>) => {
+	// are code-split and mounted lazily. Both also run open-ended loops — a
+	// self-rescheduling rAF and a `loop: true` timeline — that would otherwise
+	// keep burning frames long after the panel has scrolled away, so the handle
+	// each one returns is kept and driven from here: a second, permanent
+	// observer for "is it on screen", plus the document's visibility for "is
+	// anyone even looking at this tab".
+	type DemoHandle = { destroy: () => void; pause?: () => void; resume?: () => void };
+
+	const mountWhenNear = (el: Element | null, load: () => Promise<DemoHandle>) => {
 		if (!el) return;
+
+		let handle: DemoHandle | null = null;
+		let onScreen = true;
+
+		const sync = () => {
+			if (!handle) return;
+			if (onScreen && document.visibilityState !== 'hidden') handle.resume?.();
+			else handle.pause?.();
+		};
+
+		document.addEventListener('visibilitychange', sync);
+
+		const mount = () =>
+			load()
+				.then((demo) => {
+					handle = demo;
+					if (typeof IntersectionObserver === 'undefined') return;
+					// Distinct from the loader observer above, which disconnects
+					// after firing once: this one stays for the life of the page.
+					const live = new IntersectionObserver(
+						(entries) => {
+							for (const entry of entries) onScreen = entry.isIntersecting;
+							sync();
+						},
+						{ rootMargin: '100px' }
+					);
+					live.observe(el);
+				})
+				.catch((err) => {
+					// A demo that refuses to load is a missing flourish, not a
+					// broken page — say so in the console and leave the rest alone.
+					console.error('demo failed to mount', err);
+				});
+
 		if (typeof IntersectionObserver === 'undefined') {
-			load().then((run) => run());
+			mount();
 			return;
 		}
 		const io = new IntersectionObserver(
@@ -1870,7 +1919,7 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 				for (const entry of entries) {
 					if (!entry.isIntersecting) continue;
 					io.disconnect();
-					load().then((run) => run());
+					mount();
 					break;
 				}
 			},
@@ -1882,7 +1931,7 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 	const fireworksMount = document.getElementById('fireworks-mount');
 	mountWhenNear(fireworksMount, async () => {
 		const { default: initFireworks } = await import('../scripts/demos/fireworks.js');
-		return () => initFireworks(fireworksMount);
+		return initFireworks(fireworksMount as HTMLElement);
 	});
 
 	const cfCanvas = document.getElementById('cf-canvas');
@@ -1890,7 +1939,7 @@ const STAR = 'M9 1 L10.8 7.2 L17 9 L10.8 10.8 L9 17 L7.2 10.8 L1 9 L7.2 7.2 Z';
 		const { default: initConstellationField } = await import(
 			'../scripts/demos/constellation-field.js'
 		);
-		return () => initConstellationField(cfCanvas);
+		return initConstellationField(cfCanvas as HTMLCanvasElement);
 	});
 </script>
 

@@ -77,6 +77,10 @@ const POINTER_PULL = 30; // px/s²
 const RIPPLE_MS = 900;
 const RIPPLE_R = 190;
 const RIPPLE_BAND = 60; // px either side of the ring that brightens links
+// Every live ripple costs one hypot per link candidate inside the O(n²) link
+// loop, so rapid clicking must not be allowed to stack them up. Three reads as
+// "the field is responding" and is cheap; the oldest is dropped past that.
+const MAX_RIPPLES = 3;
 
 // --- SIZE ADAPTATION -------------------------------------------------------
 // Reference stage the constants above were tuned against.
@@ -243,11 +247,15 @@ const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
 
 /**
  * @param {HTMLCanvasElement} canvas
- * @returns {{ destroy: () => void }}
+ * @returns {{ destroy: () => void, pause: () => void, resume: () => void }}
  */
 export default function initConstellationField(canvas) {
 	const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
-	if (!ctx) return { destroy() {} };
+	if (!ctx) return { destroy() {}, pause() {}, resume() {} };
+
+	// A second init on the same canvas would leave two rAF loops painting the
+	// same context — hand back the live one instead.
+	if (canvas.__constellationField) return canvas.__constellationField;
 
 	const stage = canvas.parentElement || canvas;
 	const motionQuery =
@@ -753,6 +761,7 @@ export default function initConstellationField(canvas) {
 		pointer.y = p.y;
 		pointer.age = 0;
 		pointer.on = true;
+		if (ripples.length >= MAX_RIPPLES) ripples.shift(); // drop the oldest
 		ripples.push({ x: p.x, y: p.y, t: 0, r: 0 });
 	};
 	canvas.addEventListener('pointermove', onMove);
@@ -823,10 +832,24 @@ export default function initConstellationField(canvas) {
 
 	start();
 
-	return {
+	const handle = {
+		// The host pauses the loop whenever this panel is off screen or the tab
+		// is in the background — rAF alone reschedules itself forever.
+		pause() {
+			stop();
+		},
+		resume() {
+			if (destroyed || reduceMotion || rafId) return;
+			// Pick the clock back up here rather than through start(): the
+			// twinkle clock and the next-event countdown carry on where they
+			// were, so returning to the panel doesn't reset the show.
+			last = performance.now();
+			rafId = requestAnimationFrame(frame);
+		},
 		destroy() {
 			if (destroyed) return;
 			destroyed = true;
+			if (canvas.__constellationField === handle) delete canvas.__constellationField;
 			if (observer) observer.disconnect();
 			stop();
 			clearTimeout(resizeTimeout);
@@ -843,4 +866,7 @@ export default function initConstellationField(canvas) {
 			ripples = [];
 		},
 	};
+
+	canvas.__constellationField = handle;
+	return handle;
 }
