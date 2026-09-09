@@ -50,6 +50,8 @@
 	--color-hairline: rgba(251, 248, 238, 0.08);
 	--color-hairline-strong: rgba(251, 248, 238, 0.18);
 	--color-card-border: rgba(251, 248, 238, 0.12);
+	--color-field-bg: rgba(251, 248, 238, 0.04);
+	--color-field-bg-focus: rgba(251, 248, 238, 0.06);
 	--color-rule-soft: rgba(251, 248, 238, 0.25);
 	--color-rule-tick: rgba(251, 248, 238, 0.35);
 
@@ -101,6 +103,8 @@
 	--hairline: rgba(251, 248, 238, 0.08);
 	--hairline-strong: rgba(251, 248, 238, 0.18);
 	--card-border: rgba(251, 248, 238, 0.12);
+	--field-bg: rgba(251, 248, 238, 0.04);
+	--field-bg-focus: rgba(251, 248, 238, 0.06);
 	--rule-soft: rgba(251, 248, 238, 0.25);
 	--rule-tick: rgba(251, 248, 238, 0.35);
 

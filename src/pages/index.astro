@@ -345,11 +345,11 @@ const morphCards = [
 						duration="1100"
 						stagger="48"
 						delay="420"
-						>I love to design beautiful experiences and build tools that help other people create more
+						>Design beautiful experiences and build tools that help other people create more
 						amazing things.</split-text
 					>
 				</p>
-				<!-- Both pills are `relative` so scripts/effects/spark-burst.js can hang
+				<!-- All three pills are `relative` so scripts/effects/spark-burst.js can hang
 				     its dots off their edges. -->
 				<div class="hero-actions relative flex flex-wrap items-center justify-center gap-[1.25rem]">
 					<a class="pill pill-gold relative" href="#contact" data-scroll-to-contact>Send a Message</a>
@@ -359,6 +359,21 @@ const morphCards = [
 						target="_blank"
 						rel="noopener noreferrer">
 						LinkedIn
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+							<path
+								d="M7 17 L17 7 M9 7 L17 7 L17 15"
+								stroke="var(--gold)"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"></path>
+						</svg>
+					</a>
+					<a
+						class="pill pill-outline relative"
+						href="https://github.com/CorySchulz"
+						target="_blank"
+						rel="noopener noreferrer">
+						GitHub
 						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
 							<path
 								d="M7 17 L17 7 M9 7 L17 7 L17 15"
@@ -716,7 +731,7 @@ const morphCards = [
 									>Puzzle</split-text
 								>
 							</h3>
-							<p class="fs-subheading font-semibold text-cream text-balance">A complete web app framework that&rsquo;s simpler and faster to use than React, Vue, and Svelte.</p>
+							<p class="fs-subheading font-semibold text-cream text-balance">A complete web app framework that&rsquo;s simpler and faster to use.</p>
 							<p class="proj-desc fs-body-md text-slate-dim text-pretty max-w-[46ch]">
 								A front-end web app framework: single-file <code>.pzl</code> components, reactive data,
 								and a Go + esbuild compiler.
@@ -1166,7 +1181,7 @@ const morphCards = [
 								>Have a project in mind?</split-text
 							>
 						</h2>
-						<p class="fs-body-lg text-slate-dim text-pretty max-w-[520px]">
+						<p class="fs-subheading text-slate text-pretty max-w-[560px]">
 							Tell me what you&rsquo;re building. If it sounds like a good fit, I&rsquo;ll get back to you as
 							soon as I can.
 						</p>
@@ -1281,6 +1296,14 @@ const morphCards = [
 
 	<!-- ============ FOOTER ============ -->
 	<footer class="site-footer py-8 fs-body-sm">
+		<!-- Stage lights for the contact form. The layer sits in the footer so the
+		     beams pivot on the page's bottom corners, clips its own box so a
+		     swinging beam can never widen the document, and rides behind every
+		     section. Swept by scripts/effects/spotlights.js. -->
+		<div class="spotlights" aria-hidden="true">
+			<span class="spotlight spotlight-left"></span>
+			<span class="spotlight spotlight-right"></span>
+		</div>
 		<div class="container flex flex-wrap items-center justify-between gap-md">
 			<p>&copy; 2026 Cory Schulz</p>
 			<nav class="footer-links flex flex-wrap gap-5" aria-label="Elsewhere">
@@ -1306,6 +1329,8 @@ const morphCards = [
 	import '@magic-spells/scroll-progress';
 	import { scene } from '@magic-spells/animation-engine';
 	import { timeline, scrollDriver } from '@magic-spells/timeline-engine';
+	// The two sweeping beams behind the contact form.
+	import '../scripts/effects/spotlights.js';
 
 	const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 
