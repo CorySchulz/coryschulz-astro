@@ -1,0 +1,99 @@
+/* Two theatrical beams rising out of the page's bottom corners, framing the
+   contact form. The layer lives inside the footer so its base sits on the very
+   bottom edge of the page, and it clips its own box: a beam swinging outward
+   can never widen the document. Everything here is shape and light — the sweep
+   itself is scripts/effects/spotlights.js. */
+
+/* isolation, so the beams' z-index: -1 stays inside the footer: the body paints
+   an opaque night background of its own, and the root's negative band sits
+   under it, which would swallow them whole. */
+.site-footer {
+	position: relative;
+	isolation: isolate;
+}
+
+/* And the section above claims a layer of its own, so the form, its labels and
+   the closing copy all paint over the beams reaching up past them. Nothing
+   here carries a background, so lifting the section hides nothing. */
+.section-contact {
+	z-index: 1;
+}
+
+.spotlights {
+	position: absolute;
+	inset-inline: 0;
+	bottom: 0;
+	height: 44rem;
+	overflow: hidden;
+	pointer-events: none;
+	z-index: -1;
+}
+
+/* A narrow wedge — 14rem across at the tip over 42rem of throw, so roughly a
+   19 degree beam — pinned by its base to the corner it rotates around.
+   Three things do the softening, and all three are needed: the gradient warms
+   and dims the light along the throw, the radial mask kills it entirely well
+   before the tip could reach the layer's clip, and the blur takes the
+   clip-path's straight edges off. The static rotations below are what a no-JS
+   or reduced-motion visitor sees. */
+.spotlight {
+	position: absolute;
+	bottom: -2rem;
+	width: 14rem;
+	height: 42rem;
+	transform-origin: 50% 100%;
+	clip-path: polygon(42% 100%, 58% 100%, 100% 0, 0 0);
+	background: linear-gradient(
+		to top,
+		rgba(223, 192, 132, 0.34),
+		rgba(201, 168, 106, 0.17) 30%,
+		rgba(201, 168, 106, 0.08) 62%,
+		rgba(201, 168, 106, 0.04) 100%
+	);
+	mask-image: radial-gradient(
+		135% 104% at 50% 100%,
+		rgb(0 0 0 / 1) 0%,
+		rgb(0 0 0 / 0.5) 44%,
+		rgb(0 0 0 / 0.14) 68%,
+		rgb(0 0 0 / 0) 86%
+	);
+	filter: blur(34px);
+	will-change: transform, opacity;
+}
+
+.spotlight-left {
+	left: -7rem;
+	transform: rotate(30deg);
+}
+
+.spotlight-right {
+	right: -7rem;
+	transform: rotate(-28deg);
+}
+
+/* Phones get a shorter, narrower, dimmer pair: the same gesture at 390px, but
+   far enough off the copy that it never reads as haze behind the form. */
+@media (max-width: 639px) {
+	.spotlights {
+		height: 30rem;
+	}
+
+	.spotlight {
+		width: 9rem;
+		height: 28rem;
+		filter: blur(22px);
+		opacity: 0.7;
+	}
+
+	.spotlight-left {
+		left: -5rem;
+	}
+
+	.spotlight-right {
+		right: -5rem;
+	}
+}
+
+/* Reduced motion: the beams simply hold the angles above. The script builds no
+   timeline on that path, so nothing ever writes an inline transform over
+   them. */
